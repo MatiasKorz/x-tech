@@ -1,4 +1,5 @@
-﻿using System;
+﻿using INSTITUTO_C.Helpers;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -24,31 +25,55 @@ namespace INSTITUTO_C.Models
         public string Id { get; set; }
 
 
-        [Required]
+        [Required(ErrorMessage = ErrorMesseges.Requerido)]
         public string UserName { get; set; }
-        public string Email { get; set; }
-        public DateOnly FechaAlta { get; set; }
 
-        [Required]
-        [StringLength(20, MinimumLength = 5)]
-        [RegularExpression(@"^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s' ]+$", ErrorMessage = "El {0} solo puede contener letras y espacios. ")]
+        [Required(ErrorMessage = ErrorMesseges.Requerido)]
+        [EmailAddress(ErrorMessage = ErrorMesseges.NotValid)]
+        public string Email { get; set; }
+
+        [Required(ErrorMessage = ErrorMesseges.Requerido)]
+        [DataType(DataType.Date)]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:yyyy/MM/dd}")]
+        public DateTime FechaAlta { get; set; }
+
+        [Required(ErrorMessage = ErrorMesseges.Requerido)]
+        [StringLength(20, MinimumLength = 5, ErrorMessage = ErrorMesseges.CaracteresMinMax)]
+        [RegularExpression(@"^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s' ]+$", ErrorMessage = ErrorMesseges.SoloLetras)]
         public string Nombre { get; set; }
 
-        [Required]
-        [StringLength(20, MinimumLength = 5)]
-        [RegularExpression(@"^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s' ]+$", ErrorMessage = "El {0} solo puede contener letras y espacios. ")]
+        [Required(ErrorMessage = ErrorMesseges.Requerido)]
+        [StringLength(20, MinimumLength = 5, ErrorMessage = ErrorMesseges.CaracteresMinMax)]
+        [RegularExpression(@"^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s' ]+$", ErrorMessage = ErrorMesseges.SoloLetras)]
         public string Apellido { get; set; }
 
-        [Required]
+
+
+        [Required(ErrorMessage = ErrorMesseges.Requerido)]
+        [RegularExpression(@"^\d+$", ErrorMessage = ErrorMesseges.SoloNumeros)]
+        [StringLength(8, MinimumLength = 8, ErrorMessage = ErrorMesseges.CaracteresExactos)] // Exactamente 8 caracteres
         public string DNI { get; set; }
 
+
+        [Required(ErrorMessage = ErrorMesseges.Requerido)]
+        [RegularExpression(@"^\d+$", ErrorMessage = ErrorMesseges.SoloNumeros)]
         public string Telefono { get; set; }
+
+
+        [Required(ErrorMessage = ErrorMesseges.Requerido)]
         public string Direccion { get; set; }
+
+        //[Required(ErrorMessage = ErrorMesseges.Requerido)] dice chatgpt que no va
         public bool Activo { get; set; }
 
+        [Required(ErrorMessage = ErrorMesseges.Requerido)]
+        [Range(1, 500, ErrorMessage = ErrorMesseges.Range)]
         public int NumeroMatricula { get; set; }
 
+
+        //navegacional
         public Carrera Carrera { get; set; }
+        //navegacional
 
         public List<Inscripcion> Inscripciones { get; set; }
         public List<Calificacion> Calificaciones { get; set; }
