@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace INSTITUTO_C.Models
 {
@@ -14,7 +16,14 @@ namespace INSTITUTO_C.Models
         public string Id { get; set; }
 
         public Carrera Carrera { get; set; }
+
+
+        [Required]
+        [StringLength(50, MinimumLength = 5)]
         public string Nombre { get; set; }
+
+        [Required]
+        [StringLength(10)]
         public string CodigoMateria { get; set; }
         public string Descripcion { get; set; }
         public int CupoMaximo { get; set; }

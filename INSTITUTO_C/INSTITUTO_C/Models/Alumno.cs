@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace INSTITUTO_C.Models
 {
@@ -21,11 +23,23 @@ namespace INSTITUTO_C.Models
 
         public string Id { get; set; }
 
+
+        [Required]
         public string UserName { get; set; }
         public string Email { get; set; }
         public DateOnly FechaAlta { get; set; }
+
+        [Required]
+        [StringLength(20, MinimumLength = 5)]
+        [RegularExpression(@"^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s' ]+$", ErrorMessage = "El {0} solo puede contener letras y espacios. ")]
         public string Nombre { get; set; }
+
+        [Required]
+        [StringLength(20, MinimumLength = 5)]
+        [RegularExpression(@"^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s' ]+$", ErrorMessage = "El {0} solo puede contener letras y espacios. ")]
         public string Apellido { get; set; }
+
+        [Required]
         public string DNI { get; set; }
 
         public string Telefono { get; set; }
