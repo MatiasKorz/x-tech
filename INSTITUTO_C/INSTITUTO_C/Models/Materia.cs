@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using INSTITUTO_C.Helpers;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -15,17 +16,25 @@ namespace INSTITUTO_C.Models
 
         public string Id { get; set; }
 
+        //navega
         public Carrera Carrera { get; set; }
+        //navega
 
 
-        [Required]
+        [Required(ErrorMessage = ErrorMesseges.Requerido)]
         [StringLength(50, MinimumLength = 5)]
         public string Nombre { get; set; }
 
-        [Required]
-        [StringLength(10)]
+        [Required(ErrorMessage = ErrorMesseges.Requerido)]
+        [StringLength(20, MinimumLength = 5, ErrorMessage = ErrorMesseges.CaracteresMinMax)]
         public string CodigoMateria { get; set; }
+
+        [Required(ErrorMessage = ErrorMesseges.Requerido)]
+        [StringLength(100, MinimumLength = 5, ErrorMessage = ErrorMesseges.CaracteresMinMax)]
         public string Descripcion { get; set; }
+
+        [Required(ErrorMessage = ErrorMesseges.Requerido)]
+        [Range(1, 500, ErrorMessage = ErrorMesseges.Range)]
         public int CupoMaximo { get; set; }
         public List<MateriaCursada> cursadas { get; set; }
 

@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using INSTITUTO_C.Helpers;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Timers;
 
 namespace INSTITUTO_C.Models
 {
@@ -17,8 +19,8 @@ namespace INSTITUTO_C.Models
 
 
 
-        [Required]
-        [StringLength(20, MinimumLength = 5,ErrorMessage = "Tiene que tener entre {2} y {1} caracteres.")]
+        [Required(ErrorMessage = ErrorMesseges.Requerido)]
+        [StringLength(20, MinimumLength = 5,ErrorMessage = ErrorMesseges.CaracteresMinMax)]
         public string Nombre { get; set; }
 
 
