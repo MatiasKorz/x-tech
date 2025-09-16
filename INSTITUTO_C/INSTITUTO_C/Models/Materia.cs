@@ -18,6 +18,7 @@ namespace INSTITUTO_C.Models
 
         //navega
         public Carrera Carrera { get; set; }
+        public string CarreraId { get; set; }
         //navega
 
 
