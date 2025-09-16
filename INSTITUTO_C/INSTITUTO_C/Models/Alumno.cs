@@ -63,7 +63,7 @@ namespace INSTITUTO_C.Models
         [Required(ErrorMessage = ErrorMesseges.Requerido)]
         public string Direccion { get; set; }
 
-        //[Required(ErrorMessage = ErrorMesseges.Requerido)] dice chatgpt que no va
+        //[Required(ErrorMessage = ErrorMesseges.Requerido)] 
         public bool Activo { get; set; }
 
         [Required(ErrorMessage = ErrorMesseges.Requerido)]
