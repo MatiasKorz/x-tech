@@ -22,6 +22,8 @@ namespace INSTITUTO_C.Models
         //- Inscripciones
         //- Calificaciones
 
+
+        [Key,ForeignKey("Carrera")]
         public string Id { get; set; }
 
 
@@ -73,6 +75,8 @@ namespace INSTITUTO_C.Models
 
         //navegacional
         public Carrera Carrera { get; set; }
+
+        
         //navegacional
 
         public List<Inscripcion> Inscripciones { get; set; }
