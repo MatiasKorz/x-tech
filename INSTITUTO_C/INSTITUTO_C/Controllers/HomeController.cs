@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using INSTITUTO_C.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 namespace INSTITUTO_C.Controllers
 {
