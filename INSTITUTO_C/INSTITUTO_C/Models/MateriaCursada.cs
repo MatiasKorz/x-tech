@@ -5,12 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace INSTITUTO_C.Models
-{
-    public enum Cuatrimestre
-    {
-        Primero = 1, // 1C
-        Segundo = 2  // 2C
-    }
+{ 
 
     public class MateriaCursada
     {
@@ -30,7 +25,8 @@ namespace INSTITUTO_C.Models
         public int Anio { get; set; }
 
         [Required(ErrorMessage = ErrorMesseges.Requerido)]
-        public Cuatrimestre Cuatrimestre { get; set; }
+        [Range(1, 2, ErrorMessage = ErrorMesseges.Range)]
+        public int Cuatrimestre { get; set; }
 
         public bool Activo { get; set; }
 
