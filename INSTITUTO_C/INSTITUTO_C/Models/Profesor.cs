@@ -53,7 +53,7 @@ namespace INSTITUTO_C.Models
         [RegularExpression(@"^[\d\s\-\(\)\+]+$", ErrorMessage = ErrorMesseges.SoloNumeros)]
         public int Telefono { get; set; }
 
-        [Required(ErrorMessage = ErrorMesseges.Requerido)]
+        [StringLength(20)]
         public string Direccion { get; set; }
 
         public bool Activo { get; set; } = true;
