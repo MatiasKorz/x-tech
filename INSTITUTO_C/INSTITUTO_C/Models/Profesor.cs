@@ -35,25 +35,25 @@ namespace INSTITUTO_C.Models
         public DateTime FechaAlta { get; set; }
 
         [Required(ErrorMessage = ErrorMesseges.Requerido)]
-        [StringLength(50, MinimumLength = 2, ErrorMessage = ErrorMesseges.CaracteresMinMax)]
+        [StringLength(20, MinimumLength = 2, ErrorMessage = ErrorMesseges.CaracteresMinMax)]
         [RegularExpression(@"^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s']+$", ErrorMessage = ErrorMesseges.SoloLetras)]
         public string Nombre { get; set; }
 
         [Required(ErrorMessage = ErrorMesseges.Requerido)]
-        [StringLength(50, MinimumLength = 2, ErrorMessage = ErrorMesseges.CaracteresMinMax)]
+        [StringLength(20, MinimumLength = 2, ErrorMessage = ErrorMesseges.CaracteresMinMax)]
         [RegularExpression(@"^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s']+$", ErrorMessage = ErrorMesseges.SoloLetras)]
         public string Apellido { get; set; }
 
         [Required(ErrorMessage = ErrorMesseges.Requerido)]
         [RegularExpression(@"^\d+$", ErrorMessage = ErrorMesseges.SoloNumeros)]
-        [StringLength(8, MinimumLength = 8, ErrorMessage = ErrorMesseges.CaracteresExactos)]
+        [StringLength(10, MinimumLength = 8, ErrorMessage = ErrorMesseges.CaracteresExactos)]
         public string DNI { get; set; }
 
         [Required(ErrorMessage = ErrorMesseges.Requerido)]
-        [RegularExpression(@"^\d+$", ErrorMessage = ErrorMesseges.SoloNumeros)]
+        [RegularExpression(@"^[\d\s\-\(\)\+]+$", ErrorMessage = ErrorMesseges.SoloNumeros)]
         public int Telefono { get; set; }
 
-        [Required(ErrorMessage = ErrorMesseges.Requerido)]
+        [StringLength(50)]
         public string Direccion { get; set; }
 
         public bool Activo { get; set; } = true;
