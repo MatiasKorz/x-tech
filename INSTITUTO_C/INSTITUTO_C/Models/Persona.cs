@@ -47,7 +47,7 @@ namespace INSTITUTO_C.Models
         public string DNI { get; set; }
 
         [StringLength(15)]
-        [RegularExpression(@"^\d+$", ErrorMessage = ErrorMesseges.SoloNumeros)]
+        [RegularExpression(@"^[\d\s\-\(\)\+]+$", ErrorMessage = ErrorMesseges.SoloNumeros)]
         public int Telefono { get; set; }
 
         [StringLength(50)]

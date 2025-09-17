@@ -49,11 +49,11 @@ namespace INSTITUTO_C.Models
         [StringLength(10, MinimumLength = 8, ErrorMessage = ErrorMesseges.CaracteresExactos)]
         public string DNI { get; set; }
 
-        [Required(ErrorMessage = ErrorMesseges.Requerido)]
+        [StringLength(15)]
         [RegularExpression(@"^[\d\s\-\(\)\+]+$", ErrorMessage = ErrorMesseges.SoloNumeros)]
         public int Telefono { get; set; }
 
-        [StringLength(50)]
+        [StringLength(20)]
         public string Direccion { get; set; }
 
         public bool Activo { get; set; } = true;
