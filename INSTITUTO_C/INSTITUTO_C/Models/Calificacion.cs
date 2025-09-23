@@ -21,7 +21,7 @@ namespace INSTITUTO_C.Models
         [Required(ErrorMessage = ErrorMesseges.Requerido)]
         [DataType(DataType.Date)]
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:yyyy/MM/dd}")]
-        public DateTime FechaAlta { get; set; }
+        public DateTime Fecha { get; set; }
 
 
         //????
