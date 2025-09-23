@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace INSTITUTO_C.Models
 {
-    public class Alumno
+    public class Alumno: Persona
     {
         //- UserName
         //- Email
@@ -23,51 +23,10 @@ namespace INSTITUTO_C.Models
         //- Calificaciones
 
 
-        [Key,ForeignKey("Carrera")]
-        public string Id { get; set; }
+        
 
 
-        [Required(ErrorMessage = ErrorMesseges.Requerido)]
-        public string UserName { get; set; }
-
-        [Required(ErrorMessage = ErrorMesseges.Requerido)]
-        [EmailAddress(ErrorMessage = ErrorMesseges.NotValid)]
-        public string Email { get; set; }
-
-        [Required(ErrorMessage = ErrorMesseges.Requerido)]
-        [DataType(DataType.Date)]
-        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:yyyy/MM/dd}")]
-        public DateTime FechaAlta { get; set; }
-
-        [Required(ErrorMessage = ErrorMesseges.Requerido)]
-        [StringLength(20, MinimumLength = 5, ErrorMessage = ErrorMesseges.CaracteresMinMax)]
-        [RegularExpression(@"^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s' ]+$", ErrorMessage = ErrorMesseges.SoloLetras)]
-        public string Nombre { get; set; }
-
-        [Required(ErrorMessage = ErrorMesseges.Requerido)]
-        [StringLength(20, MinimumLength = 5, ErrorMessage = ErrorMesseges.CaracteresMinMax)]
-        [RegularExpression(@"^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s' ]+$", ErrorMessage = ErrorMesseges.SoloLetras)]
-        public string Apellido { get; set; }
-
-
-
-        [Required(ErrorMessage = ErrorMesseges.Requerido)]
-        [RegularExpression(@"^\d+$", ErrorMessage = ErrorMesseges.SoloNumeros)]
-        [StringLength(8, MinimumLength = 8, ErrorMessage = ErrorMesseges.CaracteresExactos)] // Exactamente 8 caracteres
-        public string DNI { get; set; }
-
-
-        [Required(ErrorMessage = ErrorMesseges.Requerido)]
-        [RegularExpression(@"^\d+$", ErrorMessage = ErrorMesseges.SoloNumeros)]
-        public string Telefono { get; set; }
-
-
-        [Required(ErrorMessage = ErrorMesseges.Requerido)]
-        public string Direccion { get; set; }
-
-        //[Required(ErrorMessage = ErrorMesseges.Requerido)] 
-        public bool Activo { get; set; }
-
+        
         [Required(ErrorMessage = ErrorMesseges.Requerido)]
         [Range(1, 500, ErrorMessage = ErrorMesseges.Range)]
         public int NumeroMatricula { get; set; }
@@ -76,6 +35,7 @@ namespace INSTITUTO_C.Models
         //navegacional
         public Carrera Carrera { get; set; }
 
+        public string CarreraId {  get; set; }
         
         //navegacional
 
