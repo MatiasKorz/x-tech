@@ -14,13 +14,12 @@ namespace INSTITUTO_C.Models
         //- CupoMaximo
         //- Cursadas
 
-        public string Id { get; set; }
+        public int Id { get; set; }
 
-        //navega
         public Carrera Carrera { get; set; }
-        public string CarreraId { get; set; }
-        //navega
 
+        [Required(ErrorMessage = ErrorMesseges.Requerido)]
+        public int CarreraId { get; set; }
 
         [Required(ErrorMessage = ErrorMesseges.Requerido)]
         [StringLength(50, MinimumLength = 5)]
@@ -37,6 +36,7 @@ namespace INSTITUTO_C.Models
         [Required(ErrorMessage = ErrorMesseges.Requerido)]
         [Range(1, 500, ErrorMessage = ErrorMesseges.Range)]
         public int CupoMaximo { get; set; }
+
         public List<MateriaCursada> cursadas { get; set; }
 
 

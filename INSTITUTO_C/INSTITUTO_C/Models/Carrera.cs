@@ -12,19 +12,14 @@ namespace INSTITUTO_C.Models
         //- Materias
         //- Alumnos
 
-
-        public string Id { get; set; }
-
-
-
-
+        public int Id { get; set; }
 
         [Required(ErrorMessage = ErrorMesseges.Requerido)]
         [StringLength(20, MinimumLength = 5,ErrorMessage = ErrorMesseges.CaracteresMinMax)]
         public string Nombre { get; set; }
 
-
         public List<Materia> Materias { get; set; }
+
         public List<Alumno> Alumnos { get; set; }
 
     }

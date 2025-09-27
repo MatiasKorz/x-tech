@@ -14,6 +14,7 @@ namespace INSTITUTO_C.Models
 
         [Required(ErrorMessage = ErrorMesseges.Requerido)]
         public int MateriaId { get; set; }
+
         public Materia Materia { get; set; }
 
         [Required(ErrorMessage = ErrorMesseges.Requerido)]
@@ -22,6 +23,7 @@ namespace INSTITUTO_C.Models
         public string CodigoCursada { get; set; }
 
         [Required(ErrorMessage = ErrorMesseges.Requerido)]
+        [Range(2020, 2050, ErrorMessage = ErrorMesseges.Range)]
         public int Anio { get; set; }
 
         [Required(ErrorMessage = ErrorMesseges.Requerido)]
@@ -29,6 +31,10 @@ namespace INSTITUTO_C.Models
         public int Cuatrimestre { get; set; }
 
         public bool Activo { get; set; }
+
+        //relacional
+        [Required(ErrorMessage = ErrorMesseges.Requerido)]
+        public int ProfesorId { get; set; }
 
         public Profesor Profesor { get; set; }
 

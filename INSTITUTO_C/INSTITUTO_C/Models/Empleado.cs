@@ -7,7 +7,7 @@ namespace INSTITUTO_C.Models
     {
 
         [Required(ErrorMessage = ErrorMesseges.Requerido)]
-        [StringLength(20, MinimumLength = 3, ErrorMessage = ErrorMesseges.CaracteresMinMax)]
+        //elimine el range xq deberia ser autogenerado
         public string Legajo { get; set; }
 
     }

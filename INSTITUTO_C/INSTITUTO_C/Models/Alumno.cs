@@ -22,24 +22,19 @@ namespace INSTITUTO_C.Models
         //- Inscripciones
         //- Calificaciones
 
-
-        
-
-
-        
         [Required(ErrorMessage = ErrorMesseges.Requerido)]
-        [Range(1, 500, ErrorMessage = ErrorMesseges.Range)]
+        //elimine el range xq deberia ser autogenerado
         public int NumeroMatricula { get; set; }
-
 
         //navegacional
         public Carrera Carrera { get; set; }
 
-        public string CarreraId {  get; set; }
-        
-        //navegacional
+        //relacional
+        [Required(ErrorMessage = ErrorMesseges.Requerido)]
+        public int CarreraId {  get; set; }
 
         public List<Inscripcion> Inscripciones { get; set; }
+
         public List<Calificacion> Calificaciones { get; set; }
         
 }
