@@ -8,18 +8,17 @@ namespace INSTITUTO_C.Models
         [Required(ErrorMessage = ErrorMesseges.Requerido)]
         [Key]
         public int MateriaCursadaId { get; set; }
+
         [Required(ErrorMessage = ErrorMesseges.Requerido)]
         [Key]
         public int AlumnoId { get; set; }
         //asi estaba en los videos cortos
 
-        public MateriaCursada materiaCursada { get; set; }
+        public MateriaCursada MateriaCursada { get; set; }
 
-        public Alumno alumno { get; set; } 
+        public Alumno Alumno { get; set; }
 
-
-
-
+        public Calificacion Calificacion { get; set; }
 
     }
 }

@@ -20,8 +20,6 @@ namespace INSTITUTO_C.Models
         //- MateriasCursada(Designado)
         //- Calificaciones(Realizadas)
 
-       
-
         public List<MateriaCursada> MateriasCursada { get; set; }
 
         public List<Calificacion> Calificaciones { get; set; }
