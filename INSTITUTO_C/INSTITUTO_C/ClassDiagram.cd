@@ -1,0 +1,102 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="INSTITUTO_C.Models.Alumno">
+    <Position X="7.75" Y="5.75" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAACAAAAEEACAAgAAAAEEAAAAgYQAAAoAAAAA=</HashCode>
+      <FileName>Models\Alumno.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Carrera" />
+    </ShowAsAssociation>
+    <ShowAsCollectionAssociation>
+      <Property Name="Inscripciones" />
+      <Property Name="Calificaciones" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="INSTITUTO_C.Models.Calificacion">
+    <Position X="8" Y="10.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\Calificacion.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="INSTITUTO_C.Models.Carrera">
+    <Position X="4.5" Y="1" Width="1.5" />
+    <AssociationLine Name="Alumnos" Type="INSTITUTO_C.Models.Alumno" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="6" Y="1.925" />
+        <Point X="8.25" Y="1.925" />
+        <Point X="8.25" Y="5.75" />
+      </Path>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAAAACAAAgAAAAAAAAAAAIAAAAAAAAAA=</HashCode>
+      <FileName>Models\Carrera.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Property Name="Alumnos" />
+      <Property Name="Materias" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="INSTITUTO_C.Models.Empleado">
+    <Position X="11.5" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\Empleado.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="INSTITUTO_C.Models.Inscripcion">
+    <Position X="4.25" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\Inscripcion.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="INSTITUTO_C.Models.Materia">
+    <Position X="1" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BAACAAQAAAAAAAAgEAAAgAABAAAAAAAAQAAAAAAAAAA=</HashCode>
+      <FileName>Models\Materia.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Carrera" />
+    </ShowAsAssociation>
+    <ShowAsCollectionAssociation>
+      <Property Name="cursadas" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="INSTITUTO_C.Models.MateriaCursada">
+    <Position X="1" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAAACAAAQACAAAAQAAAAgAAAAQJAAAAA=</HashCode>
+      <FileName>Models\MateriaCursada.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Materia" />
+      <Property Name="Profesor" />
+    </ShowAsAssociation>
+    <ShowAsCollectionAssociation>
+      <Property Name="Inscripciones" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="INSTITUTO_C.Models.Persona">
+    <Position X="9.5" Y="1" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAACAAAAEEACAAgAAAAAEAAAAgAQAAAgAAAAA=</HashCode>
+      <FileName>Models\Persona.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="INSTITUTO_C.Models.Profesor">
+    <Position X="11.25" Y="10.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAACAAAAEEACAAhAACAAEAAAAgIQAAAgAAAAA=</HashCode>
+      <FileName>Models\Profesor.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Property Name="MateriasCursada" />
+      <Property Name="Calificaciones" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Font Name="Calibri Light" Size="10" />
+</ClassDiagram>
