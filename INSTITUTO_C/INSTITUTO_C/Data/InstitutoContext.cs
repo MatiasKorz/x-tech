@@ -27,5 +27,14 @@ namespace INSTITUTO_C.Data
 
         public DbSet<Profesor> Profesores { get; set; }
 
+        public DbSet<Carrera> Carreras { get; set; }
+
+        public DbSet<Calificacion> Calificaciones { get; set; }
+
+        public DbSet<Materia> Materias { get; set; }
+
+
+        public DbSet<MateriaCursada> MateriasCursadas { get; set; }
+
     }
 }

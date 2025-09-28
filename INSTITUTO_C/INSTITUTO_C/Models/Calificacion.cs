@@ -38,7 +38,7 @@ namespace INSTITUTO_C.Models
         public DateTime Fecha { get; set; } = DateTime.Now;
 
         [Required(ErrorMessage = ErrorMesseges.Requerido)]
-        public Nota Nota { get; set; }  DateTime.Now;
+        public Nota Nota { get; set; }  
 
         [Required(ErrorMessage = ErrorMesseges.Requerido)]
         public string ProfesorId { get; set; }
