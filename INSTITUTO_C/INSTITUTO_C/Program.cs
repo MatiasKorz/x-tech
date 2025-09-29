@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using INSTITUTO_C.Data; // tu DbContext
+using Microsoft.EntityFrameworkCore;
 
 namespace INSTITUTO_C
 {
@@ -12,6 +14,8 @@ namespace INSTITUTO_C
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+
+            builder.Services.AddDbContext<InstitutoContext>(options => options.UseInMemoryDatabase("InstitutoDb"));
 
             var app = builder.Build();
 

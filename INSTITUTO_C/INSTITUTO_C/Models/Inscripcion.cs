@@ -1,4 +1,5 @@
 ﻿using INSTITUTO_C.Helpers;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace INSTITUTO_C.Models
@@ -18,7 +19,7 @@ namespace INSTITUTO_C.Models
 
         public Alumno Alumno { get; set; }
 
-        public Calificacion Calificacion { get; set; }
+        public List<Calificacion> Calificaciones { get; set; }
 
     }
 }
