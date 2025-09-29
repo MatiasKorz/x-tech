@@ -35,6 +35,7 @@ namespace INSTITUTO_C.Data
 
 
         public DbSet<MateriaCursada> MateriasCursadas { get; set; }
+        public DbSet<INSTITUTO_C.Models.Inscripcion> Inscripcion { get; set; }
 
     }
 }
