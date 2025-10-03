@@ -112,6 +112,10 @@ namespace INSTITUTO_C.Controllers
                         _context.Personas.Update(personaEnDb);
                         await _context.SaveChangesAsync();
                     }
+                    else
+                    {
+                        return NotFound();
+                    }
 
 
                     
