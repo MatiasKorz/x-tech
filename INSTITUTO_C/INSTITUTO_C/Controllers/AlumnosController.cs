@@ -118,8 +118,12 @@ namespace INSTITUTO_C.Controllers
                         _context.Alumnos.Update(alumnoEnDb);
                         await _context.SaveChangesAsync();
                     }
-                  
-                   
+                    else
+                    {
+                        return NotFound();
+                    }
+
+
                 }
                 catch (DbUpdateConcurrencyException)
                 {
