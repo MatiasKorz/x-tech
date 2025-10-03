@@ -61,7 +61,7 @@ namespace INSTITUTO_C.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(alumno);
+                _context.Alumnos.Add(alumno);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
@@ -102,8 +102,24 @@ namespace INSTITUTO_C.Controllers
             {
                 try
                 {
-                    _context.Update(alumno);
-                    await _context.SaveChangesAsync();
+                    var alumnoEnDb = _context.Alumnos.Find(alumno.Id);
+                    if (alumnoEnDb != null)
+                    {
+                        alumnoEnDb.Nombre = alumno.Nombre;
+                        alumnoEnDb.Apellido = alumno.Apellido;
+                        alumnoEnDb.Direccion = alumno.Direccion;
+                        alumnoEnDb.Email = alumno.Email;
+                        alumnoEnDb.Telefono = alumno.Telefono;
+                        alumnoEnDb.DNI = alumno.DNI;
+                        alumnoEnDb.UserName = alumno.UserName;
+                        alumnoEnDb.Activo = alumno.Activo;
+                        //alumnoEnDb.Carrera = alumno.Carrera; ver que onda
+
+                        _context.Alumnos.Update(alumnoEnDb);
+                        await _context.SaveChangesAsync();
+                    }
+                  
+                   
                 }
                 catch (DbUpdateConcurrencyException)
                 {

@@ -58,7 +58,7 @@ namespace INSTITUTO_C.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(persona);
+                _context.Personas.Add(persona);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
@@ -97,8 +97,24 @@ namespace INSTITUTO_C.Controllers
             {
                 try
                 {
-                    _context.Update(persona);
-                    await _context.SaveChangesAsync();
+                    var personaEnDb = _context.Personas.Find(persona.Id);
+                    if(personaEnDb != null)
+                    {
+                        personaEnDb.Nombre = persona.Nombre;
+                        personaEnDb.Apellido = persona.Apellido;
+                        personaEnDb.Direccion = persona.Direccion;
+                        personaEnDb.Email = persona.Email;
+                        personaEnDb.Telefono = persona.Telefono;
+                        personaEnDb.DNI = persona.DNI;
+                        personaEnDb.UserName = persona.UserName;
+                        personaEnDb.Activo = persona.Activo;    
+
+                        _context.Personas.Update(personaEnDb);
+                        await _context.SaveChangesAsync();
+                    }
+
+
+                    
                 }
                 catch (DbUpdateConcurrencyException)
                 {
