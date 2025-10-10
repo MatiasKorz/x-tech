@@ -3,7 +3,7 @@
   <Class Name="INSTITUTO_C.Models.Alumno">
     <Position X="7.75" Y="5.75" Width="1.75" />
     <TypeIdentifier>
-      <HashCode>AAACAAAAACAAAAEEACAAgAAAAEEAAAAgYQAAAoAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAAgAAAAAAAAAEAAAAAAYAAAAIAAAAA=</HashCode>
       <FileName>Models\Alumno.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
@@ -15,11 +15,14 @@
     </ShowAsCollectionAssociation>
   </Class>
   <Class Name="INSTITUTO_C.Models.Calificacion">
-    <Position X="8" Y="10.75" Width="1.5" />
+    <Position X="7.25" Y="10.75" Width="2" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAEAABACAAIAAAAAABABAAAAEBAAAgA=</HashCode>
       <FileName>Models\Calificacion.cs</FileName>
     </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Profesor" />
+    </ShowAsAssociation>
   </Class>
   <Class Name="INSTITUTO_C.Models.Carrera">
     <Position X="4.5" Y="1" Width="1.5" />
@@ -35,21 +38,21 @@
       <FileName>Models\Carrera.cs</FileName>
     </TypeIdentifier>
     <ShowAsCollectionAssociation>
-      <Property Name="Alumnos" />
       <Property Name="Materias" />
+      <Property Name="Alumnos" />
     </ShowAsCollectionAssociation>
   </Class>
   <Class Name="INSTITUTO_C.Models.Empleado">
     <Position X="11.5" Y="5.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Models\Empleado.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="INSTITUTO_C.Models.Inscripcion">
     <Position X="4.25" Y="5.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAAAAAACAAIAAAAIABAAIAAAAAAAAAA=</HashCode>
       <FileName>Models\Inscripcion.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -69,7 +72,7 @@
   <Class Name="INSTITUTO_C.Models.MateriaCursada">
     <Position X="1" Y="5.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAACAAAAAAAAAAACAAAQACAAAAQAAAAgAAAAQJAAAAA=</HashCode>
+      <HashCode>AAACAAAAAAAAAAACAAAQACAAAAQAAAAhAAAAQJAAAAA=</HashCode>
       <FileName>Models\MateriaCursada.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
@@ -90,7 +93,7 @@
   <Class Name="INSTITUTO_C.Models.Profesor">
     <Position X="11.25" Y="10.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAACAAAAACAAAAEEACAAhAACAAEAAAAgIQAAAgAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAIAAAAAAAAAA=</HashCode>
       <FileName>Models\Profesor.cs</FileName>
     </TypeIdentifier>
     <ShowAsCollectionAssociation>
