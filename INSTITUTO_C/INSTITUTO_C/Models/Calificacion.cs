@@ -30,7 +30,10 @@ namespace INSTITUTO_C.Models
         //- Inscripcion
         //- Alumno
 
-        public int id { get; set; }
+        [Key]
+        public int AlumnoId { get; set; }
+        [Key]
+        public int MateriaCursadald { get; set; }
 
         [Required(ErrorMessage = ErrorMesseges.Requerido)]
         [DataType(DataType.Date)]
@@ -49,9 +52,6 @@ namespace INSTITUTO_C.Models
         public int MateriaCursadaId { get; set; }
 
         public Inscripcion Inscripcion { get; set; }
-
-        [Required(ErrorMessage = ErrorMesseges.Requerido)]
-        public string AlumnoId { get; set; }
 
         public Alumno Alumno { get; set; }
     }

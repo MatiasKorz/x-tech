@@ -17,6 +17,11 @@ namespace INSTITUTO_C.Data
 
             modelBuilder.Entity<Inscripcion>().HasOne(i => i.Alumno).WithMany(a => a.Inscripciones).HasForeignKey(i=> i.AlumnoId);
             modelBuilder.Entity<Inscripcion>().HasOne(i => i.MateriaCursada).WithMany(mc => mc.Inscripciones).HasForeignKey(i => i.MateriaCursadaId);
+
+
+            // Clave compuesta para Calificación (PK y FK)
+            modelBuilder.Entity<Calificacion>().HasKey(c => new { c.AlumnoId, c.MateriaCursadaId });
+            modelBuilder.Entity<Calificacion>().HasOne(c => c.Inscripcion).WithOne(i => i.Calificacion).HasForeignKey<Calificacion>(c => new { c.AlumnoId, c.MateriaCursadaId });
         }
 
 
@@ -35,7 +40,7 @@ namespace INSTITUTO_C.Data
 
 
         public DbSet<MateriaCursada> MateriasCursadas { get; set; }
-        public DbSet<INSTITUTO_C.Models.Inscripcion> Inscripcion { get; set; }
+        public DbSet<INSTITUTO_C.Models.Inscripcion> Inscripciones { get; set; }
 
     }
 }

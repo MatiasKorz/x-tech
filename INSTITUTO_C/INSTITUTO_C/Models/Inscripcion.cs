@@ -19,7 +19,7 @@ namespace INSTITUTO_C.Models
 
         public Alumno Alumno { get; set; }
 
-        public List<Calificacion> Calificaciones { get; set; }
+        public Calificacion Calificacion { get; set; }
 
     }
 }
