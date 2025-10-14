@@ -22,7 +22,7 @@ namespace INSTITUTO_C.Controllers
         // GET: Inscripciones
         public async Task<IActionResult> Index()
         {
-            var institutoContext = _context.Inscripcion.Include(i => i.Alumno).Include(i => i.MateriaCursada);
+            var institutoContext = _context.Inscripciones.Include(i => i.Alumno).Include(i => i.MateriaCursada);
             return View(await institutoContext.ToListAsync());
         }
 
@@ -34,7 +34,7 @@ namespace INSTITUTO_C.Controllers
                 return NotFound();
             }
 
-            var inscripcion = await _context.Inscripcion
+            var inscripcion = await _context.Inscripciones
                 .Include(i => i.Alumno)
                 .Include(i => i.MateriaCursada)
                 .FirstOrDefaultAsync(m => m.AlumnoId == id);
@@ -80,7 +80,7 @@ namespace INSTITUTO_C.Controllers
                 return NotFound();
             }
 
-            var inscripcion = await _context.Inscripcion.FindAsync(id);
+            var inscripcion = await _context.Inscripciones.FindAsync(id);
             if (inscripcion == null)
             {
                 return NotFound();
@@ -135,7 +135,7 @@ namespace INSTITUTO_C.Controllers
                 return NotFound();
             }
 
-            var inscripcion = await _context.Inscripcion
+            var inscripcion = await _context.Inscripciones
                 .Include(i => i.Alumno)
                 .Include(i => i.MateriaCursada)
                 .FirstOrDefaultAsync(m => m.AlumnoId == id);
@@ -152,10 +152,10 @@ namespace INSTITUTO_C.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var inscripcion = await _context.Inscripcion.FindAsync(id);
+            var inscripcion = await _context.Inscripciones.FindAsync(id);
             if (inscripcion != null)
             {
-                _context.Inscripcion.Remove(inscripcion);
+                _context.Inscripciones.Remove(inscripcion);
             }
 
             await _context.SaveChangesAsync();
@@ -164,7 +164,7 @@ namespace INSTITUTO_C.Controllers
 
         private bool InscripcionExists(int id)
         {
-            return _context.Inscripcion.Any(e => e.AlumnoId == id);
+            return _context.Inscripciones.Any(e => e.AlumnoId == id);
         }
     }
 }
