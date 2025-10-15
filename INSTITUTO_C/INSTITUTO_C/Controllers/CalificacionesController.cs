@@ -26,15 +26,14 @@ namespace INSTITUTO_C.Controllers
         }
 
         // GET: Calificaciones/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(int alumnoId, int materiaCursadaId)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
             var calificacion = await _context.Calificaciones
-                .FirstOrDefaultAsync(m => m.id == id);
+                .Include(c => c.Alumno)
+                .Include(c => c.Inscripcion)
+                .ThenInclude(i => i.MateriaCursada)
+                .FirstOrDefaultAsync(c => c.AlumnoId == alumnoId && c.MateriaCursadaId == materiaCursadaId);
+
             if (calificacion == null)
             {
                 return NotFound();
@@ -54,7 +53,7 @@ namespace INSTITUTO_C.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("id,Fecha,Nota,ProfesorId,MateriaCursadaId,AlumnoId")] Calificacion calificacion)
+        public async Task<IActionResult> Create([Bind("AlumnoId,MateriaCursadaId,Fecha,Nota,ProfesorId")] Calificacion calificacion)
         {
             if (ModelState.IsValid)
             {
@@ -66,18 +65,19 @@ namespace INSTITUTO_C.Controllers
         }
 
         // GET: Calificaciones/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(int alumnoId, int materiaCursadaId)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            var calificacion = await _context.Calificaciones
+                .Include(c => c.Alumno)
+                .Include(c => c.Inscripcion)
+                .ThenInclude(i => i.MateriaCursada)
+                .FirstOrDefaultAsync(c => c.AlumnoId == alumnoId && c.MateriaCursadaId == materiaCursadaId);
 
-            var calificacion = await _context.Calificaciones.FindAsync(id);
             if (calificacion == null)
             {
                 return NotFound();
             }
+
             return View(calificacion);
         }
 
@@ -86,9 +86,9 @@ namespace INSTITUTO_C.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("id,Fecha,Nota,ProfesorId,MateriaCursadaId,AlumnoId")] Calificacion calificacion)
+        public async Task<IActionResult> Edit(int alumnoId, int materiaCursadaId, [Bind("AlumnoId,MateriaCursadaId,Fecha,Nota,ProfesorId")] Calificacion calificacion)
         {
-            if (id != calificacion.id)
+            if (alumnoId != calificacion.AlumnoId || materiaCursadaId != calificacion.MateriaCursadaId)
             {
                 return NotFound();
             }
@@ -102,7 +102,7 @@ namespace INSTITUTO_C.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!CalificacionExists(calificacion.id))
+                    if (!CalificacionExists(calificacion.AlumnoId, calificacion.MateriaCursadaId))
                     {
                         return NotFound();
                     }
@@ -116,16 +116,16 @@ namespace INSTITUTO_C.Controllers
             return View(calificacion);
         }
 
-        // GET: Calificaciones/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
 
+        // GET: Calificaciones/Delete
+        public async Task<IActionResult> Delete(int alumnoId, int materiaCursadaId)
+        {
             var calificacion = await _context.Calificaciones
-                .FirstOrDefaultAsync(m => m.id == id);
+                .Include(c => c.Alumno)
+                .Include(c => c.Inscripcion)
+                .ThenInclude(i => i.MateriaCursada)
+                .FirstOrDefaultAsync(c => c.AlumnoId == alumnoId && c.MateriaCursadaId == materiaCursadaId);
+
             if (calificacion == null)
             {
                 return NotFound();
@@ -134,24 +134,27 @@ namespace INSTITUTO_C.Controllers
             return View(calificacion);
         }
 
-        // POST: Calificaciones/Delete/5
+        // POST: Calificaciones/Delete
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(int alumnoId, int materiaCursadaId)
         {
-            var calificacion = await _context.Calificaciones.FindAsync(id);
+            var calificacion = await _context.Calificaciones
+                .FirstOrDefaultAsync(c => c.AlumnoId == alumnoId && c.MateriaCursadaId == materiaCursadaId);
+
             if (calificacion != null)
             {
                 _context.Calificaciones.Remove(calificacion);
+                await _context.SaveChangesAsync();
             }
 
-            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool CalificacionExists(int id)
+        
+        private bool CalificacionExists(int alumnoId, int materiaCursadaId)
         {
-            return _context.Calificaciones.Any(e => e.id == id);
+            return _context.Calificaciones.Any(c => c.AlumnoId == alumnoId && c.MateriaCursadaId == materiaCursadaId);
         }
     }
 }
