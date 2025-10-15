@@ -22,6 +22,13 @@ namespace INSTITUTO_C.Data
             // Clave compuesta para Calificación (PK y FK)
             modelBuilder.Entity<Calificacion>().HasKey(c => new { c.AlumnoId, c.MateriaCursadaId });
             modelBuilder.Entity<Calificacion>().HasOne(c => c.Inscripcion).WithOne(i => i.Calificacion).HasForeignKey<Calificacion>(c => new { c.AlumnoId, c.MateriaCursadaId });
+
+
+
+            //fecha alta
+            modelBuilder.Entity<Persona>()
+           .Property(p => p.FechaAlta)
+           .ValueGeneratedOnAdd();
         }
 
 
