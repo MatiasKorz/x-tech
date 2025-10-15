@@ -54,11 +54,11 @@ namespace INSTITUTO_C.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Legajo,Id,UserName,Email,FechaAlta,Nombre,Apellido,DNI,Telefono,Direccion,Activo")] Empleado empleado)
+        public async Task<IActionResult> Create([Bind("Legajo,Id,UserName,Email,Nombre,Apellido,DNI,Telefono,Direccion,Activo")] Empleado empleado)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(empleado);
+                _context.Empleados.Add(empleado);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
@@ -86,7 +86,7 @@ namespace INSTITUTO_C.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Legajo,Id,UserName,Email,FechaAlta,Nombre,Apellido,DNI,Telefono,Direccion,Activo")] Empleado empleado)
+        public async Task<IActionResult> Edit(int id, [Bind("Legajo,Id,UserName,Email,Nombre,Apellido,DNI,Telefono,Direccion,Activo")] Empleado empleado)
         {
             if (id != empleado.Id)
             {
@@ -97,8 +97,30 @@ namespace INSTITUTO_C.Controllers
             {
                 try
                 {
-                    _context.Update(empleado);
-                    await _context.SaveChangesAsync();
+                    var empleadoEnDB = _context.Empleados.Find(empleado.Id);
+                    if (empleadoEnDB != null)
+                    {
+                        empleadoEnDB.Nombre = empleado.Nombre;
+                        empleadoEnDB.Apellido = empleado.Apellido;
+                        empleadoEnDB.Direccion = empleado.Direccion;
+                        empleadoEnDB.Email = empleado.Email;
+                        empleadoEnDB.Telefono = empleado.Telefono;
+                        empleadoEnDB.DNI = empleado.DNI;
+                        empleadoEnDB.UserName = empleado.UserName;
+                        empleadoEnDB.Activo = empleado.Activo;
+
+                        _context.Empleados.Update(empleadoEnDB);
+                        await _context.SaveChangesAsync();
+
+
+                    }
+                    else
+                    {
+                        return NotFound();
+                    }
+
+                    
+                    
                 }
                 catch (DbUpdateConcurrencyException)
                 {

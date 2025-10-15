@@ -54,11 +54,11 @@ namespace INSTITUTO_C.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Legajo,Id,UserName,Email,FechaAlta,Nombre,Apellido,DNI,Telefono,Direccion,Activo")] Profesor profesor)
+        public async Task<IActionResult> Create([Bind("Legajo,Id,UserName,Email,Nombre,Apellido,DNI,Telefono,Direccion,Activo")] Profesor profesor)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(profesor);
+                _context.Profesores.Add(profesor);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
@@ -86,7 +86,7 @@ namespace INSTITUTO_C.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Legajo,Id,UserName,Email,FechaAlta,Nombre,Apellido,DNI,Telefono,Direccion,Activo")] Profesor profesor)
+        public async Task<IActionResult> Edit(int id, [Bind("Legajo,Id,UserName,Email,Nombre,Apellido,DNI,Telefono,Direccion,Activo")] Profesor profesor)
         {
             if (id != profesor.Id)
             {
@@ -97,8 +97,29 @@ namespace INSTITUTO_C.Controllers
             {
                 try
                 {
-                    _context.Update(profesor);
-                    await _context.SaveChangesAsync();
+                    var profesorEnDB =  _context.Profesores.Find(profesor.Id);
+                    if (profesorEnDB != null)
+                    {
+                        profesorEnDB.Nombre = profesor.Nombre;
+                        profesorEnDB.Apellido = profesor.Apellido;
+                        profesorEnDB.Direccion = profesor.Direccion;
+                        profesorEnDB.Telefono = profesor.Telefono;
+                        profesorEnDB.DNI = profesor.DNI;
+                        profesorEnDB.Email = profesor.Email;
+                        profesorEnDB.UserName = profesor.UserName;
+                        profesorEnDB.Activo = profesor.Activo;
+
+
+
+                        _context.Profesores.Update(profesorEnDB);
+                        await _context.SaveChangesAsync();
+                    }
+                    else
+                    {
+                        return NotFound();
+                    }
+
+                    
                 }
                 catch (DbUpdateConcurrencyException)
                 {
