@@ -16,5 +16,10 @@
         public const string CaracteresExactos = "El campo {0} solo acepta {1} caracteres";
 
         public const string NotValid = "{0} invalido";
+
+        public const string SoloMayusculasYNumeros = "El campo {0} solo puede contener letras mayúsculas y números.";
+
+        
+
     }
 }

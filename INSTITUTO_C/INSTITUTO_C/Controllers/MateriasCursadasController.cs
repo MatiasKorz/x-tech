@@ -63,7 +63,14 @@ namespace INSTITUTO_C.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(materiaCursada);
+
+
+                if (!string.IsNullOrWhiteSpace(materiaCursada.CodigoCursada))
+                {
+                    materiaCursada.CodigoCursada = materiaCursada.CodigoCursada.ToUpper();
+                }
+
+                _context.MateriasCursadas.Add(materiaCursada);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
@@ -106,8 +113,27 @@ namespace INSTITUTO_C.Controllers
             {
                 try
                 {
-                    _context.Update(materiaCursada);
-                    await _context.SaveChangesAsync();
+
+                    var materiaCursadaEnDB = _context.MateriasCursadas.Find(materiaCursada.Id);
+                    if(materiaCursadaEnDB != null)
+                    {
+
+                        materiaCursadaEnDB.Activo = materiaCursada.Activo;
+                        
+
+
+
+
+
+
+
+                        _context.MateriasCursadas.Update(materiaCursada);
+                        await _context.SaveChangesAsync();
+                    } else
+                    {
+                        return NotFound();
+                    }
+                    
                 }
                 catch (DbUpdateConcurrencyException)
                 {

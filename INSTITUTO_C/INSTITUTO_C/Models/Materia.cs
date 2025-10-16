@@ -26,7 +26,8 @@ namespace INSTITUTO_C.Models
         public string Nombre { get; set; }
 
         [Required(ErrorMessage = ErrorMesseges.Requerido)]
-        [StringLength(20, MinimumLength = 5, ErrorMessage = ErrorMesseges.CaracteresMinMax)]
+        [StringLength(10, MinimumLength = 2, ErrorMessage = ErrorMesseges.CaracteresMinMax)]
+        [RegularExpression(@"^[A-Z0-9]+$", ErrorMessage = ErrorMesseges.SoloMayusculasYNumeros)]
         public string CodigoMateria { get; set; }
 
         [Required(ErrorMessage = ErrorMesseges.Requerido)]
