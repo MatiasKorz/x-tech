@@ -22,7 +22,7 @@ namespace INSTITUTO_C.Models
         //- Inscripciones
         //- Calificaciones
 
-        [Required(ErrorMessage = ErrorMesseges.Requerido)]
+        //[Required(ErrorMessage = ErrorMesseges.Requerido)]
         //elimine el range xq deberia ser autogenerado
         public int NumeroMatricula { get; set; }
 
@@ -35,7 +35,7 @@ namespace INSTITUTO_C.Models
 
         public List<Inscripcion> Inscripciones { get; set; }
 
-        public List<Calificacion> Calificaciones { get; set; }
+      //  public List<Calificacion> Calificaciones { get; set; }
         
 }
 }
