@@ -58,7 +58,7 @@ namespace INSTITUTO_C.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(carrera);
+                _context.Carreras.Add(carrera);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
@@ -97,6 +97,12 @@ namespace INSTITUTO_C.Controllers
             {
                 try
                 {
+                    var carreraEnDB = _context.Carreras.Find(carrera.Id);
+                    if (carreraEnDB != null)
+                    {
+
+                    }
+
                     _context.Update(carrera);
                     await _context.SaveChangesAsync();
                 }
