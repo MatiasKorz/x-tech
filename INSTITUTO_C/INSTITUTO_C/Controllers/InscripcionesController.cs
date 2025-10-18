@@ -63,7 +63,7 @@ namespace INSTITUTO_C.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(inscripcion);
+                _context.Inscripciones.Add(inscripcion);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
@@ -106,8 +106,23 @@ namespace INSTITUTO_C.Controllers
             {
                 try
                 {
-                    _context.Update(inscripcion);
-                    await _context.SaveChangesAsync();
+
+
+                    var inscripcionEnDB =_context.Inscripciones.Find(id);
+                    if(inscripcionEnDB != null)
+                    {
+                        
+
+
+
+                        _context.Inscripciones.Update(inscripcionEnDB);
+                        await _context.SaveChangesAsync();
+                    }
+                    else
+                    {
+                        return NotFound();
+                    }
+                    
                 }
                 catch (DbUpdateConcurrencyException)
                 {

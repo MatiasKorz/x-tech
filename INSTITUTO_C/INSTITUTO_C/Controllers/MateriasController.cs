@@ -61,7 +61,7 @@ namespace INSTITUTO_C.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(materia);
+                _context.Materias.Add(materia);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
@@ -102,8 +102,27 @@ namespace INSTITUTO_C.Controllers
             {
                 try
                 {
-                    _context.Update(materia);
-                    await _context.SaveChangesAsync();
+
+                    var materiaEnDB = _context.Materias.Find(materia.Id);
+
+                    if (materiaEnDB != null)
+                    {
+                        materiaEnDB.Nombre = materia.Nombre;
+                        materiaEnDB.Descripcion = materia.Descripcion;  
+                        
+
+
+
+
+
+                        _context.Materias.Update(materiaEnDB);
+                        await _context.SaveChangesAsync();
+                    }
+                    else
+                    {
+                        return NotFound();
+                    }
+
                 }
                 catch (DbUpdateConcurrencyException)
                 {
