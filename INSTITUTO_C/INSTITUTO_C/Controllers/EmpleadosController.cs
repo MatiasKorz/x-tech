@@ -54,10 +54,31 @@ namespace INSTITUTO_C.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Legajo,Id,UserName,Email,Nombre,Apellido,DNI,Telefono,Direccion,Activo")] Empleado empleado)
+        public async Task<IActionResult> Create([Bind("Id,UserName,Email,Nombre,Apellido,DNI,Telefono,Direccion,Activo")] Empleado empleado)
         {
             if (ModelState.IsValid)
             {
+
+
+
+
+                int maxLegajo = 0;
+                var legajosNumericos = _context.Empleados
+                    .AsEnumerable()
+                    .Select(e => int.TryParse(e.Legajo, out int parsed) ? parsed : 0)
+                    .ToList();
+
+                if (legajosNumericos.Any())
+                {
+                    maxLegajo = legajosNumericos.Max();
+                }
+
+                empleado.Legajo = (maxLegajo + 1).ToString();
+
+
+
+
+
                 _context.Empleados.Add(empleado);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -86,7 +107,7 @@ namespace INSTITUTO_C.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Legajo,Id,UserName,Email,Nombre,Apellido,DNI,Telefono,Direccion,Activo")] Empleado empleado)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,UserName,Email,Nombre,Apellido,DNI,Telefono,Direccion,Activo")] Empleado empleado)
         {
             if (id != empleado.Id)
             {
