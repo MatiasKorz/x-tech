@@ -24,13 +24,13 @@ namespace INSTITUTO_C.Models
 
         //[Required(ErrorMessage = ErrorMesseges.Requerido)]
         //elimine el range xq deberia ser autogenerado
-        public int NumeroMatricula { get; set; }
+        public string NumeroMatricula { get; set; }
 
         //navegacional
         public Carrera Carrera { get; set; }
 
         //relacional
-        [Required(ErrorMessage = ErrorMesseges.Requerido)]
+        //[Required(ErrorMessage = ErrorMesseges.Requerido)]
         public int CarreraId {  get; set; }
 
         public List<Inscripcion> Inscripciones { get; set; }
