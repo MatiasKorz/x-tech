@@ -54,7 +54,7 @@ namespace INSTITUTO_C.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Legajo,Id,UserName,Email,Nombre,Apellido,DNI,Telefono,Direccion,Activo")] Profesor profesor)
+        public async Task<IActionResult> Create([Bind("Id,UserName,Email,Nombre,Apellido,DNI,Telefono,Direccion,Activo")] Profesor profesor)
         {
             if (ModelState.IsValid)
             {
@@ -86,7 +86,7 @@ namespace INSTITUTO_C.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Legajo,Id,UserName,Email,Nombre,Apellido,DNI,Telefono,Direccion,Activo")] Profesor profesor)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,UserName,Email,Nombre,Apellido,DNI,Telefono,Direccion,Activo")] Profesor profesor)
         {
             if (id != profesor.Id)
             {

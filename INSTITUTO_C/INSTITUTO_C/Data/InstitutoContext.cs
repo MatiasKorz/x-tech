@@ -29,6 +29,18 @@ namespace INSTITUTO_C.Data
             modelBuilder.Entity<Persona>()
            .Property(p => p.FechaAlta)
            .ValueGeneratedOnAdd();
+
+
+
+            modelBuilder.Entity<Empleado>()
+           .HasIndex(e => e.Legajo)
+           .IsUnique();
+
+            modelBuilder.Entity<Alumno>()
+          .HasIndex(a => a.NumeroMatricula)
+          .IsUnique();
+
+
         }
 
 
