@@ -57,10 +57,32 @@ namespace INSTITUTO_C.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("NumeroMatricula,Id,UserName,Email,Nombre,Apellido,DNI,Telefono,Direccion,Activo")] Alumno alumno)
+        public async Task<IActionResult> Create([Bind("Id,UserName,Email,Nombre,Apellido,DNI,Telefono,Direccion,Activo")] Alumno alumno)
         {
             if (ModelState.IsValid)
             {
+
+
+
+
+
+
+                int maxNumMatricula = 0;
+                var numerosDeMatricula = _context.Alumnos
+                    .AsEnumerable()
+                    .Select(a => int.TryParse(a.NumeroMatricula, out int parsed) ? parsed : 0)
+                    .ToList();
+
+                if (numerosDeMatricula.Any())
+                {
+                    maxNumMatricula = numerosDeMatricula.Max();
+                }
+
+                alumno.NumeroMatricula = (maxNumMatricula + 1).ToString();
+
+
+
+
                 _context.Alumnos.Add(alumno);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -91,7 +113,7 @@ namespace INSTITUTO_C.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("NumeroMatricula,Id,UserName,Email,Nombre,Apellido,DNI,Telefono,Direccion,Activo")] Alumno alumno)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,UserName,Email,Nombre,Apellido,DNI,Telefono,Direccion,Activo")] Alumno alumno)
         {
             if (id != alumno.Id)
             {
