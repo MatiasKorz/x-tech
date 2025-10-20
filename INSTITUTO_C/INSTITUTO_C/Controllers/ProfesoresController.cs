@@ -58,6 +58,20 @@ namespace INSTITUTO_C.Controllers
         {
             if (ModelState.IsValid)
             {
+
+                int maxLegajo = 0;
+                var legajosNumericos = _context.Empleados
+                    .AsEnumerable()
+                    .Select(e => int.TryParse(e.Legajo, out int parsed) ? parsed : 0)
+                    .ToList();
+
+                if (legajosNumericos.Any())
+                {
+                    maxLegajo = legajosNumericos.Max();
+                }
+
+                profesor.Legajo = (maxLegajo + 1).ToString();
+
                 _context.Profesores.Add(profesor);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
