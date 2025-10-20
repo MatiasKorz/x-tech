@@ -30,7 +30,8 @@ namespace INSTITUTO_C.Models
         public Carrera Carrera { get; set; }
 
         //relacional
-        //[Required(ErrorMessage = ErrorMesseges.Requerido)]
+        [Required(ErrorMessage = ErrorMesseges.Requerido)]
+        [Display(Name = "Carrera")]
         public int CarreraId {  get; set; }
 
         public List<Inscripcion> Inscripciones { get; set; }
