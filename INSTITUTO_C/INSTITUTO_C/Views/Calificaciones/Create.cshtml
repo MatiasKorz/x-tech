@@ -24,17 +24,23 @@
             </div>
             <div class="form-group">
                 <label asp-for="ProfesorId" class="control-label"></label>
-                <input asp-for="ProfesorId" class="form-control" />
+                <select asp-for="ProfesorId" class="form-control" asp-items="ViewBag.ProfesorId">
+                    <option value="">Seleccione un profesor</option>
+                </select>
                 <span asp-validation-for="ProfesorId" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="MateriaCursadaId" class="control-label"></label>
-                <input asp-for="MateriaCursadaId" class="form-control" />
+                <select asp-for="MateriaCursadaId" class="form-control" asp-items="ViewBag.MateriaCursadaId">
+                    <option value="">Seleccione una materia cursada</option>
+                </select>
                 <span asp-validation-for="MateriaCursadaId" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="AlumnoId" class="control-label"></label>
-                <input asp-for="AlumnoId" class="form-control" />
+                <select asp-for="AlumnoId" class="form-control" asp-items="ViewBag.AlumnoId">
+                    <option value="">Seleccione un alumno</option>
+                </select>
                 <span asp-validation-for="AlumnoId" class="text-danger"></span>
             </div>
             <div class="form-group">

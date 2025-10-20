@@ -6,10 +6,12 @@ namespace INSTITUTO_C.Models
 {
     public class Inscripcion
     {
+        [Display(Name = "Cursada")]
         [Required(ErrorMessage = ErrorMesseges.Requerido)]
         [Key]
         public int MateriaCursadaId { get; set; }
 
+        [Display(Name = "Alumno")]
         [Required(ErrorMessage = ErrorMesseges.Requerido)]
         [Key]
         public int AlumnoId { get; set; }

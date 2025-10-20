@@ -18,8 +18,11 @@ namespace INSTITUTO_C.Models
 
         public Carrera Carrera { get; set; }
 
+
+        [Display(Name = "Carrera")]
         [Required(ErrorMessage = ErrorMesseges.Requerido)]
         public int CarreraId { get; set; }
+
 
         [Required(ErrorMessage = ErrorMesseges.Requerido)]
         [StringLength(50, MinimumLength = 5)]

@@ -109,8 +109,8 @@ namespace INSTITUTO_C.Controllers
                     {
                         materiaEnDB.Nombre = materia.Nombre;
                         materiaEnDB.Descripcion = materia.Descripcion;  
-                        
-
+                        materiaEnDB.CodigoMateria = materia.CodigoMateria;
+                        materiaEnDB.CupoMaximo = materia.CupoMaximo;
 
 
 
