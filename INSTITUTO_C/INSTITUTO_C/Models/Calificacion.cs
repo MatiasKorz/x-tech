@@ -15,9 +15,11 @@ namespace INSTITUTO_C.Models
         //- Alumno
 
         [Key]
+        [Display(Name = "Alumno")]
         public int AlumnoId { get; set; }
         [Key]
-        public int MateriaCursadald { get; set; }
+        [Display(Name = "Cursada")]
+        public int MateriaCursadaId { get; set; }
 
         [Required(ErrorMessage = ErrorMesseges.Requerido)]
         [DataType(DataType.Date)]
@@ -28,12 +30,12 @@ namespace INSTITUTO_C.Models
         public Nota Nota { get; set; }  
 
         [Required(ErrorMessage = ErrorMesseges.Requerido)]
+        [Display(Name = "Profesor")]
         public int ProfesorId { get; set; }
 
         public Profesor Profesor { get; set; }
 
-        [Required(ErrorMessage = ErrorMesseges.Requerido)]
-        public int MateriaCursadaId { get; set; }
+    
 
         public Inscripcion Inscripcion { get; set; }
 

@@ -12,6 +12,8 @@ namespace INSTITUTO_C.Models
         public int Id { get; set; }
 
 
+
+        [Display(Name = "Codigo de Materia")]
         [Required(ErrorMessage = ErrorMesseges.Requerido)]
         public int MateriaId { get; set; }
 
@@ -23,6 +25,7 @@ namespace INSTITUTO_C.Models
         public string CodigoCursada { get; set; }
 
         [Required(ErrorMessage = ErrorMesseges.Requerido)]
+        [Display(Name = "Año")]
         [Range(2020, 2050, ErrorMessage = ErrorMesseges.Range)]
         public int Anio { get; set; }
 
@@ -33,6 +36,7 @@ namespace INSTITUTO_C.Models
         public bool Activo { get; set; }
 
         //relacional
+        [Display(Name = "Profesor")]
         [Required(ErrorMessage = ErrorMesseges.Requerido)]
         public int ProfesorId { get; set; }
 
