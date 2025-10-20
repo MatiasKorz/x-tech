@@ -57,7 +57,7 @@ namespace INSTITUTO_C.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,UserName,Email,Nombre,Apellido,DNI,Telefono,Direccion,Activo")] Alumno alumno)
+        public async Task<IActionResult> Create([Bind("Id,UserName,Email,Nombre,Apellido,DNI,Telefono,Direccion,Activo,CarreraId")] Alumno alumno)
         {
             if (ModelState.IsValid)
             {
@@ -90,6 +90,7 @@ namespace INSTITUTO_C.Controllers
             ViewData["CarreraId"] = new SelectList(_context.Carreras, "Id", "Nombre", alumno.CarreraId);
             return View(alumno);
         }
+        
 
         // GET: Alumnos/Edit/5
         public async Task<IActionResult> Edit(int? id)
