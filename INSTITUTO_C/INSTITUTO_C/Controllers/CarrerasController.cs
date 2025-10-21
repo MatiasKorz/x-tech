@@ -100,10 +100,10 @@ namespace INSTITUTO_C.Controllers
                     var carreraEnDB = _context.Carreras.Find(carrera.Id);
                     if (carreraEnDB != null)
                     {
-
+                        carreraEnDB.Nombre = carrera.Nombre;
                     }
 
-                    _context.Update(carrera);
+                    _context.Update(carreraEnDB);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
