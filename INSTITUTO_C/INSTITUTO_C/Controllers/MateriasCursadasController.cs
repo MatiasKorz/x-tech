@@ -59,16 +59,13 @@ namespace INSTITUTO_C.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,MateriaId,CodigoCursada,Anio,Cuatrimestre,Activo,ProfesorId")] MateriaCursada materiaCursada)
+        public async Task<IActionResult> Create([Bind("Id,MateriaId,CodigoCursada,Cuatrimestre,Activo,ProfesorId")] MateriaCursada materiaCursada)
         {
             if (ModelState.IsValid)
             {
+                materiaCursada.Materia = await _context.Materias.FindAsync(materiaCursada.MateriaId);
 
-
-                if (!string.IsNullOrWhiteSpace(materiaCursada.CodigoCursada))
-                {
-                    materiaCursada.CodigoCursada = materiaCursada.CodigoCursada.ToUpper();
-                }
+                materiaCursada.GenerarNombre();
 
                 _context.MateriasCursadas.Add(materiaCursada);
                 await _context.SaveChangesAsync();

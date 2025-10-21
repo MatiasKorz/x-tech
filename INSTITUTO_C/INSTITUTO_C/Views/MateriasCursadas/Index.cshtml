@@ -13,6 +13,9 @@
     <thead>
         <tr>
             <th>
+                @Html.DisplayNameFor(model => model.Nombre)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.Materia)
             </th>
             <th>
@@ -37,13 +40,16 @@
 @foreach (var item in Model) {
         <tr>
             <td>
+                @Html.DisplayFor(modelItem => item.Nombre)
+            </td>
+            <td>
                 @Html.DisplayFor(modelItem => item.Materia.CodigoMateria)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.CodigoCursada)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Anio)
+                @Html.DisplayFor(modelItem => item.Anio.Year)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Cuatrimestre)

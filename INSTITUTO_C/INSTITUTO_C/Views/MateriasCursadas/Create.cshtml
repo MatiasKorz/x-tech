@@ -21,17 +21,20 @@
             </div>
             <div class="form-group">
                 <label asp-for="CodigoCursada" class="control-label"></label>
-                <input asp-for="CodigoCursada" class="form-control" />
+                <select asp-for="CodigoCursada" class="form-control"
+                        asp-items="Html.GetEnumSelectList<CodigoCursada>()">
+                    <option value="">Seleccione un código</option>
+                </select>
                 <span asp-validation-for="CodigoCursada" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="Anio" class="control-label"></label>
-                <input asp-for="Anio" class="form-control" />
-                <span asp-validation-for="Anio" class="text-danger"></span>
-            </div>
+           
             <div class="form-group">
                 <label asp-for="Cuatrimestre" class="control-label"></label>
-                <input asp-for="Cuatrimestre" class="form-control" />
+                <select asp-for="Cuatrimestre" class="form-control">
+                    <option value="">Seleccione cuatrimestre</option>
+                    <option value="1">1° Cuatrimestre</option>
+                    <option value="2">2° Cuatrimestre</option>
+                </select>
                 <span asp-validation-for="Cuatrimestre" class="text-danger"></span>
             </div>
             <div class="form-group form-check">
