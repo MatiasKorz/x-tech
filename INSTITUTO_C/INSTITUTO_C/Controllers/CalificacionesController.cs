@@ -22,6 +22,13 @@ namespace INSTITUTO_C.Controllers
         // GET: Calificaciones
         public async Task<IActionResult> Index()
         {
+            var calificaciones = _context.Calificaciones
+            .Include(c => c.Alumno)
+            .Include(c => c.Profesor)
+            .Include(c => c.Inscripcion)
+            .ThenInclude(i => i.MateriaCursada);
+
+
             return View(await _context.Calificaciones.ToListAsync());
         }
 
@@ -45,6 +52,10 @@ namespace INSTITUTO_C.Controllers
         // GET: Calificaciones/Create
         public IActionResult Create()
         {
+
+            ViewBag.ProfesorId = new SelectList(_context.Profesores, "Id", "Apellido");
+            ViewBag.MateriaCursadaId = new SelectList(_context.MateriasCursadas.Include(m => m.Materia), "Id", "Nombre");
+            ViewBag.AlumnoId = new SelectList(_context.Alumnos, "Id", "Apellido");
             return View();
         }
 
@@ -57,7 +68,7 @@ namespace INSTITUTO_C.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(calificacion);
+                _context.Calificaciones.Add(calificacion);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
@@ -77,6 +88,10 @@ namespace INSTITUTO_C.Controllers
             {
                 return NotFound();
             }
+
+            ViewBag.ProfesorId = new SelectList(_context.Profesores, "Id", "Apellido", calificacion.ProfesorId);
+            ViewBag.MateriaCursadaId = new SelectList(_context.MateriasCursadas.Include(m => m.Materia), "Id", "Nombre", calificacion.MateriaCursadaId);
+            ViewBag.AlumnoId = new SelectList(_context.Alumnos, "Id", "Apellido", calificacion.AlumnoId);
 
             return View(calificacion);
         }
