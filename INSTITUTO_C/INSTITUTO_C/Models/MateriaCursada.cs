@@ -20,14 +20,16 @@ namespace INSTITUTO_C.Models
         public Materia Materia { get; set; }
 
         [Required(ErrorMessage = ErrorMesseges.Requerido)]
-        [StringLength(1, MinimumLength = 1, ErrorMessage = ErrorMesseges.CaracteresExactos)]
-        [RegularExpression("^[A-Z]$", ErrorMessage = ErrorMesseges.SoloLetras)]
-        public string CodigoCursada { get; set; }
+        [Display(Name = "Código de Cursada")]
+        public CodigoCursada CodigoCursada { get; set; }
+
 
         [Required(ErrorMessage = ErrorMesseges.Requerido)]
+        [DataType(DataType.Date)]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:yyyy}")]
+        [ScaffoldColumn(false)]
         [Display(Name = "Año")]
-        [Range(2020, 2050, ErrorMessage = ErrorMesseges.Range)]
-        public int Anio { get; set; }
+        public DateTime Anio { get; set; } = DateTime.Now;
 
         [Required(ErrorMessage = ErrorMesseges.Requerido)]
         [Range(1, 2, ErrorMessage = ErrorMesseges.Range)]
@@ -43,6 +45,19 @@ namespace INSTITUTO_C.Models
         public Profesor Profesor { get; set; }
 
         public List<Inscripcion> Inscripciones { get; set; }
+
+
+        
+        [ScaffoldColumn(false)]
+        public string Nombre { get; set; }
+
+
+        public void GenerarNombre()
+        {
+            Nombre = $"{Materia.CodigoMateria}-{Anio.Year}-{Cuatrimestre}C-{CodigoCursada}";
+        }
+
+
 
     }
 }
