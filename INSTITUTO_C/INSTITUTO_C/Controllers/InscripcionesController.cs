@@ -50,7 +50,7 @@ namespace INSTITUTO_C.Controllers
         public IActionResult Create()
         {
             ViewData["AlumnoId"] = new SelectList(_context.Alumnos, "Id", "Apellido");
-            ViewData["MateriaCursadaId"] = new SelectList(_context.MateriasCursadas, "Id", "CodigoCursada");
+            ViewData["MateriaCursadaId"] = new SelectList(_context.MateriasCursadas, "Id", "Nombre");
             return View();
         }
 
@@ -68,7 +68,7 @@ namespace INSTITUTO_C.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["AlumnoId"] = new SelectList(_context.Alumnos, "Id", "Apellido", inscripcion.AlumnoId);
-            ViewData["MateriaCursadaId"] = new SelectList(_context.MateriasCursadas, "Id", "CodigoCursada", inscripcion.MateriaCursadaId);
+            ViewData["MateriaCursadaId"] = new SelectList(_context.MateriasCursadas, "Id", "Nombre", inscripcion.MateriaCursadaId);
             return View(inscripcion);
         }
 
@@ -86,7 +86,7 @@ namespace INSTITUTO_C.Controllers
                 return NotFound();
             }
             ViewData["AlumnoId"] = new SelectList(_context.Alumnos, "Id", "Apellido", inscripcion.AlumnoId);
-            ViewData["MateriaCursadaId"] = new SelectList(_context.MateriasCursadas, "Id", "CodigoCursada", inscripcion.MateriaCursadaId);
+            ViewData["MateriaCursadaId"] = new SelectList(_context.MateriasCursadas, "Id", "Nombre", inscripcion.MateriaCursadaId);
             return View(inscripcion);
         }
 
@@ -138,7 +138,7 @@ namespace INSTITUTO_C.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["AlumnoId"] = new SelectList(_context.Alumnos, "Id", "Apellido", inscripcion.AlumnoId);
-            ViewData["MateriaCursadaId"] = new SelectList(_context.MateriasCursadas, "Id", "CodigoCursada", inscripcion.MateriaCursadaId);
+            ViewData["MateriaCursadaId"] = new SelectList(_context.MateriasCursadas, "Id", "Nombre", inscripcion.MateriaCursadaId);
             return View(inscripcion);
         }
 
