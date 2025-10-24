@@ -110,6 +110,11 @@ namespace INSTITUTO_C.Controllers
                     var empleadoEnDB = _context.Empleados.Find(empleado.Id);
                     if (empleadoEnDB != null)
                     {
+
+                        if (string.IsNullOrEmpty(empleadoEnDB.Legajo))
+                        {
+                            empleadoEnDB.Legajo = EmpleadoHelper.GenerarLegajo(_context);
+                        }
                         empleadoEnDB.Nombre = empleado.Nombre;
                         empleadoEnDB.Apellido = empleado.Apellido;
                         empleadoEnDB.Direccion = empleado.Direccion;
