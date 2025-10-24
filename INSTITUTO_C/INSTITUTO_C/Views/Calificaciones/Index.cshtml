@@ -26,9 +26,9 @@
             <tr>
                 <td>@Html.DisplayFor(modelItem => item.Fecha)</td>
                 <td>@Html.DisplayFor(modelItem => item.Nota)</td>
-                <td>@Html.DisplayFor(modelItem => item.ProfesorId)</td>
-                <td>@Html.DisplayFor(modelItem => item.MateriaCursadaId)</td>
-                <td>@Html.DisplayFor(modelItem => item.AlumnoId)</td>
+                <td>@Html.DisplayFor(modelItem => item.Profesor.Apellido)</td>
+                <td>@Html.DisplayFor(modelItem => item.Inscripcion.MateriaCursada.Nombre)</td>
+                <td>@Html.DisplayFor(modelItem => item.Alumno.Apellido)</td>
                 <td>
                     <a asp-action="Edit" asp-route-alumnoId="@item.AlumnoId" asp-route-materiaCursadaId="@item.MateriaCursadaId">Editar</a> |
                     <a asp-action="Details" asp-route-alumnoId="@item.AlumnoId" asp-route-materiaCursadaId="@item.MateriaCursadaId">Detalles</a> |

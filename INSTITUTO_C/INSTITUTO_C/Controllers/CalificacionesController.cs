@@ -22,14 +22,14 @@ namespace INSTITUTO_C.Controllers
         // GET: Calificaciones
         public async Task<IActionResult> Index()
         {
-            var calificaciones = _context.Calificaciones
-            .Include(c => c.Alumno)
-            .Include(c => c.Profesor)
-            .Include(c => c.Inscripcion)
-            .ThenInclude(i => i.MateriaCursada);
+            var calificaciones = await _context.Calificaciones
+                .Include(c => c.Profesor)
+                .Include(c => c.Alumno)
+                .Include(c => c.Inscripcion)
+                    .ThenInclude(i => i.MateriaCursada)
+                .ToListAsync();
 
-
-            return View(await _context.Calificaciones.ToListAsync());
+            return View(calificaciones);
         }
 
         // GET: Calificaciones/Details/5
@@ -37,6 +37,7 @@ namespace INSTITUTO_C.Controllers
         {
             var calificacion = await _context.Calificaciones
                 .Include(c => c.Alumno)
+                .Include(c => c.Profesor)
                 .Include(c => c.Inscripcion)
                 .ThenInclude(i => i.MateriaCursada)
                 .FirstOrDefaultAsync(c => c.AlumnoId == alumnoId && c.MateriaCursadaId == materiaCursadaId);
