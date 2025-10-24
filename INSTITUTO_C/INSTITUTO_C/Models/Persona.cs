@@ -1,11 +1,12 @@
 ﻿using INSTITUTO_C.Helpers;
+using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace INSTITUTO_C.Models
 {
-    public class Persona
+    public class Persona: IdentityUser<int>
     {
         //- UserName
         //- Email
@@ -17,7 +18,7 @@ namespace INSTITUTO_C.Models
         //- Direccion
         //- Activo
 
-        public int Id { get; set; }
+       // public int Id { get; set; }
 
         [Required(ErrorMessage = ErrorMesseges.Requerido)]
         [StringLength(50, MinimumLength = 3, ErrorMessage = ErrorMesseges.CaracteresMinMax)]
@@ -26,7 +27,13 @@ namespace INSTITUTO_C.Models
 
         [Required(ErrorMessage = ErrorMesseges.Requerido)]
         [EmailAddress(ErrorMessage = ErrorMesseges.NotValid)]
-        public string Email { get; set; }
+        public override string Email {
+            get { return base.Email; }
+
+
+
+            set { base.Email = value; }
+        }
 
         [Required(ErrorMessage = ErrorMesseges.Requerido)]
         [DataType(DataType.Date)]

@@ -1,9 +1,11 @@
 ﻿using INSTITUTO_C.Models;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace INSTITUTO_C.Data
 {
-    public class InstitutoContext: DbContext
+    public class InstitutoContext: IdentityDbContext<IdentityUser<int>, IdentityRole<int>,int>
     {
         public InstitutoContext(DbContextOptions options) : base(options) 
         {
@@ -40,6 +42,10 @@ namespace INSTITUTO_C.Data
           .HasIndex(a => a.NumeroMatricula)
           .IsUnique();
 
+
+            modelBuilder.Entity<IdentityUser<int>>().ToTable("Personas");
+            modelBuilder.Entity<IdentityRole<int>>().ToTable("Roles");
+            modelBuilder.Entity<IdentityUserRole<int>>().ToTable("PersonasRoles");
 
         }
 

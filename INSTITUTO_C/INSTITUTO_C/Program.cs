@@ -3,6 +3,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using INSTITUTO_C.Data; // tu DbContext
 using Microsoft.EntityFrameworkCore;
+using INSTITUTO_C.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace INSTITUTO_C
 {
@@ -16,6 +18,28 @@ namespace INSTITUTO_C
             builder.Services.AddControllersWithViews();
 
             builder.Services.AddDbContext<InstitutoContext>(options => options.UseInMemoryDatabase("InstitutoDb"));
+
+
+            //identity
+
+            builder.Services.AddIdentity<Persona, IdentityRole<int>>().AddEntityFrameworkStores<InstitutoContext>();
+
+            builder.Services.Configure<IdentityOptions>(opciones =>
+            {
+                opciones.Password.RequireNonAlphanumeric = false;
+                opciones.Password.RequireLowercase = false;
+                opciones.Password.RequireUppercase = false;
+                opciones.Password.RequireDigit = false;
+                opciones.Password.RequiredLength = 5;
+
+
+                //Password1!
+
+            }
+
+            );
+            
+
 
             var app = builder.Build();
 
@@ -32,7 +56,8 @@ namespace INSTITUTO_C
 
             app.UseRouting();
 
-            app.UseAuthorization();
+            app.UseAuthentication(); //siempre auten antes de autor
+            app.UseAuthorization();  //eso es mucho muy importante
 
             app.MapControllerRoute(
                 name: "default",
