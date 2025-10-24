@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace INSTITUTO_C.Controllers
 {
@@ -68,6 +69,46 @@ namespace INSTITUTO_C.Controllers
             }
             return View(viewModel);
         }
+
+
+
+
+        public IActionResult IniciarSesion()
+        {
+            return View();
+
+
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> IniciarSesion(Login viewModel)
+        {
+
+            if (ModelState.IsValid)
+            {
+               var resultado = await _signInManager.PasswordSignInAsync(viewModel.Email, viewModel.Password, viewModel.Recordarme, false);
+
+                if (resultado.Succeeded)
+                {
+                    return RedirectToAction("Index", "Home");
+                }
+                ModelState.AddModelError(string.Empty, "Acceso denegado");
+            }
+
+
+            return View(viewModel);
+
+
+        }
+
+
+        public async Task<IActionResult> CerrarSesion()
+        {
+
+            await _signInManager.SignOutAsync();
+            return RedirectToAction("Index","Home");
+        }
+
 
 
     }
