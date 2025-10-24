@@ -19,7 +19,7 @@
 
         public const string SoloMayusculasYNumeros = "El campo {0} solo puede contener letras mayúsculas y números.";
 
-        
+        public const string NoMatch = "Las contraseñas no coinciden";
 
     }
 }

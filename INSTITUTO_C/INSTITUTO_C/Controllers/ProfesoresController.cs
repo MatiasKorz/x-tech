@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using INSTITUTO_C.Data;
 using INSTITUTO_C.Models;
+using INSTITUTO_C.Helpers;
 
 namespace INSTITUTO_C.Controllers
 {
@@ -59,18 +60,7 @@ namespace INSTITUTO_C.Controllers
             if (ModelState.IsValid)
             {
 
-                int maxLegajo = 0;
-                var legajosNumericos = _context.Empleados
-                    .AsEnumerable()
-                    .Select(e => int.TryParse(e.Legajo, out int parsed) ? parsed : 0)
-                    .ToList();
-
-                if (legajosNumericos.Any())
-                {
-                    maxLegajo = legajosNumericos.Max();
-                }
-
-                profesor.Legajo = (maxLegajo + 1).ToString();
+                profesor.Legajo = EmpleadoHelper.GenerarLegajo(_context);
 
                 _context.Profesores.Add(profesor);
                 await _context.SaveChangesAsync();
