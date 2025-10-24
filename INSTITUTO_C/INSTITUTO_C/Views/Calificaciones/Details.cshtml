@@ -25,24 +25,24 @@
         </dd>
 
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.ProfesorId)
+            Profesor
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.ProfesorId)
+            @Model.Profesor.Apellido
         </dd>
 
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.MateriaCursadaId)
+            Materia
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.MateriaCursadaId)
+            @Model.Inscripcion.MateriaCursada.Nombre
         </dd>
 
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.AlumnoId)
+            Alumno
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.AlumnoId)
+            @Model.Alumno.Apellido
         </dd>
     </dl>
 </div>
