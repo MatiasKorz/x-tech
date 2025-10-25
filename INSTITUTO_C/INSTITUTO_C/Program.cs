@@ -5,6 +5,7 @@ using INSTITUTO_C.Data; // tu DbContext
 using Microsoft.EntityFrameworkCore;
 using INSTITUTO_C.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Configuration;
 
 namespace INSTITUTO_C
 {
@@ -17,7 +18,8 @@ namespace INSTITUTO_C
             // Add services to the container.
             builder.Services.AddControllersWithViews();
 
-            builder.Services.AddDbContext<InstitutoContext>(options => options.UseInMemoryDatabase("InstitutoDb"));
+            //builder.Services.AddDbContext<InstitutoContext>(options => options.UseInMemoryDatabase("InstitutoDb"));
+            builder.Services.AddDbContext<InstitutoContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("InstitutoDBCS")));
 
 
             //identity
@@ -32,15 +34,11 @@ namespace INSTITUTO_C
                 opciones.Password.RequireDigit = false;
                 opciones.Password.RequiredLength = 5;
 
-
                 //Password1!
-
             }
 
             );
             
-
-
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
