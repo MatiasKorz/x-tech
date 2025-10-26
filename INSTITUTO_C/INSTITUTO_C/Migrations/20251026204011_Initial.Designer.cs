@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace INSTITUTO_C.Migrations
 {
     [DbContext(typeof(InstitutoContext))]
-    [Migration("20251025224246_Inicial")]
-    partial class Inicial
+    [Migration("20251026204011_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -451,7 +451,7 @@ namespace INSTITUTO_C.Migrations
                     b.HasOne("INSTITUTO_C.Models.Profesor", "Profesor")
                         .WithMany("Calificaciones")
                         .HasForeignKey("ProfesorId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("INSTITUTO_C.Models.Inscripcion", "Inscripcion")
@@ -472,13 +472,13 @@ namespace INSTITUTO_C.Migrations
                     b.HasOne("INSTITUTO_C.Models.Alumno", "Alumno")
                         .WithMany("Inscripciones")
                         .HasForeignKey("AlumnoId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("INSTITUTO_C.Models.MateriaCursada", "MateriaCursada")
                         .WithMany("Inscripciones")
                         .HasForeignKey("MateriaCursadaId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Alumno");
@@ -508,7 +508,7 @@ namespace INSTITUTO_C.Migrations
                     b.HasOne("INSTITUTO_C.Models.Profesor", "Profesor")
                         .WithMany("MateriasCursada")
                         .HasForeignKey("ProfesorId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Materia");

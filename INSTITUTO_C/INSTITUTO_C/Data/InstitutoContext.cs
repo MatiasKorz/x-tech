@@ -15,17 +15,37 @@ namespace INSTITUTO_C.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            modelBuilder.Entity<Inscripcion>().HasKey(i => new { i.AlumnoId, i.MateriaCursadaId });
+            modelBuilder.Entity<Inscripcion>()
+    .HasKey(i => new { i.AlumnoId, i.MateriaCursadaId });
 
-            modelBuilder.Entity<Inscripcion>().HasOne(i => i.Alumno).WithMany(a => a.Inscripciones).HasForeignKey(i=> i.AlumnoId);
-            modelBuilder.Entity<Inscripcion>().HasOne(i => i.MateriaCursada).WithMany(mc => mc.Inscripciones).HasForeignKey(i => i.MateriaCursadaId);
+            modelBuilder.Entity<Inscripcion>()
+                .HasOne(i => i.Alumno)
+                .WithMany(a => a.Inscripciones)
+                .HasForeignKey(i => i.AlumnoId)
+                .OnDelete(DeleteBehavior.Restrict);
 
+            modelBuilder.Entity<Inscripcion>()
+                .HasOne(i => i.MateriaCursada)
+                .WithMany(mc => mc.Inscripciones)
+                .HasForeignKey(i => i.MateriaCursadaId)
+                .OnDelete(DeleteBehavior.Restrict);
 
             // Clave compuesta para Calificación (PK y FK)
-            modelBuilder.Entity<Calificacion>().HasKey(c => new { c.AlumnoId, c.MateriaCursadaId });
-            modelBuilder.Entity<Calificacion>().HasOne(c => c.Inscripcion).WithOne(i => i.Calificacion).HasForeignKey<Calificacion>(c => new { c.AlumnoId, c.MateriaCursadaId });
+            modelBuilder.Entity<Calificacion>()
+          .HasKey(c => new { c.AlumnoId, c.MateriaCursadaId });
 
+            modelBuilder.Entity<Calificacion>()
+                .HasOne(c => c.Inscripcion)
+                .WithOne(i => i.Calificacion)
+                .HasForeignKey<Calificacion>(c => new { c.AlumnoId, c.MateriaCursadaId })
+                .OnDelete(DeleteBehavior.Cascade); 
 
+            // Calificacion: relación con Profesor
+            modelBuilder.Entity<Calificacion>()
+                .HasOne(c => c.Profesor)
+                .WithMany(p => p.Calificaciones)
+                .HasForeignKey(c => c.ProfesorId)
+                .OnDelete(DeleteBehavior.Restrict);
 
             //fecha alta
             modelBuilder.Entity<Persona>()
@@ -41,6 +61,13 @@ namespace INSTITUTO_C.Data
             modelBuilder.Entity<Alumno>()
           .HasIndex(a => a.NumeroMatricula)
           .IsUnique();
+
+
+            modelBuilder.Entity<MateriaCursada>()
+          .HasOne(mc => mc.Profesor)
+          .WithMany(p => p.MateriasCursada)
+          .HasForeignKey(mc => mc.ProfesorId)
+          .OnDelete(DeleteBehavior.Restrict);
 
 
             modelBuilder.Entity<IdentityUser<int>>().ToTable("Personas");
