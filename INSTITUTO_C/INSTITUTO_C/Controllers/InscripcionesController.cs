@@ -67,14 +67,13 @@ namespace INSTITUTO_C.Controllers
         }
 
         // GET: Inscripciones/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(int alumnoId, int materiaCursadaId)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            var inscripcion = await _context.Inscripciones
+             .Include(i => i.Alumno)
+             .Include(i => i.MateriaCursada)
+             .FirstOrDefaultAsync(i => i.AlumnoId == alumnoId && i.MateriaCursadaId == materiaCursadaId);
 
-            var inscripcion = await _context.Inscripciones.FindAsync(id);
             if (inscripcion == null)
             {
                 return NotFound();
@@ -89,45 +88,28 @@ namespace INSTITUTO_C.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("MateriaCursadaId,AlumnoId")] Inscripcion inscripcion)
+        public async Task<IActionResult> Edit(int alumnoId, int materiaCursadaId, [Bind("MateriaCursadaId,AlumnoId")] Inscripcion inscripcion)
         {
-            if (id != inscripcion.AlumnoId)
-            {
+            if (alumnoId != inscripcion.AlumnoId || materiaCursadaId != inscripcion.MateriaCursadaId)
                 return NotFound();
-            }
+
 
             if (ModelState.IsValid)
             {
                 try
                 {
-
-
-                    var inscripcionEnDB =_context.Inscripciones.Find(id);
-                    if(inscripcionEnDB != null)
-                    {
-                        
-
-
-
-                        _context.Inscripciones.Update(inscripcionEnDB);
-                        await _context.SaveChangesAsync();
-                    }
-                    else
-                    {
-                        return NotFound();
-                    }
-                    
+                    _context.Update(inscripcion);
+                    await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!InscripcionExists(inscripcion.AlumnoId))
-                    {
+                    var exists = await _context.Inscripciones.AnyAsync(i =>
+                        i.AlumnoId == inscripcion.AlumnoId && i.MateriaCursadaId == inscripcion.MateriaCursadaId);
+
+                    if (!exists)
                         return NotFound();
-                    }
                     else
-                    {
                         throw;
-                    }
                 }
                 return RedirectToAction(nameof(Index));
             }
