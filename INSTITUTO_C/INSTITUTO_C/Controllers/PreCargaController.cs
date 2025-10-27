@@ -14,7 +14,7 @@ namespace INSTITUTO_C.Controllers
         private readonly UserManager<Persona> _userManager;
         private readonly RoleManager<IdentityRole<int>> _roleManager;
         private readonly InstitutoContext _context;
-        private List<string> roles = new List<string>() {"Admin", "Empleado", "Profesor", "Alumno"};
+        private List<string> roles = new List<string>() {"Admin", "Empleado", "Profesor", "Alumno", "Usuario"};
         public PreCargaController(UserManager<Persona> userManager, RoleManager<IdentityRole<int>> roleManager, InstitutoContext context)
         {
             this._userManager = userManager;
