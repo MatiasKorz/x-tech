@@ -137,21 +137,15 @@ namespace INSTITUTO_C.Controllers
         }
 
         // GET: Inscripciones/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Delete(int alumnoId, int materiaCursadaId)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
             var inscripcion = await _context.Inscripciones
                 .Include(i => i.Alumno)
                 .Include(i => i.MateriaCursada)
-                .FirstOrDefaultAsync(m => m.AlumnoId == id);
+                .FirstOrDefaultAsync(i => i.AlumnoId == alumnoId && i.MateriaCursadaId == materiaCursadaId);
+
             if (inscripcion == null)
-            {
                 return NotFound();
-            }
 
             return View(inscripcion);
         }
@@ -159,13 +153,11 @@ namespace INSTITUTO_C.Controllers
         // POST: Inscripciones/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(int alumnoId, int materiaCursadaId)
         {
-            var inscripcion = await _context.Inscripciones.FindAsync(id);
+            var inscripcion = await _context.Inscripciones.FindAsync(alumnoId, materiaCursadaId);
             if (inscripcion != null)
-            {
                 _context.Inscripciones.Remove(inscripcion);
-            }
 
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
