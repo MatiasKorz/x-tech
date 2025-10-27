@@ -27,21 +27,15 @@ namespace INSTITUTO_C.Controllers
         }
 
         // GET: Inscripciones/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(int alumnoId, int materiaCursadaId)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
             var inscripcion = await _context.Inscripciones
                 .Include(i => i.Alumno)
                 .Include(i => i.MateriaCursada)
-                .FirstOrDefaultAsync(m => m.AlumnoId == id);
+                .FirstOrDefaultAsync(i => i.AlumnoId == alumnoId && i.MateriaCursadaId == materiaCursadaId);
+
             if (inscripcion == null)
-            {
                 return NotFound();
-            }
 
             return View(inscripcion);
         }

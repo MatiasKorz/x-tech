@@ -31,12 +31,24 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Alumno.Apellido)
             </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
-            </td>
-        </tr>
-}
+                <td>
+                    <a asp-action="Edit"
+                       asp-route-alumnoId="@item.AlumnoId"
+                       asp-route-materiaCursadaId="@item.MateriaCursadaId">
+                        Edit
+                    </a> |
+                    <a asp-action="Details"
+                       asp-route-alumnoId="@item.AlumnoId"
+                       asp-route-materiaCursadaId="@item.MateriaCursadaId">
+                        Details
+                    </a> |
+                    <a asp-action="Delete"
+                       asp-route-alumnoId="@item.AlumnoId"
+                       asp-route-materiaCursadaId="@item.MateriaCursadaId">
+                        Delete
+                    </a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
