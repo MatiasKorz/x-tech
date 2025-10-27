@@ -102,7 +102,7 @@ namespace INSTITUTO_C.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int alumnoId, int materiaCursadaId, [Bind("AlumnoId,MateriaCursadaId,Fecha,Nota,ProfesorId")] Calificacion calificacion)
+        public async Task<IActionResult> Edit(int alumnoId, int materiaCursadaId, [Bind("AlumnoId,MateriaCursadaId,Nota")] Calificacion calificacion)
         {
             if (alumnoId != calificacion.AlumnoId || materiaCursadaId != calificacion.MateriaCursadaId)
             {
@@ -113,8 +113,19 @@ namespace INSTITUTO_C.Controllers
             {
                 try
                 {
-                    _context.Update(calificacion);
+                    // Solo actualizamos la Nota
+                    var calificacionExistente = await _context.Calificaciones
+                        .FirstOrDefaultAsync(c => c.AlumnoId == alumnoId && c.MateriaCursadaId == materiaCursadaId);
+
+                    if (calificacionExistente == null)
+                        return NotFound();
+
+                    calificacionExistente.Nota = calificacion.Nota;
+
+                    _context.Update(calificacionExistente);
                     await _context.SaveChangesAsync();
+
+                    return RedirectToAction(nameof(Index));
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -127,10 +138,10 @@ namespace INSTITUTO_C.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
             }
             return View(calificacion);
         }
+
 
 
         // GET: Calificaciones/Delete
@@ -138,6 +149,7 @@ namespace INSTITUTO_C.Controllers
         {
             var calificacion = await _context.Calificaciones
                 .Include(c => c.Alumno)
+                .Include(c => c.Profesor)
                 .Include(c => c.Inscripcion)
                 .ThenInclude(i => i.MateriaCursada)
                 .FirstOrDefaultAsync(c => c.AlumnoId == alumnoId && c.MateriaCursadaId == materiaCursadaId);
@@ -167,7 +179,6 @@ namespace INSTITUTO_C.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        
         private bool CalificacionExists(int alumnoId, int materiaCursadaId)
         {
             return _context.Calificaciones.Any(c => c.AlumnoId == alumnoId && c.MateriaCursadaId == materiaCursadaId);

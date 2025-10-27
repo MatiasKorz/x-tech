@@ -15,7 +15,7 @@
             @Html.DisplayNameFor(model => model.MateriaCursada)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.MateriaCursada.CodigoCursada)
+            @Html.DisplayFor(model => model.MateriaCursada.Nombre)
         </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Alumno)
@@ -25,7 +25,7 @@
         </dd>
     </dl>
     
-    <form asp-action="Delete">
+    <form asp-action="Delete" method="post">
         <input type="hidden" asp-for="MateriaCursadaId" />
         <input type="hidden" asp-for="AlumnoId" />
         <input type="submit" value="Delete" class="btn btn-danger" /> |
