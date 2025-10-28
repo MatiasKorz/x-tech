@@ -18,8 +18,8 @@ namespace INSTITUTO_C
             // Add services to the container.
             builder.Services.AddControllersWithViews();
 
-            //builder.Services.AddDbContext<InstitutoContext>(options => options.UseInMemoryDatabase("InstitutoDb"));
-            builder.Services.AddDbContext<InstitutoContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("InstitutoDBCS")));
+            builder.Services.AddDbContext<InstitutoContext>(options => options.UseInMemoryDatabase("InstitutoDb"));
+            //builder.Services.AddDbContext<InstitutoContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("InstitutoDBCS")));
 
 
             //identity
