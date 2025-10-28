@@ -25,9 +25,6 @@ namespace INSTITUTO_C.Models
         //[RegularExpression(@"^[a-zA-Z0-9_]+$", ErrorMessage = "Solo letras, números y guión bajo")]
         public override string UserName { 
              get { return base.UserName; }
-
-
-
              set { base.UserName = value; }
         }
 
@@ -35,9 +32,6 @@ namespace INSTITUTO_C.Models
         [EmailAddress(ErrorMessage = ErrorMesseges.NotValid)]
         public override string Email {
             get { return base.Email; }
-
-
-
             set { base.Email = value; }
         }
 
@@ -64,12 +58,12 @@ namespace INSTITUTO_C.Models
         public string DNI { get; set; }
 
         //[Required(ErrorMessage = ErrorMesseges.Requerido)]
-        [StringLength(20, MinimumLength = 8, ErrorMessage = "Teléfono debe tener entre 8 y 20 caracteres")]
+        [StringLength(15, MinimumLength = 8, ErrorMessage = "Teléfono debe tener entre 8 y 15 caracteres")]
         [RegularExpression(@"^[\d\s\-\(\)\+]+$", ErrorMessage = ErrorMesseges.SoloNumeros)]
         public string Telefono { get; set; }
 
         //[Required(ErrorMessage = ErrorMesseges.Requerido)]
-        [StringLength(100, MinimumLength = 10, ErrorMessage = "Dirección debe tener entre 10 y 100 caracteres")]
+        [StringLength(20, MinimumLength = 5, ErrorMessage = "Dirección debe tener entre 5 y 20 caracteres")]
         public string Direccion { get; set; }
 
         public bool Activo { get; set; } = true;
