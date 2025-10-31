@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using INSTITUTO_C.Data;
 using INSTITUTO_C.Models;
+using INSTITUTO_C.Helpers;
 
 namespace INSTITUTO_C.Controllers
 {
@@ -128,6 +129,11 @@ namespace INSTITUTO_C.Controllers
                     var alumnoEnDb = _context.Alumnos.Find(alumno.Id);
                     if (alumnoEnDb != null)
                     {
+
+                        if (string.IsNullOrEmpty(alumnoEnDb.NumeroMatricula))
+                        {
+                            alumnoEnDb.NumeroMatricula = AlumnoHelper.GenerarNumMatricula(_context);
+                        }
                         alumnoEnDb.Nombre = alumno.Nombre;
                         alumnoEnDb.Apellido = alumno.Apellido;
                         alumnoEnDb.Direccion = alumno.Direccion;

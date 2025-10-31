@@ -7,6 +7,14 @@ namespace INSTITUTO_C.ViewModels
     public class RegistroUsuario
     {
 
+
+
+
+        [Required(ErrorMessage = ErrorMesseges.Requerido)]
+        [Display(Name = "Carrera")]
+        public string CarreraNombre { get; set; }
+
+
         [Required(ErrorMessage = ErrorMesseges.Requerido)]
         [EmailAddress(ErrorMessage = ErrorMesseges.NotValid)]
         public string Email { get; set; }

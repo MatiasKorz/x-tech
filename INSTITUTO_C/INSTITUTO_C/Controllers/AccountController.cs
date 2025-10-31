@@ -1,9 +1,12 @@
-﻿using INSTITUTO_C.Helpers;
+﻿using INSTITUTO_C.Data;
+using INSTITUTO_C.Helpers;
 using INSTITUTO_C.Models;
 using INSTITUTO_C.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 using System.Threading.Tasks;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
@@ -14,15 +17,19 @@ namespace INSTITUTO_C.Controllers
 
         private readonly UserManager<Persona> _userManager;
         private readonly SignInManager<Persona> _signInManager;
-        public AccountController(UserManager<Persona> userManager, SignInManager<Persona> signInManager)
+        private readonly InstitutoContext _context;
+        public AccountController(UserManager<Persona> userManager, SignInManager<Persona> signInManager, InstitutoContext context)
         {
             this._userManager = userManager;
             this._signInManager = signInManager;
+            this._context = context;
         }
 
 
         public IActionResult Registrar()
         {
+
+            ViewData["CarreraNombre"] = new SelectList(_context.Carreras, "Nombre", "Nombre");
             return View();
         }
 
@@ -32,30 +39,38 @@ namespace INSTITUTO_C.Controllers
         {
             if (ModelState.IsValid)
             {
+                var carreraSeleccionada = _context.Carreras
+                 .FirstOrDefault(c => c.Nombre == viewModel.CarreraNombre);
 
-                //string nuevoLegajo = EmpleadoHelper.GenerarLegajo(_context);
-                Empleado empleado = new Empleado()
+                if (carreraSeleccionada == null)
+                {
+                    ModelState.AddModelError("CarreraNombre", "Carrera inválida");
+                    ViewData["CarreraNombre"] = new SelectList(_context.Carreras, "Nombre", "Nombre", viewModel.CarreraNombre);
+                    return View(viewModel);
+                }
+
+                Alumno alumno = new Alumno()
                 {
                     
 
                      Email = viewModel.Email,
                      UserName = viewModel.Email,
-                     //Legajo = nuevoLegajo, // 👈 asignación automática
-                     
-                   
+                    CarreraId = carreraSeleccionada.Id
+
+
                 };
 
 
-                var resultadoCreate = await _userManager.CreateAsync(empleado, viewModel.Password);
+                var resultadoCreate = await _userManager.CreateAsync(alumno, viewModel.Password);
 
 
                 if (resultadoCreate.Succeeded)
                 {
 
-                    await _signInManager.SignInAsync(empleado, isPersistent: false);
-                    //return RedirectToAction("Index", "Home");
+                    await _signInManager.SignInAsync(alumno, isPersistent: false);
+         
 
-                    return RedirectToAction("Edit", "Empleados", new { id = empleado.Id });
+                    return RedirectToAction("Edit", "Alumnos", new { id = alumno.Id });
 
                 }
 
@@ -67,6 +82,8 @@ namespace INSTITUTO_C.Controllers
                 }
                 
             }
+
+            ViewData["CarreraNombre"] = new SelectList(_context.Carreras, "Nombre", "Nombre", viewModel.CarreraNombre);
             return View(viewModel);
         }
 
