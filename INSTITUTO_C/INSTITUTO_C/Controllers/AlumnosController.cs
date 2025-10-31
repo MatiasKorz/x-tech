@@ -69,9 +69,27 @@ namespace INSTITUTO_C.Controllers
 
 
 
-              var result = await _userManager.CreateAsync(alumno, "Password1!");
-                if (result.Succeeded)
-                    return RedirectToAction(nameof(Index));
+              var resultAgregar = await _userManager.CreateAsync(alumno, Configs.Password);
+                if (resultAgregar.Succeeded)
+                    if (resultAgregar.Succeeded)
+                    {
+                        var resultadoAddRole = await _userManager.AddToRoleAsync(alumno, Configs.Alumno);
+
+                        if (resultadoAddRole.Succeeded)
+                        {
+                            return RedirectToAction("Index", "Alumnos");
+                        }
+                        else
+                        {
+                            return Content("No se pudo agregar rol");
+                        }
+
+                    }
+                foreach (var error in resultAgregar.Errors)
+                {
+                    ModelState.AddModelError("", error.Description);
+                }
+                return RedirectToAction(nameof(Index));
             }
             ViewData["CarreraId"] = new SelectList(_context.Carreras, "Id", "Nombre", alumno.CarreraId);
             return View(alumno);

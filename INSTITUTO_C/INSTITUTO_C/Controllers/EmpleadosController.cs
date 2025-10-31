@@ -63,9 +63,27 @@ namespace INSTITUTO_C.Controllers
 
 
 
-                var result = await _userManager.CreateAsync(empleado, "Password1!");
-                if (result.Succeeded)
-                    return RedirectToAction(nameof(Index));
+                var resultAgregar = await _userManager.CreateAsync(empleado, Configs.Password);
+                if (resultAgregar.Succeeded)
+                { 
+                    var resultadoAddRole = await _userManager.AddToRoleAsync(empleado, Configs.Empleado);
+
+                if (resultadoAddRole.Succeeded)
+                {
+                    return RedirectToAction("Index", "Empleados");
+                }
+                else
+                {
+                    return Content("No se pudo agregar rol");
+                }
+
+            }
+                foreach (var error in resultAgregar.Errors)
+                {
+                    ModelState.AddModelError("", error.Description);
+                }
+
+                return RedirectToAction(nameof(Index));
             }
             return View(empleado);
         }

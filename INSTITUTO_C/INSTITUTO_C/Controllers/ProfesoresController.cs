@@ -58,9 +58,27 @@ namespace INSTITUTO_C.Controllers
 
                 profesor.Legajo = EmpleadoHelper.GenerarLegajo(_context);
 
-                var result = await _userManager.CreateAsync(profesor, "Password1!");
-                if (result.Succeeded)
-                    return RedirectToAction(nameof(Index));
+                var resultAgregar = await _userManager.CreateAsync(profesor, Configs.Password);
+                if (resultAgregar.Succeeded)
+                {
+                    var resultadoAddRole = await _userManager.AddToRoleAsync(profesor, Configs.Profesor);
+
+                    if (resultadoAddRole.Succeeded)
+                    {
+                        return RedirectToAction("Index", "Profesores");
+                    }
+                    else
+                    {
+                        return Content("No se pudo agregar rol");
+                    }
+
+                }
+                foreach (var error in resultAgregar.Errors)
+                {
+                    ModelState.AddModelError("", error.Description);
+                }
+
+                return RedirectToAction(nameof(Index));
             }
             return View(profesor);
         }

@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using INSTITUTO_C.Data;
 using INSTITUTO_C.Models;
 using Microsoft.AspNetCore.Identity;
+using INSTITUTO_C.Helpers;
 
 namespace INSTITUTO_C.Controllers
 {
@@ -60,16 +61,28 @@ namespace INSTITUTO_C.Controllers
         public async Task<IActionResult> Create([Bind("Id,UserName,Email,Nombre,Apellido,DNI,Telefono,Direccion,Activo")] Persona persona)
         {
 
-            var result = await _userManager.CreateAsync(persona, "Password1!");
-            if (result.Succeeded)
+            if (ModelState.IsValid) {
+            var resultAgregar = await _userManager.CreateAsync(persona, Configs.Password);
+            if (resultAgregar.Succeeded)
             {
-              
-                return RedirectToAction(nameof(Index));
+                var resultadoAddRole = await _userManager.AddToRoleAsync(persona, Configs.Usuario);
+
+                if (resultadoAddRole.Succeeded)
+                {
+                    return RedirectToAction("Index", "Personas");
+                }
+                else
+                {
+                    return Content("No se pudo agregar rol");
+                }
+
             }
-            foreach (var error in result.Errors)
+            foreach (var error in resultAgregar.Errors)
             {
                 ModelState.AddModelError("", error.Description);
             }
+            return RedirectToAction(nameof(Index));
+        }
             return View(persona);
         }
 

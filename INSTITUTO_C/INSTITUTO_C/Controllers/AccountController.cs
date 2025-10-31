@@ -67,10 +67,22 @@ namespace INSTITUTO_C.Controllers
                 if (resultadoCreate.Succeeded)
                 {
 
-                    await _signInManager.SignInAsync(alumno, isPersistent: false);
+                    var resultadoAddRole = await _userManager.AddToRoleAsync(alumno, Configs.Alumno);
+
+                    if (resultadoAddRole.Succeeded)
+                    {
+                        await _signInManager.SignInAsync(alumno, isPersistent: false);
+                        return RedirectToAction("Edit", "Alumnos", new { id = alumno.Id });
+                    }
+                    else
+                    {
+                        return Content("No se pudo agregar rol");
+                    }
+
+
          
 
-                    return RedirectToAction("Edit", "Alumnos", new { id = alumno.Id });
+
 
                 }
 
