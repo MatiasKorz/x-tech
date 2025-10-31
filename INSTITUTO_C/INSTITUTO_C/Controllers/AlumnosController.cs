@@ -8,40 +8,35 @@ using Microsoft.EntityFrameworkCore;
 using INSTITUTO_C.Data;
 using INSTITUTO_C.Models;
 using INSTITUTO_C.Helpers;
+using Microsoft.AspNetCore.Identity;
 
 namespace INSTITUTO_C.Controllers
 {
     public class AlumnosController : Controller
     {
+        private readonly UserManager<Persona> _userManager;
         private readonly InstitutoContext _context;
 
-        public AlumnosController(InstitutoContext context)
+        public AlumnosController(UserManager<Persona> userManager, InstitutoContext context)
         {
+            _userManager = userManager;
             _context = context;
         }
 
         // GET: Alumnos
         public async Task<IActionResult> Index()
         {
-            var institutoContext = _context.Alumnos.Include(a => a.Carrera);
-            return View(await institutoContext.ToListAsync());
+            var alumnos = _userManager.Users.OfType<Alumno>();
+            return View(await Task.FromResult(alumnos.ToList()));
         }
 
         // GET: Alumnos/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
-            var alumno = await _context.Alumnos
-                .Include(a => a.Carrera)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (alumno == null)
-            {
-                return NotFound();
-            }
+            var alumno = await _userManager.FindByIdAsync(id.ToString()) as Alumno;
+            if (alumno == null) return NotFound();
 
             return View(alumno);
         }
@@ -68,25 +63,15 @@ namespace INSTITUTO_C.Controllers
 
 
 
-                int maxNumMatricula = 0;
-                var numerosDeMatricula = _context.Alumnos
-                    .AsEnumerable()
-                    .Select(a => int.TryParse(a.NumeroMatricula, out int parsed) ? parsed : 0)
-                    .ToList();
 
-                if (numerosDeMatricula.Any())
-                {
-                    maxNumMatricula = numerosDeMatricula.Max();
-                }
-
-                alumno.NumeroMatricula = (maxNumMatricula + 1).ToString();
+                alumno.NumeroMatricula = AlumnoHelper.GenerarNumMatricula(_context);
 
 
 
 
-                _context.Alumnos.Add(alumno);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+              var result = await _userManager.CreateAsync(alumno, "Password1!");
+                if (result.Succeeded)
+                    return RedirectToAction(nameof(Index));
             }
             ViewData["CarreraId"] = new SelectList(_context.Carreras, "Id", "Nombre", alumno.CarreraId);
             return View(alumno);
@@ -101,7 +86,7 @@ namespace INSTITUTO_C.Controllers
                 return NotFound();
             }
 
-            var alumno = await _context.Alumnos.FindAsync(id);
+            var alumno = await _userManager.FindByIdAsync(id.ToString()) as Alumno;
             if (alumno == null)
             {
                 return NotFound();
@@ -124,10 +109,10 @@ namespace INSTITUTO_C.Controllers
 
             if (ModelState.IsValid)
             {
-                try
-                {
-                    var alumnoEnDb = _context.Alumnos.Find(alumno.Id);
-                    if (alumnoEnDb != null)
+
+
+                var alumnoEnDb = await _userManager.FindByIdAsync(alumno.Id.ToString()) as Alumno;
+                if (alumnoEnDb != null)
                     {
 
                         if (string.IsNullOrEmpty(alumnoEnDb.NumeroMatricula))
@@ -142,31 +127,24 @@ namespace INSTITUTO_C.Controllers
                         alumnoEnDb.DNI = alumno.DNI;
                         alumnoEnDb.UserName = alumno.UserName;
                         alumnoEnDb.Activo = alumno.Activo;
-                        //alumnoEnDb.Carrera = alumno.Carrera; ver que onda
+                    //alumnoEnDb.Carrera = alumno.Carrera; ver que onda
 
-                        _context.Alumnos.Update(alumnoEnDb);
-                        await _context.SaveChangesAsync();
-                    }
-                    else
+                    var resultado = await _userManager.UpdateAsync(alumnoEnDb);
+                    if (resultado.Succeeded)
+                        return RedirectToAction(nameof(Index));
+
+                    foreach (var error in resultado.Errors)
+                        ModelState.AddModelError("", error.Description);
+                }
+                else
                     {
                         return NotFound();
                     }
 
 
                 }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!AlumnoExists(alumno.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
+             
+            
             ViewData["CarreraId"] = new SelectList(_context.Carreras, "Id", "Nombre", alumno.CarreraId);
             return View(alumno);
         }
@@ -179,9 +157,8 @@ namespace INSTITUTO_C.Controllers
                 return NotFound();
             }
 
-            var alumno = await _context.Alumnos
-                .Include(a => a.Carrera)
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var alumno = await _userManager.FindByIdAsync(id.ToString()) as Alumno;
+        
             if (alumno == null)
             {
                 return NotFound();
@@ -195,19 +172,26 @@ namespace INSTITUTO_C.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var alumno = await _context.Alumnos.FindAsync(id);
-            if (alumno != null)
+            var alumno = await _userManager.FindByIdAsync(id.ToString()) as Alumno;
+            if (alumno == null) return NotFound();
+
+            var resultado = await _userManager.DeleteAsync(alumno);
+            if (!resultado.Succeeded)
             {
-                _context.Alumnos.Remove(alumno);
+                foreach (var error in resultado.Errors)
+                    ModelState.AddModelError("", error.Description);
+                return View(alumno);
             }
 
-            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
-        }
 
-        private bool AlumnoExists(int id)
+
+
+        }
+        private async Task<bool> AlumnoExists(int id)
         {
-            return _context.Alumnos.Any(e => e.Id == id);
+            var alumno = await _userManager.FindByIdAsync(id.ToString()) as Alumno;
+            return alumno != null;
         }
     }
 }

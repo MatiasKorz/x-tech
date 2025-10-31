@@ -7,22 +7,25 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using INSTITUTO_C.Data;
 using INSTITUTO_C.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace INSTITUTO_C.Controllers
 {
     public class PersonasController : Controller
     {
-        private readonly InstitutoContext _context;
+        private readonly UserManager<Persona> _userManager;
 
-        public PersonasController(InstitutoContext context)
+        public PersonasController(UserManager<Persona> userManager)
         {
-            _context = context;
+            _userManager = userManager;
         }
 
         // GET: Personas
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Personas.ToListAsync());
+
+            
+            return View(await _userManager.Users.ToListAsync());
         }
 
         // GET: Personas/Details/5
@@ -33,8 +36,8 @@ namespace INSTITUTO_C.Controllers
                 return NotFound();
             }
 
-            var persona = await _context.Personas
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var persona = await _userManager.FindByIdAsync(id.ToString());
+
             if (persona == null)
             {
                 return NotFound();
@@ -56,11 +59,16 @@ namespace INSTITUTO_C.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,UserName,Email,Nombre,Apellido,DNI,Telefono,Direccion,Activo")] Persona persona)
         {
-            if (ModelState.IsValid)
+
+            var result = await _userManager.CreateAsync(persona, "Password1!");
+            if (result.Succeeded)
             {
-                _context.Personas.Add(persona);
-                await _context.SaveChangesAsync();
+              
                 return RedirectToAction(nameof(Index));
+            }
+            foreach (var error in result.Errors)
+            {
+                ModelState.AddModelError("", error.Description);
             }
             return View(persona);
         }
@@ -73,7 +81,7 @@ namespace INSTITUTO_C.Controllers
                 return NotFound();
             }
 
-            var persona = await _context.Personas.FindAsync(id);
+            var persona = await _userManager.FindByIdAsync(id.ToString());
             if (persona == null)
             {
                 return NotFound();
@@ -95,10 +103,9 @@ namespace INSTITUTO_C.Controllers
 
             if (ModelState.IsValid)
             {
-                try
-                {
-                    var personaEnDb = _context.Personas.Find(persona.Id);
-                    if(personaEnDb != null)
+               
+                    var personaEnDb = await _userManager.FindByIdAsync(persona.Id.ToString());
+                    if (personaEnDb != null)
                     {
                         personaEnDb.Nombre = persona.Nombre;
                         personaEnDb.Apellido = persona.Apellido;
@@ -107,10 +114,14 @@ namespace INSTITUTO_C.Controllers
                         personaEnDb.Telefono = persona.Telefono;
                         personaEnDb.DNI = persona.DNI;
                         personaEnDb.UserName = persona.UserName;
-                        personaEnDb.Activo = persona.Activo;    
+                        personaEnDb.Activo = persona.Activo;
 
-                        _context.Personas.Update(personaEnDb);
-                        await _context.SaveChangesAsync();
+                        var resultado = await _userManager.UpdateAsync(personaEnDb);
+                        if (resultado.Succeeded)
+                            return RedirectToAction(nameof(Index));
+
+                        foreach (var error in resultado.Errors)
+                            ModelState.AddModelError("", error.Description);
                     }
                     else
                     {
@@ -119,18 +130,7 @@ namespace INSTITUTO_C.Controllers
 
 
                     
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!PersonaExists(persona.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
+               
                 return RedirectToAction(nameof(Index));
             }
             return View(persona);
@@ -144,8 +144,8 @@ namespace INSTITUTO_C.Controllers
                 return NotFound();
             }
 
-            var persona = await _context.Personas
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var persona = await _userManager.FindByIdAsync(id.ToString());
+   
             if (persona == null)
             {
                 return NotFound();
@@ -159,19 +159,29 @@ namespace INSTITUTO_C.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var persona = await _context.Personas.FindAsync(id);
+            var persona = await _userManager.FindByIdAsync(id.ToString());
             if (persona != null)
             {
-                _context.Personas.Remove(persona);
+                var resultado = await _userManager.DeleteAsync(persona);
+                if (!resultado.Succeeded)
+                {
+                    foreach (var error in resultado.Errors)
+                        ModelState.AddModelError("", error.Description);
+                    return View(persona);
+                }
             }
 
-            await _context.SaveChangesAsync();
+            else
+            {
+                return NotFound();
+            }
             return RedirectToAction(nameof(Index));
         }
 
-        private bool PersonaExists(int id)
+        private async Task<bool> PersonaExists(int id)
         {
-            return _context.Personas.Any(e => e.Id == id);
+            var persona = await _userManager.FindByIdAsync(id.ToString());
+            return persona != null;
         }
     }
 }

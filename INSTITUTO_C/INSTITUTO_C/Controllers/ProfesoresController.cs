@@ -8,39 +8,35 @@ using Microsoft.EntityFrameworkCore;
 using INSTITUTO_C.Data;
 using INSTITUTO_C.Models;
 using INSTITUTO_C.Helpers;
+using Microsoft.AspNetCore.Identity;
 
 namespace INSTITUTO_C.Controllers
 {
     public class ProfesoresController : Controller
     {
         private readonly InstitutoContext _context;
+        private readonly UserManager<Persona> _userManager;
 
-        public ProfesoresController(InstitutoContext context)
+        public ProfesoresController(InstitutoContext context, UserManager<Persona> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: Profesores
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Profesores.ToListAsync());
+            var profesores = _userManager.Users.OfType<Profesor>();
+            return View(await Task.FromResult(profesores.ToList()));
         }
 
         // GET: Profesores/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
-            var profesor = await _context.Profesores
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (profesor == null)
-            {
-                return NotFound();
-            }
-
+            var profesor = await _userManager.FindByIdAsync(id.ToString()) as Profesor;
+            if (profesor == null) return NotFound();
             return View(profesor);
         }
 
@@ -62,9 +58,9 @@ namespace INSTITUTO_C.Controllers
 
                 profesor.Legajo = EmpleadoHelper.GenerarLegajo(_context);
 
-                _context.Profesores.Add(profesor);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                var result = await _userManager.CreateAsync(profesor, "Password1!");
+                if (result.Succeeded)
+                    return RedirectToAction(nameof(Index));
             }
             return View(profesor);
         }
@@ -77,7 +73,7 @@ namespace INSTITUTO_C.Controllers
                 return NotFound();
             }
 
-            var profesor = await _context.Profesores.FindAsync(id);
+            var profesor = await _userManager.FindByIdAsync(id.ToString()) as Profesor;
             if (profesor == null)
             {
                 return NotFound();
@@ -99,11 +95,15 @@ namespace INSTITUTO_C.Controllers
 
             if (ModelState.IsValid)
             {
-                try
-                {
-                    var profesorEnDB =  _context.Profesores.Find(profesor.Id);
+                
+                    var profesorEnDB = await _userManager.FindByIdAsync(profesor.Id.ToString()) as Profesor;
                     if (profesorEnDB != null)
                     {
+
+                        if (string.IsNullOrEmpty(profesorEnDB.Legajo))
+                        {
+                            profesorEnDB.Legajo = EmpleadoHelper.GenerarLegajo(_context);
+                        }
                         profesorEnDB.Nombre = profesor.Nombre;
                         profesorEnDB.Apellido = profesor.Apellido;
                         profesorEnDB.Direccion = profesor.Direccion;
@@ -115,31 +115,32 @@ namespace INSTITUTO_C.Controllers
 
 
 
-                        _context.Profesores.Update(profesorEnDB);
-                        await _context.SaveChangesAsync();
+                        var resultado = await _userManager.UpdateAsync(profesorEnDB);
+                        if (resultado.Succeeded)
+                            return RedirectToAction(nameof(Index));
+
+
+
+                        foreach (var error in resultado.Errors)
+                            ModelState.AddModelError("", error.Description);
                     }
                     else
                     {
                         return NotFound();
                     }
 
-                    
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!ProfesorExists(profesor.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
+
+
+
+
                 return RedirectToAction(nameof(Index));
-            }
+
+               
+                }
             return View(profesor);
         }
+        
+
 
         // GET: Profesores/Delete/5
         public async Task<IActionResult> Delete(int? id)
@@ -149,8 +150,8 @@ namespace INSTITUTO_C.Controllers
                 return NotFound();
             }
 
-            var profesor = await _context.Profesores
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var profesor = await _userManager.FindByIdAsync(id.ToString()) as Profesor;
+      
             if (profesor == null)
             {
                 return NotFound();
@@ -164,19 +165,24 @@ namespace INSTITUTO_C.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var profesor = await _context.Profesores.FindAsync(id);
-            if (profesor != null)
+            var profesor = await _userManager.FindByIdAsync(id.ToString()) as Profesor;
+            if (profesor == null) return NotFound();
+
+            var resultado = await _userManager.DeleteAsync(profesor);
+            if (!resultado.Succeeded)
             {
-                _context.Profesores.Remove(profesor);
+                foreach (var error in resultado.Errors)
+                    ModelState.AddModelError("", error.Description);
+                return View(profesor);
             }
 
-            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool ProfesorExists(int id)
+        private async Task<bool> ProfesorExists(int id)
         {
-            return _context.Profesores.Any(e => e.Id == id);
+            var profesor = await _userManager.FindByIdAsync(id.ToString()) as Profesor;
+            return profesor != null;
         }
     }
 }
