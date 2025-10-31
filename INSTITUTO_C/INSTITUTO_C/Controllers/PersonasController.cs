@@ -62,6 +62,7 @@ namespace INSTITUTO_C.Controllers
         {
 
             if (ModelState.IsValid) {
+                persona.UserName = persona.Email;
             var resultAgregar = await _userManager.CreateAsync(persona, Configs.Password);
             if (resultAgregar.Succeeded)
             {

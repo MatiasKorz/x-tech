@@ -55,12 +55,13 @@ namespace INSTITUTO_C.Controllers
         {
             if (ModelState.IsValid)
             {
-
+                profesor.UserName = profesor.Email;
                 profesor.Legajo = EmpleadoHelper.GenerarLegajo(_context);
 
                 var resultAgregar = await _userManager.CreateAsync(profesor, Configs.Password);
                 if (resultAgregar.Succeeded)
                 {
+
                     var resultadoAddRole = await _userManager.AddToRoleAsync(profesor, Configs.Profesor);
 
                     if (resultadoAddRole.Succeeded)

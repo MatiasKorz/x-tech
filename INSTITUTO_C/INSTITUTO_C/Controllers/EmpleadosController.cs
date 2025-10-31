@@ -56,7 +56,7 @@ namespace INSTITUTO_C.Controllers
             if (ModelState.IsValid)
             {
 
-
+                empleado.UserName = empleado.Email;
 
                 empleado.Legajo = EmpleadoHelper.GenerarLegajo(_context);
 

@@ -20,7 +20,7 @@ namespace INSTITUTO_C.Models
 
        // public int Id { get; set; }
 
-        [Required(ErrorMessage = ErrorMesseges.Requerido)]
+        //[Required(ErrorMessage = ErrorMesseges.Requerido)]
         [StringLength(50, MinimumLength = 3, ErrorMessage = ErrorMesseges.CaracteresMinMax)]
         //[RegularExpression(@"^[a-zA-Z0-9_]+$", ErrorMessage = "Solo letras, números y guión bajo")]
         public override string UserName { 

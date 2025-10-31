@@ -63,7 +63,7 @@ namespace INSTITUTO_C.Controllers
 
 
 
-
+                alumno.UserName = alumno.Email;
                 alumno.NumeroMatricula = AlumnoHelper.GenerarNumMatricula(_context);
 
 
