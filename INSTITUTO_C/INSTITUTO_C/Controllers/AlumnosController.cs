@@ -140,10 +140,8 @@ namespace INSTITUTO_C.Controllers
                         alumnoEnDb.Nombre = alumno.Nombre;
                         alumnoEnDb.Apellido = alumno.Apellido;
                         alumnoEnDb.Direccion = alumno.Direccion;
-                        alumnoEnDb.Email = alumno.Email;
                         alumnoEnDb.Telefono = alumno.Telefono;
                         alumnoEnDb.DNI = alumno.DNI;
-                        alumnoEnDb.UserName = alumno.UserName;
                         alumnoEnDb.Activo = alumno.Activo;
                     //alumnoEnDb.Carrera = alumno.Carrera; ver que onda
 

@@ -124,10 +124,8 @@ namespace INSTITUTO_C.Controllers
                         personaEnDb.Nombre = persona.Nombre;
                         personaEnDb.Apellido = persona.Apellido;
                         personaEnDb.Direccion = persona.Direccion;
-                        personaEnDb.Email = persona.Email;
                         personaEnDb.Telefono = persona.Telefono;
                         personaEnDb.DNI = persona.DNI;
-                        personaEnDb.UserName = persona.UserName;
                         personaEnDb.Activo = persona.Activo;
 
                         var resultado = await _userManager.UpdateAsync(personaEnDb);

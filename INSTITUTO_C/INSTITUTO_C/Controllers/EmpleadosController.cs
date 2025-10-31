@@ -130,10 +130,8 @@ namespace INSTITUTO_C.Controllers
                         empleadoEnDB.Nombre = empleado.Nombre;
                         empleadoEnDB.Apellido = empleado.Apellido;
                         empleadoEnDB.Direccion = empleado.Direccion;
-                        empleadoEnDB.Email = empleado.Email;
                         empleadoEnDB.Telefono = empleado.Telefono;
                         empleadoEnDB.DNI = empleado.DNI;
-                        empleadoEnDB.UserName = empleado.UserName;
                         empleadoEnDB.Activo = empleado.Activo;
 
 

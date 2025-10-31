@@ -128,8 +128,6 @@ namespace INSTITUTO_C.Controllers
                         profesorEnDB.Direccion = profesor.Direccion;
                         profesorEnDB.Telefono = profesor.Telefono;
                         profesorEnDB.DNI = profesor.DNI;
-                        profesorEnDB.Email = profesor.Email;
-                        profesorEnDB.UserName = profesor.UserName;
                         profesorEnDB.Activo = profesor.Activo;
 
 
