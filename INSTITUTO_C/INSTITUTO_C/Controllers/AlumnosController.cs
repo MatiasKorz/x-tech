@@ -26,8 +26,11 @@ namespace INSTITUTO_C.Controllers
         // GET: Alumnos
         public async Task<IActionResult> Index()
         {
-            var alumnos = _userManager.Users.OfType<Alumno>();
-            return View(await Task.FromResult(alumnos.ToList()));
+            var alumnos = await _context.Alumnos
+                .Include(a => a.Carrera)
+                .ToListAsync();
+
+            return View(alumnos);
         }
 
         // GET: Alumnos/Details/5
@@ -35,7 +38,10 @@ namespace INSTITUTO_C.Controllers
         {
             if (id == null) return NotFound();
 
-            var alumno = await _userManager.FindByIdAsync(id.ToString()) as Alumno;
+            var alumno = await _context.Alumnos
+                .Include(a => a.Carrera)
+                .FirstOrDefaultAsync(a => a.Id == id);
+
             if (alumno == null) return NotFound();
 
             return View(alumno);
@@ -169,40 +175,30 @@ namespace INSTITUTO_C.Controllers
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
-            {
                 return NotFound();
-            }
 
-            var alumno = await _userManager.FindByIdAsync(id.ToString()) as Alumno;
-        
+            var alumno = await _context.Alumnos
+                .Include(a => a.Carrera)
+                .FirstOrDefaultAsync(m => m.Id == id);
+
             if (alumno == null)
-            {
                 return NotFound();
-            }
 
             return View(alumno);
         }
 
-        // POST: Alumnos/Delete/5
+
+        // POST: Alumno/DeleteConfirmed/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var alumno = await _userManager.FindByIdAsync(id.ToString()) as Alumno;
-            if (alumno == null) return NotFound();
+            var alumno = await _context.Alumnos.FindAsync(id);
 
-            var resultado = await _userManager.DeleteAsync(alumno);
-            if (!resultado.Succeeded)
-            {
-                foreach (var error in resultado.Errors)
-                    ModelState.AddModelError("", error.Description);
-                return View(alumno);
-            }
+            _context.Alumnos.Remove(alumno);
+            await _context.SaveChangesAsync();
 
             return RedirectToAction(nameof(Index));
-
-
-
         }
         private async Task<bool> AlumnoExists(int id)
         {
