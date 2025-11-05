@@ -8,6 +8,8 @@ using Microsoft.EntityFrameworkCore;
 using INSTITUTO_C.Data;
 using INSTITUTO_C.Models;
 using Microsoft.AspNetCore.Authorization;
+using INSTITUTO_C.Helpers;
+using Microsoft.AspNetCore.Identity;
 
 namespace INSTITUTO_C.Controllers
 {
@@ -15,10 +17,12 @@ namespace INSTITUTO_C.Controllers
     public class InscripcionesController : Controller
     {
         private readonly InstitutoContext _context;
+        private readonly UserManager<Persona> _userManager;
 
-        public InscripcionesController(InstitutoContext context)
+        public InscripcionesController(InstitutoContext context, UserManager<Persona> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: Inscripciones
@@ -43,9 +47,10 @@ namespace INSTITUTO_C.Controllers
         }
 
         // GET: Inscripciones/Create
+        [Authorize(Roles = Configs.Alumno)]
         public IActionResult Create()
         {
-            ViewData["AlumnoId"] = new SelectList(_context.Alumnos, "Id", "Apellido");
+          //  ViewData["AlumnoId"] = new SelectList(_context.Alumnos, "Id", "Apellido");
             ViewData["MateriaCursadaId"] = new SelectList(_context.MateriasCursadas, "Id", "Nombre");
             return View();
         }
@@ -55,15 +60,18 @@ namespace INSTITUTO_C.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("MateriaCursadaId,AlumnoId")] Inscripcion inscripcion)
+        [Authorize(Roles = Configs.Alumno)]
+        public async Task<IActionResult> Create([Bind("MateriaCursadaId")] Inscripcion inscripcion)
         {
+            var user = await _userManager.GetUserAsync(User);
+            inscripcion.AlumnoId = user.Id; 
             if (ModelState.IsValid)
             {
                 _context.Inscripciones.Add(inscripcion);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["AlumnoId"] = new SelectList(_context.Alumnos, "Id", "Apellido", inscripcion.AlumnoId);
+           // ViewData["AlumnoId"] = new SelectList(_context.Alumnos, "Id", "Apellido", inscripcion.AlumnoId);
             ViewData["MateriaCursadaId"] = new SelectList(_context.MateriasCursadas, "Id", "Nombre", inscripcion.MateriaCursadaId);
             return View(inscripcion);
         }
@@ -80,7 +88,7 @@ namespace INSTITUTO_C.Controllers
             {
                 return NotFound();
             }
-            ViewData["AlumnoId"] = new SelectList(_context.Alumnos, "Id", "Apellido", inscripcion.AlumnoId);
+            //ViewData["AlumnoId"] = new SelectList(_context.Alumnos, "Id", "Apellido", inscripcion.AlumnoId);
             ViewData["MateriaCursadaId"] = new SelectList(_context.MateriasCursadas, "Id", "Nombre", inscripcion.MateriaCursadaId);
             return View(inscripcion);
         }
