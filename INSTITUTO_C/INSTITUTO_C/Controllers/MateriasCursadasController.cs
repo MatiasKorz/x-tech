@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using INSTITUTO_C.Data;
 using INSTITUTO_C.Models;
 using Microsoft.AspNetCore.Authorization;
+using INSTITUTO_C.Helpers;
 
 namespace INSTITUTO_C.Controllers
 {
@@ -49,6 +50,7 @@ namespace INSTITUTO_C.Controllers
         }
 
         // GET: MateriasCursadas/Create
+        [Authorize(Roles = Configs.Empleado)]
         public IActionResult Create()
         {
             ViewData["MateriaId"] = new SelectList(_context.Materias, "Id", "CodigoMateria");
@@ -61,6 +63,7 @@ namespace INSTITUTO_C.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = Configs.Empleado)]
         public async Task<IActionResult> Create([Bind("Id,MateriaId,CodigoCursada,Cuatrimestre,Activo,ProfesorId")] MateriaCursada materiaCursada)
         {
             if (ModelState.IsValid)
@@ -79,6 +82,7 @@ namespace INSTITUTO_C.Controllers
         }
 
         // GET: MateriasCursadas/Edit/5
+        [Authorize(Roles = Configs.Empleado)]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -101,7 +105,8 @@ namespace INSTITUTO_C.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,MateriaId,CodigoCursada,Anio,Cuatrimestre,Activo,ProfesorId")] MateriaCursada materiaCursada)
+        [Authorize(Roles = Configs.Empleado)]
+        public async Task<IActionResult> Edit(int id, [Bind("Id,MateriaId,CodigoCursada,Cuatrimestre,Activo,ProfesorId")] MateriaCursada materiaCursada)
         {
             if (id != materiaCursada.Id)
             {
@@ -118,15 +123,16 @@ namespace INSTITUTO_C.Controllers
                     {
 
                         materiaCursadaEnDB.Activo = materiaCursada.Activo;
+                        materiaCursadaEnDB.ProfesorId = materiaCursada.ProfesorId;
+
+
+
+
+
+
+
+
                         
-
-
-
-
-
-
-
-                        _context.MateriasCursadas.Update(materiaCursada);
                         await _context.SaveChangesAsync();
                     } else
                     {
@@ -147,12 +153,13 @@ namespace INSTITUTO_C.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["MateriaId"] = new SelectList(_context.Materias, "Id", "CodigoMateria", materiaCursada.MateriaId);
+           // ViewData["MateriaId"] = new SelectList(_context.Materias, "Id", "CodigoMateria", materiaCursada.MateriaId);
             ViewData["ProfesorId"] = new SelectList(_context.Profesores, "Id", "Apellido", materiaCursada.ProfesorId);
             return View(materiaCursada);
         }
 
         // GET: MateriasCursadas/Delete/5
+        [Authorize(Roles = Configs.Empleado)]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -175,6 +182,7 @@ namespace INSTITUTO_C.Controllers
         // POST: MateriasCursadas/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = Configs.Empleado)]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var materiaCursada = await _context.MateriasCursadas.FindAsync(id);
