@@ -50,6 +50,7 @@ namespace INSTITUTO_C.Controllers
         }
 
         // GET: Alumnos/Create
+        [Authorize(Roles = Configs.Empleado)]
         public IActionResult Create()
         {
             ViewData["CarreraId"] = new SelectList(_context.Carreras, "Id", "Nombre");
@@ -61,6 +62,7 @@ namespace INSTITUTO_C.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = Configs.Empleado)]
         public async Task<IActionResult> Create([Bind("Id,UserName,Email,Nombre,Apellido,DNI,Telefono,Direccion,Activo,CarreraId")] Alumno alumno)
         {
             if (ModelState.IsValid)

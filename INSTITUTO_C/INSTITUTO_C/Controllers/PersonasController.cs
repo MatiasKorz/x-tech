@@ -9,9 +9,11 @@ using INSTITUTO_C.Data;
 using INSTITUTO_C.Models;
 using Microsoft.AspNetCore.Identity;
 using INSTITUTO_C.Helpers;
+using Microsoft.AspNetCore.Authorization;
 
 namespace INSTITUTO_C.Controllers
 {
+    [Authorize]
     public class PersonasController : Controller
     {
         private readonly UserManager<Persona> _userManager;

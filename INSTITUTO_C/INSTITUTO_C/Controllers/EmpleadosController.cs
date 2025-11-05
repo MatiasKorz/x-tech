@@ -9,9 +9,11 @@ using INSTITUTO_C.Data;
 using INSTITUTO_C.Models;
 using INSTITUTO_C.Helpers;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
 
 namespace INSTITUTO_C.Controllers
 {
+    [Authorize]
     public class EmpleadosController : Controller
     {
         private readonly InstitutoContext _context;
@@ -41,6 +43,7 @@ namespace INSTITUTO_C.Controllers
         }
 
         // GET: Empleados/Create
+        [Authorize(Roles = Configs.Empleado)]
         public IActionResult Create()
         {
             return View();
@@ -51,6 +54,7 @@ namespace INSTITUTO_C.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = Configs.Empleado)]
         public async Task<IActionResult> Create([Bind("Id,UserName,Email,Nombre,Apellido,DNI,Telefono,Direccion,Activo")] Empleado empleado)
         {
             if (ModelState.IsValid)
@@ -89,6 +93,7 @@ namespace INSTITUTO_C.Controllers
         }
 
         // GET: Empleados/Edit/5
+        [Authorize(Roles = Configs.Empleado)]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -109,6 +114,7 @@ namespace INSTITUTO_C.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = Configs.Empleado)]
         public async Task<IActionResult> Edit(int id, [Bind("Id,UserName,Email,Nombre,Apellido,DNI,Telefono,Direccion,Activo")] Empleado empleado)
         {
             if (id != empleado.Id)
