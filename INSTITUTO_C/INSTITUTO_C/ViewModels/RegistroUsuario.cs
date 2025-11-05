@@ -16,6 +16,22 @@ namespace INSTITUTO_C.ViewModels
 
 
         [Required(ErrorMessage = ErrorMesseges.Requerido)]
+        public string Nombre { get; set; }
+
+        [Required(ErrorMessage = ErrorMesseges.Requerido)]
+        public string Apellido { get; set; }
+
+        [Required(ErrorMessage = ErrorMesseges.Requerido)]
+        public string DNI { get; set; }
+
+        [Required(ErrorMessage = ErrorMesseges.Requerido)]
+        public string Telefono { get; set; }
+
+        [Required(ErrorMessage = ErrorMesseges.Requerido)]
+        public string Direccion { get; set; }
+
+
+        [Required(ErrorMessage = ErrorMesseges.Requerido)]
         [EmailAddress(ErrorMessage = ErrorMesseges.NotValid)]
         public string Email { get; set; }
 

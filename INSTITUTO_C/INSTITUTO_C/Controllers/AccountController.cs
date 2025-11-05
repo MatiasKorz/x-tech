@@ -58,7 +58,14 @@ namespace INSTITUTO_C.Controllers
 
                      Email = viewModel.Email,
                      UserName = viewModel.Email,
-                    CarreraId = carreraSeleccionada.Id
+                    Nombre = viewModel.Nombre,
+                    Apellido = viewModel.Apellido,
+                    DNI = viewModel.DNI,
+                    Telefono = viewModel.Telefono,
+                    Direccion = viewModel.Direccion,
+                    CarreraId = carreraSeleccionada.Id,
+                    Activo = false,
+                    
 
 
                 };
@@ -75,7 +82,7 @@ namespace INSTITUTO_C.Controllers
                     if (resultadoAddRole.Succeeded)
                     {
                         await _signInManager.SignInAsync(alumno, isPersistent: false);
-                        return RedirectToAction("Edit", "Alumnos", new { id = alumno.Id });
+                        return RedirectToAction("Details", "Alumnos", new { id = alumno.Id });
                     }
                     else
                     {
