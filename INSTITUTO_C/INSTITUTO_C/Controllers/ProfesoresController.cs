@@ -9,9 +9,11 @@ using INSTITUTO_C.Data;
 using INSTITUTO_C.Models;
 using INSTITUTO_C.Helpers;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
 
 namespace INSTITUTO_C.Controllers
 {
+    [Authorize]
     public class ProfesoresController : Controller
     {
         private readonly InstitutoContext _context;
@@ -24,6 +26,8 @@ namespace INSTITUTO_C.Controllers
         }
 
         // GET: Profesores
+        [AllowAnonymous]
+
         public async Task<IActionResult> Index()
         {
             var profesores = _userManager.Users.OfType<Profesor>();
