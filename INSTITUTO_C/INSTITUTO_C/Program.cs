@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using INSTITUTO_C.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace INSTITUTO_C
 {
@@ -38,6 +39,15 @@ namespace INSTITUTO_C
             }
 
             );
+
+            builder.Services.PostConfigure<CookieAuthenticationOptions>(IdentityConstants.ApplicationScheme,
+                opciones =>
+                {
+                    opciones.LoginPath = "/Account/Iniciarsesion";
+                    opciones.AccessDeniedPath = "/Account/Accesodenegado";
+                    opciones.Cookie.Name = "IdentidadInstitutoApp";
+
+                });
             
             var app = builder.Build();
 
