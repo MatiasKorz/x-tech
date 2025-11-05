@@ -1,6 +1,12 @@
 ﻿@{
     ViewData["Title"] = "Instituto";
 }
+@if(ViewBag.Mensaje != null)
+{
+    <div>
+        <p class="text-info">@ViewBag.Mensaje</p>
+    </div>
+}
 
 
 <main>

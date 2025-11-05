@@ -8,43 +8,42 @@ using Microsoft.EntityFrameworkCore;
 using INSTITUTO_C.Data;
 using INSTITUTO_C.Models;
 using INSTITUTO_C.Helpers;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
 
 namespace INSTITUTO_C.Controllers
 {
+    [Authorize]
     public class EmpleadosController : Controller
     {
         private readonly InstitutoContext _context;
+        private readonly UserManager<Persona> _userManager;
 
-        public EmpleadosController(InstitutoContext context)
+        public EmpleadosController(InstitutoContext context, UserManager<Persona> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: Empleados
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Empleados.ToListAsync());
+            var empleados = _userManager.Users.OfType<Empleado>();
+            return View(await Task.FromResult(empleados.ToList()));
         }
 
         // GET: Empleados/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
-            var empleado = await _context.Empleados
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (empleado == null)
-            {
-                return NotFound();
-            }
-
+            var empleado = await _userManager.FindByIdAsync(id.ToString()) as Empleado;
+            if (empleado == null) return NotFound();
             return View(empleado);
         }
 
         // GET: Empleados/Create
+        [Authorize(Roles = Configs.Empleado)]
         public IActionResult Create()
         {
             return View();
@@ -55,27 +54,46 @@ namespace INSTITUTO_C.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = Configs.Empleado)]
         public async Task<IActionResult> Create([Bind("Id,UserName,Email,Nombre,Apellido,DNI,Telefono,Direccion,Activo")] Empleado empleado)
         {
             if (ModelState.IsValid)
             {
 
-
+                empleado.UserName = empleado.Email;
 
                 empleado.Legajo = EmpleadoHelper.GenerarLegajo(_context);
 
 
 
 
+                var resultAgregar = await _userManager.CreateAsync(empleado, Configs.Password);
+                if (resultAgregar.Succeeded)
+                { 
+                    var resultadoAddRole = await _userManager.AddToRoleAsync(empleado, Configs.Empleado);
 
-                _context.Empleados.Add(empleado);
-                await _context.SaveChangesAsync();
+                if (resultadoAddRole.Succeeded)
+                {
+                    return RedirectToAction("Index", "Empleados");
+                }
+                else
+                {
+                    return Content("No se pudo agregar rol");
+                }
+
+            }
+                foreach (var error in resultAgregar.Errors)
+                {
+                    ModelState.AddModelError("", error.Description);
+                }
+
                 return RedirectToAction(nameof(Index));
             }
             return View(empleado);
         }
 
         // GET: Empleados/Edit/5
+        [Authorize(Roles = Configs.Empleado)]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -83,7 +101,7 @@ namespace INSTITUTO_C.Controllers
                 return NotFound();
             }
 
-            var empleado = await _context.Empleados.FindAsync(id);
+            var empleado = await _userManager.FindByIdAsync(id.ToString()) as Empleado;
             if (empleado == null)
             {
                 return NotFound();
@@ -96,6 +114,7 @@ namespace INSTITUTO_C.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = Configs.Empleado)]
         public async Task<IActionResult> Edit(int id, [Bind("Id,UserName,Email,Nombre,Apellido,DNI,Telefono,Direccion,Activo")] Empleado empleado)
         {
             if (id != empleado.Id)
@@ -105,9 +124,8 @@ namespace INSTITUTO_C.Controllers
 
             if (ModelState.IsValid)
             {
-                try
-                {
-                    var empleadoEnDB = _context.Empleados.Find(empleado.Id);
+               
+                    var empleadoEnDB = await _userManager.FindByIdAsync(empleado.Id.ToString()) as Empleado;
                     if (empleadoEnDB != null)
                     {
 
@@ -118,36 +136,29 @@ namespace INSTITUTO_C.Controllers
                         empleadoEnDB.Nombre = empleado.Nombre;
                         empleadoEnDB.Apellido = empleado.Apellido;
                         empleadoEnDB.Direccion = empleado.Direccion;
-                        empleadoEnDB.Email = empleado.Email;
                         empleadoEnDB.Telefono = empleado.Telefono;
                         empleadoEnDB.DNI = empleado.DNI;
-                        empleadoEnDB.UserName = empleado.UserName;
                         empleadoEnDB.Activo = empleado.Activo;
 
-                        _context.Empleados.Update(empleadoEnDB);
-                        await _context.SaveChangesAsync();
 
 
-                    }
-                    else
+                    var resultado = await _userManager.UpdateAsync(empleadoEnDB);
+                    if (resultado.Succeeded)
+                        return RedirectToAction(nameof(Index));
+
+                
+
+                foreach (var error in resultado.Errors)
+                    ModelState.AddModelError("", error.Description);
+            }
+            else
                     {
                         return NotFound();
                     }
 
                     
                     
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!EmpleadoExists(empleado.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
+              
                 return RedirectToAction(nameof(Index));
             }
             return View(empleado);
@@ -161,8 +172,8 @@ namespace INSTITUTO_C.Controllers
                 return NotFound();
             }
 
-            var empleado = await _context.Empleados
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var empleado = await _userManager.FindByIdAsync(id.ToString()) as Empleado;
+
             if (empleado == null)
             {
                 return NotFound();
@@ -176,19 +187,24 @@ namespace INSTITUTO_C.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var empleado = await _context.Empleados.FindAsync(id);
-            if (empleado != null)
-            {
-                _context.Empleados.Remove(empleado);
-            }
+            var empleado = await _userManager.FindByIdAsync(id.ToString()) as Empleado;
+            if (empleado == null) return NotFound();
 
-            await _context.SaveChangesAsync();
+            var resultado = await _userManager.DeleteAsync(empleado);
+            if (!resultado.Succeeded)
+            {
+                foreach (var error in resultado.Errors)
+                    ModelState.AddModelError("", error.Description);
+                return View(empleado);
+            }
+          
             return RedirectToAction(nameof(Index));
         }
 
-        private bool EmpleadoExists(int id)
+        private async Task<bool> EmpleadoExists(int id)
         {
-            return _context.Empleados.Any(e => e.Id == id);
+            var empleado = await _userManager.FindByIdAsync(id.ToString()) as Empleado;
+            return empleado != null;
         }
     }
 }

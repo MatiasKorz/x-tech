@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using INSTITUTO_C.Data;
 using INSTITUTO_C.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace INSTITUTO_C.Controllers
 {
+    [Authorize]
     public class MateriasController : Controller
     {
         private readonly InstitutoContext _context;
@@ -20,6 +22,7 @@ namespace INSTITUTO_C.Controllers
         }
 
         // GET: Materias
+        [AllowAnonymous]
         public async Task<IActionResult> Index()
         {
             var institutoContext = _context.Materias.Include(m => m.Carrera);

@@ -129,6 +129,12 @@
                                 <a class="nav-link text-white btn btn-submit " asp-area="" asp-controller="Account" asp-action="CerrarSesion">Cerrar sesión</a>
                             </li>
                         </ul>
+                        @if (User.IsInRole("Alumno"))
+                        {
+@*                             <li class="nav-item">
+                                <a class="nav-link text-white" asp-area="" asp-controller="Carreras" asp-action="Index">Carreras</a>
+                            </li> *@
+                        }
 
                     }
                     else
