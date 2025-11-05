@@ -102,8 +102,10 @@ namespace INSTITUTO_C.Controllers
 
 
 
-        public IActionResult IniciarSesion()
+        public IActionResult IniciarSesion(string returnUrl)
         {
+       
+            TempData["ReturnUrl"] = returnUrl;
             return View();
 
 
@@ -113,12 +115,18 @@ namespace INSTITUTO_C.Controllers
         public async Task<IActionResult> IniciarSesion(Login viewModel)
         {
 
+      
+            var returnUrl = TempData["ReturnUrl"] as string;
             if (ModelState.IsValid)
             {
                var resultado = await _signInManager.PasswordSignInAsync(viewModel.Email, viewModel.Password, viewModel.Recordarme, false);
 
                 if (resultado.Succeeded)
                 {
+                    if(!string.IsNullOrEmpty(returnUrl))
+                    {
+                        return Redirect(returnUrl);
+                    }
                     return RedirectToAction("Index", "Home");
                 }
                 ModelState.AddModelError(string.Empty, "Acceso denegado");
