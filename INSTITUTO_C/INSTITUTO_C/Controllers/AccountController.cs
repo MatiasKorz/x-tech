@@ -147,6 +147,16 @@ namespace INSTITUTO_C.Controllers
         }
 
 
+        public IActionResult AccesoDenegado(string returnUrl)
+        {
+            ViewBag.ReturnUrl = returnUrl;
+            return View();
+        }
+        
+            
+ 
+
+
 
     }
 
