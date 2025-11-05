@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using INSTITUTO_C.Data;
 using INSTITUTO_C.Models;
 using Microsoft.AspNetCore.Authorization;
+using INSTITUTO_C.Helpers;
 
 namespace INSTITUTO_C.Controllers
 {
@@ -47,6 +48,7 @@ namespace INSTITUTO_C.Controllers
         }
 
         // GET: Carreras/Create
+        [Authorize(Roles = Configs.Empleado)]
         public IActionResult Create()
         {
             return View();
@@ -57,6 +59,7 @@ namespace INSTITUTO_C.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = Configs.Empleado)]
         public async Task<IActionResult> Create([Bind("Id,Nombre")] Carrera carrera)
         {
             if (ModelState.IsValid)
@@ -69,6 +72,7 @@ namespace INSTITUTO_C.Controllers
         }
 
         // GET: Carreras/Edit/5
+        [Authorize(Roles = Configs.Empleado)]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -89,6 +93,7 @@ namespace INSTITUTO_C.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = Configs.Empleado)]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Nombre")] Carrera carrera)
         {
             if (id != carrera.Id)
@@ -126,6 +131,7 @@ namespace INSTITUTO_C.Controllers
         }
 
         // GET: Carreras/Delete/5
+        [Authorize(Roles = Configs.Empleado)]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -146,6 +152,7 @@ namespace INSTITUTO_C.Controllers
         // POST: Carreras/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = Configs.Empleado)]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var carrera = await _context.Carreras.FindAsync(id);

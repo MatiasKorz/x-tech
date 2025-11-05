@@ -50,6 +50,7 @@ namespace INSTITUTO_C.Controllers
         }
 
         // GET: MateriasCursadas/Create
+        [Authorize(Roles = Configs.Empleado)]
         public IActionResult Create()
         {
             ViewData["MateriaId"] = new SelectList(_context.Materias, "Id", "CodigoMateria");
@@ -62,6 +63,7 @@ namespace INSTITUTO_C.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = Configs.Empleado)]
         public async Task<IActionResult> Create([Bind("Id,MateriaId,CodigoCursada,Cuatrimestre,Activo,ProfesorId")] MateriaCursada materiaCursada)
         {
             if (ModelState.IsValid)
@@ -157,6 +159,7 @@ namespace INSTITUTO_C.Controllers
         }
 
         // GET: MateriasCursadas/Delete/5
+        [Authorize(Roles = Configs.Empleado)]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -179,6 +182,7 @@ namespace INSTITUTO_C.Controllers
         // POST: MateriasCursadas/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = Configs.Empleado)]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var materiaCursada = await _context.MateriasCursadas.FindAsync(id);
