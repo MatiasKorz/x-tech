@@ -59,6 +59,9 @@ namespace INSTITUTO_C
                 app.UseHsts();
             }
 
+            using (var scope = app.Services.CreateScope()) 
+            { var dbContext = scope.ServiceProvider.GetRequiredService<InstitutoContext>(); dbContext.Database.Migrate(); }
+
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
