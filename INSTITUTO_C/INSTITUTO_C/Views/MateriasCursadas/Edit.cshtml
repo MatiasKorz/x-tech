@@ -15,22 +15,21 @@
             <input type="hidden" asp-for="Id" />
             <div class="form-group">
                 <label asp-for="MateriaId" class="control-label"></label>
-                <select asp-for="MateriaId" class="form-control" asp-items="ViewBag.MateriaId"></select>
-                <span asp-validation-for="MateriaId" class="text-danger"></span>
+                <input asp-for="MateriaId" class="form-control" readonly />
             </div>
             <div class="form-group">
                 <label asp-for="CodigoCursada" class="control-label"></label>
-                <input asp-for="CodigoCursada" class="form-control" />
+                <input asp-for="CodigoCursada" class="form-control" readonly />
                 <span asp-validation-for="CodigoCursada" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Anio" class="control-label"></label>
-                <input asp-for="Anio" class="form-control" />
-                <span asp-validation-for="Anio" class="text-danger"></span>
+                <label>Año</label>
+                <input class="form-control" value="@Model.Anio.Year" readonly />
+                <input type="hidden" asp-for="Anio" />
             </div>
             <div class="form-group">
                 <label asp-for="Cuatrimestre" class="control-label"></label>
-                <input asp-for="Cuatrimestre" class="form-control" />
+                <input asp-for="Cuatrimestre" class="form-control" readonly />
                 <span asp-validation-for="Cuatrimestre" class="text-danger"></span>
             </div>
             <div class="form-group form-check">
