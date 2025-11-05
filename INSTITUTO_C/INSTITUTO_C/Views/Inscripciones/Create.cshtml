@@ -5,6 +5,12 @@
 }
 
 <h1>Create</h1>
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["Error"]
+    </div>
+}
 
 <h4>Inscripcion</h4>
 <hr />

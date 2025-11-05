@@ -48,27 +48,27 @@ namespace INSTITUTO_C.Models
         public DateTime FechaAlta { get; private set; } = DateTime.Now;
 
 
-        //[Required(ErrorMessage = ErrorMesseges.Requerido)]
+        [Required(ErrorMessage = ErrorMesseges.Requerido)]
         [StringLength(20, MinimumLength = 2, ErrorMessage = ErrorMesseges.CaracteresMinMax)]
         [RegularExpression(@"^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s']+$", ErrorMessage = ErrorMesseges.SoloLetras)]
         public string Nombre { get; set; }
 
-        //[Required(ErrorMessage = ErrorMesseges.Requerido)]
+        [Required(ErrorMessage = ErrorMesseges.Requerido)]
         [StringLength(20, MinimumLength = 2, ErrorMessage = ErrorMesseges.CaracteresMinMax)]
         [RegularExpression(@"^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s']+$", ErrorMessage = ErrorMesseges.SoloLetras)]
         public string Apellido { get; set; }
 
-        //[Required(ErrorMessage = ErrorMesseges.Requerido)]
+        [Required(ErrorMessage = ErrorMesseges.Requerido)]
         [RegularExpression(@"^\d+$", ErrorMessage = ErrorMesseges.SoloNumeros)]
         [StringLength(10, MinimumLength = 7, ErrorMessage = "DNI debe tener entre 7 y 10 dígitos")]
         public string DNI { get; set; }
 
-        //[Required(ErrorMessage = ErrorMesseges.Requerido)]
+        [Required(ErrorMessage = ErrorMesseges.Requerido)]
         [StringLength(20, MinimumLength = 8, ErrorMessage = "Teléfono debe tener entre 8 y 20 caracteres")]
         [RegularExpression(@"^[\d\s\-\(\)\+]+$", ErrorMessage = ErrorMesseges.SoloNumeros)]
         public string Telefono { get; set; }
 
-        //[Required(ErrorMessage = ErrorMesseges.Requerido)]
+        [Required(ErrorMessage = ErrorMesseges.Requerido)]
         [StringLength(100, MinimumLength = 10, ErrorMessage = "Dirección debe tener entre 10 y 100 caracteres")]
         public string Direccion { get; set; }
 

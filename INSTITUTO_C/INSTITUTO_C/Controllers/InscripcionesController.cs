@@ -64,7 +64,14 @@ namespace INSTITUTO_C.Controllers
         public async Task<IActionResult> Create([Bind("MateriaCursadaId")] Inscripcion inscripcion)
         {
             var user = await _userManager.GetUserAsync(User);
-            inscripcion.AlumnoId = user.Id; 
+            inscripcion.AlumnoId = user.Id;
+            var alumno = await _context.Alumnos.FindAsync(user.Id);
+            if (alumno == null || !alumno.Activo)
+            {
+                TempData["Error"] = "No podés inscribirte porque no estás activo.";
+                return RedirectToAction(nameof(Index));
+            }
+
             if (ModelState.IsValid)
             {
                 _context.Inscripciones.Add(inscripcion);
