@@ -23,31 +23,34 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.MateriaCursada.Nombre)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Alumno.Apellido)
-            </td>
+        @foreach (var item in Model) {
+            <tr>
                 <td>
-                    <a asp-action="Edit"
-                       asp-route-alumnoId="@item.AlumnoId"
-                       asp-route-materiaCursadaId="@item.MateriaCursadaId">
-                        Edit
-                    </a> |
-                    <a asp-action="Details"
-                       asp-route-alumnoId="@item.AlumnoId"
-                       asp-route-materiaCursadaId="@item.MateriaCursadaId">
-                        Details
-                    </a> |
-                    <a asp-action="Delete"
-                       asp-route-alumnoId="@item.AlumnoId"
-                       asp-route-materiaCursadaId="@item.MateriaCursadaId">
-                        Delete
-                    </a>
+                    @Html.DisplayFor(modelItem => item.MateriaCursada.Nombre)
                 </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Alumno.Apellido)
+                </td>
+                @if (User.IsInRole("Empleado"))
+                {
+                    <td>
+                        <a asp-action="Edit"
+                           asp-route-alumnoId="@item.AlumnoId"
+                           asp-route-materiaCursadaId="@item.MateriaCursadaId">
+                            Edit
+                        </a> |
+                        <a asp-action="Details"
+                           asp-route-alumnoId="@item.AlumnoId"
+                           asp-route-materiaCursadaId="@item.MateriaCursadaId">
+                            Details
+                        </a> |
+                        <a asp-action="Delete"
+                           asp-route-alumnoId="@item.AlumnoId"
+                           asp-route-materiaCursadaId="@item.MateriaCursadaId">
+                            Delete
+                        </a>
+                    </td>
+                }
             </tr>
         }
     </tbody>

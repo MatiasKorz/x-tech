@@ -167,6 +167,7 @@ namespace INSTITUTO_C.Controllers
         // POST: Calificaciones/Delete
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+
         public async Task<IActionResult> DeleteConfirmed(int alumnoId, int materiaCursadaId)
         {
             var calificacion = await _context.Calificaciones

@@ -26,10 +26,27 @@ namespace INSTITUTO_C.Controllers
         }
 
         // GET: Inscripciones
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? alumnoId)
         {
-            var institutoContext = _context.Inscripciones.Include(i => i.Alumno).Include(i => i.MateriaCursada);
-            return View(await institutoContext.ToListAsync());
+            var usuarioId = Int32.Parse( _userManager.GetUserId(User));
+
+            List<Inscripcion> inscripciones = null;
+            if (alumnoId is not null && (alumnoId == usuarioId|| User.IsInRole("Empleado")))
+            {
+                //para un alumno especifico
+                inscripciones = await _context.Inscripciones.Include(i => i.Alumno).Include(i => i.MateriaCursada)
+                    .Where(i => i.AlumnoId == alumnoId)
+                    .ToListAsync(); 
+                
+            }
+            else if(User.IsInRole("Alumno")){
+                return Content("No podes ver las inscripciones de otro alumno");
+            }
+            else
+            {
+                inscripciones = await _context.Inscripciones.Include(i => i.Alumno).Include(i => i.MateriaCursada).ToListAsync();
+            }
+            return View(inscripciones);
         }
 
         // GET: Inscripciones/Details/5
