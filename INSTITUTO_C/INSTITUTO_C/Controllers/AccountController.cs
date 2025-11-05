@@ -2,6 +2,7 @@
 using INSTITUTO_C.Helpers;
 using INSTITUTO_C.Models;
 using INSTITUTO_C.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -12,6 +13,7 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace INSTITUTO_C.Controllers
 {
+    [Authorize]
     public class AccountController : Controller
     {
 
@@ -25,7 +27,7 @@ namespace INSTITUTO_C.Controllers
             this._context = context;
         }
 
-
+        [AllowAnonymous]
         public IActionResult Registrar()
         {
 
@@ -35,6 +37,7 @@ namespace INSTITUTO_C.Controllers
 
 
         [HttpPost]
+        [AllowAnonymous]
         public async Task<IActionResult> Registrar(RegistroUsuario viewModel)
         {
             if (ModelState.IsValid)
@@ -101,7 +104,7 @@ namespace INSTITUTO_C.Controllers
 
 
 
-
+        [AllowAnonymous]
         public IActionResult IniciarSesion(string returnUrl)
         {
        
@@ -112,6 +115,7 @@ namespace INSTITUTO_C.Controllers
         }
 
         [HttpPost]
+        [AllowAnonymous]
         public async Task<IActionResult> IniciarSesion(Login viewModel)
         {
 
