@@ -54,13 +54,6 @@ namespace INSTITUTO_C.Data
 
 
 
-            modelBuilder.Entity<Empleado>()
-           .HasIndex(e => e.Legajo)
-           .IsUnique();
-
-            modelBuilder.Entity<Alumno>()
-          .HasIndex(a => a.NumeroMatricula)
-          .IsUnique();
 
 
             modelBuilder.Entity<MateriaCursada>()
@@ -73,6 +66,19 @@ namespace INSTITUTO_C.Data
             modelBuilder.Entity<IdentityUser<int>>().ToTable("Personas");
             modelBuilder.Entity<IdentityRole<int>>().ToTable("Roles");
             modelBuilder.Entity<IdentityUserRole<int>>().ToTable("PersonasRoles");
+
+
+            modelBuilder.Entity<Persona>().HasIndex(p => p.DNI).IsUnique();
+
+            //modelBuilder.Entity<Persona>().HasIndex(p => p.Email).IsUnique();
+            //lo probe antes y la persona ni se crea asi que quizas la logica es distinta
+
+            modelBuilder.Entity<Empleado>().HasIndex(e => e.Legajo).IsUnique();
+
+            modelBuilder.Entity<Alumno>().HasIndex(a => a.NumeroMatricula).IsUnique();
+
+            modelBuilder.Entity<Carrera>().HasIndex(c => c.Nombre).IsUnique();
+
 
         }
 
