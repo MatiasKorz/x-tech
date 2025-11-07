@@ -61,6 +61,7 @@ namespace INSTITUTO_C.Controllers
         {
 
             VerificarDNIValido(profesor);
+            VerificarEmailValido(profesor);
             if (ModelState.IsValid)
             {
                 profesor.UserName = profesor.Email;
@@ -101,6 +102,15 @@ namespace INSTITUTO_C.Controllers
             }
         }
 
+        private void VerificarEmailValido(Persona persona)
+        {
+            if (PersonasHelper.PersonaEmailExists(_context, persona.Email))
+            {
+                ModelState.AddModelError("Email", ErrorMesseges.EmailExistente);
+
+            }
+        }
+
         // GET: Profesores/Edit/5
         [Authorize(Roles = Configs.Empleado)]
         public async Task<IActionResult> Edit(int? id)
@@ -131,6 +141,7 @@ namespace INSTITUTO_C.Controllers
                 return NotFound();
             }
             VerificarDNIValido(profesor);
+            VerificarEmailValido(profesor);
             if (ModelState.IsValid)
             {
                 

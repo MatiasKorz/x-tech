@@ -1,4 +1,5 @@
 ﻿using INSTITUTO_C.Data;
+using System;
 using System.Linq;
 
 
@@ -50,9 +51,9 @@ namespace INSTITUTO_C.Helpers
             return context.Personas.Any(p => p.DNI == dni);
         }
 
-
-
-
-
+        public static bool PersonaEmailExists(InstitutoContext context, string email)
+        {
+            return context.Personas.Any(p => p.Email == email);
+        }
     }
 }

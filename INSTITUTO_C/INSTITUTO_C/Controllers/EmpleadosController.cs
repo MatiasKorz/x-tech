@@ -59,6 +59,7 @@ namespace INSTITUTO_C.Controllers
         {
 
             VerificarDNIValido(empleado);
+            VerificarEmailValido(empleado);
             if (ModelState.IsValid)
             {
 
@@ -103,7 +104,14 @@ namespace INSTITUTO_C.Controllers
             }
         }
 
+        private void VerificarEmailValido(Persona persona)
+        {
+            if (PersonasHelper.PersonaEmailExists(_context, persona.Email))
+            {
+                ModelState.AddModelError("Email", ErrorMesseges.EmailExistente);
 
+            }
+        }
 
         // GET: Empleados/Edit/5
         [Authorize(Roles = Configs.Empleado)]
@@ -136,6 +144,7 @@ namespace INSTITUTO_C.Controllers
             }
 
             VerificarDNIValido(empleado);
+            VerificarEmailValido(empleado);
             if (ModelState.IsValid)
             {
                

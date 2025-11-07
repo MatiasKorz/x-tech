@@ -68,6 +68,10 @@ namespace INSTITUTO_C.Controllers
 
             VerificarDNIValido(persona);
 
+            VerificarEmailValido(persona);
+
+
+
             if (ModelState.IsValid) {
                 persona.UserName = persona.Email;
             var resultAgregar = await _userManager.CreateAsync(persona, Configs.Password);
@@ -92,6 +96,15 @@ namespace INSTITUTO_C.Controllers
             return RedirectToAction(nameof(Index));
         }
             return View(persona);
+        }
+
+        private void VerificarEmailValido(Persona persona)
+        {
+            if (PersonasHelper.PersonaEmailExists(_context, persona.Email))
+            {
+                ModelState.AddModelError("Email", ErrorMesseges.EmailExistente);
+
+            }
         }
 
         private void VerificarDNIValido(Persona persona)
@@ -132,7 +145,7 @@ namespace INSTITUTO_C.Controllers
                 return NotFound();
             }
             VerificarDNIValido(persona);
-
+            VerificarEmailValido(persona);
             if (ModelState.IsValid)
             {
                
