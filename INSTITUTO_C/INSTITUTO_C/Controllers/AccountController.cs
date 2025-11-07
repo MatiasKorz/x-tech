@@ -163,7 +163,27 @@ namespace INSTITUTO_C.Controllers
             ViewBag.ReturnUrl = returnUrl;
             return View();
         }
-        
+
+
+
+
+        [HttpGet]
+        [AllowAnonymous]
+        public async Task<IActionResult> EmailDisponible(string email)
+        {
+            var usuarioExistente = await _userManager.FindByEmailAsync(email);
+
+
+            if(usuarioExistente == null)
+            {
+                return Json(true);
+            }
+            else
+            {
+                return Json($"El correo {email} ya esta registrado");
+            }
+
+        }
             
  
 
