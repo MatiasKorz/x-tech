@@ -9,6 +9,8 @@ using INSTITUTO_C.Data;
 using INSTITUTO_C.Models;
 using Microsoft.AspNetCore.Authorization;
 using INSTITUTO_C.Helpers;
+using Microsoft.Data.SqlClient;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace INSTITUTO_C.Controllers
 {
@@ -62,13 +64,36 @@ namespace INSTITUTO_C.Controllers
         [Authorize(Roles = Configs.Empleado)]
         public async Task<IActionResult> Create([Bind("Id,Nombre")] Carrera carrera)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
+            {
+
+                return View(carrera);
+            }
+
+            try
             {
                 _context.Carreras.Add(carrera);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
+
             }
-            return View(carrera);
+
+            catch (DbUpdateException dbex) 
+            {            
+                SqlException innerException = dbex.InnerException as SqlException;
+                if(innerException != null && (innerException.Number==2627 || innerException.Number == 2601))
+                {
+                    ModelState.AddModelError("Nombre", ErrorMesseges.CarreraNombre);
+                }
+                else
+                {
+                    ModelState.AddModelError(string.Empty, dbex.Message);
+                }
+                return View(carrera);
+
+            }
+
+
         }
 
         // GET: Carreras/Edit/5
