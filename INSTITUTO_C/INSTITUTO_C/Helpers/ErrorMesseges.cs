@@ -23,5 +23,6 @@
 
         public const string CarreraNombre = "Ya existe una carrera con ese nombre";
 
+        public const string DNIExistente = "Ya existe una persona con ese DNI";
     }
 }

@@ -10,6 +10,7 @@ using INSTITUTO_C.Models;
 using Microsoft.AspNetCore.Identity;
 using INSTITUTO_C.Helpers;
 using Microsoft.AspNetCore.Authorization;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace INSTITUTO_C.Controllers
 {
@@ -17,10 +18,12 @@ namespace INSTITUTO_C.Controllers
     public class PersonasController : Controller
     {
         private readonly UserManager<Persona> _userManager;
+        private readonly InstitutoContext _context;
 
-        public PersonasController(UserManager<Persona> userManager)
+        public PersonasController(UserManager<Persona> userManager, InstitutoContext context)
         {
             _userManager = userManager;
+            _context = context;
         }
 
         // GET: Personas
@@ -63,6 +66,8 @@ namespace INSTITUTO_C.Controllers
         public async Task<IActionResult> Create([Bind("Id,UserName,Email,Nombre,Apellido,DNI,Telefono,Direccion,Activo")] Persona persona)
         {
 
+            VerificarDNIValido(persona);
+
             if (ModelState.IsValid) {
                 persona.UserName = persona.Email;
             var resultAgregar = await _userManager.CreateAsync(persona, Configs.Password);
@@ -87,6 +92,24 @@ namespace INSTITUTO_C.Controllers
             return RedirectToAction(nameof(Index));
         }
             return View(persona);
+        }
+
+        private void VerificarDNIValido(Persona persona)
+        {
+            if (PersonaDNIExists(persona.DNI))
+            {
+                ModelState.AddModelError("DNI", ErrorMesseges.DNIExistente);
+            }
+        }
+
+        private bool PersonaDNIExists(string DNI)
+        {
+            bool resultado = false;
+            if (!string.IsNullOrEmpty(DNI))
+            {
+                resultado = _context.Personas.Any(p => p.DNI == DNI);
+            }
+            return resultado;
         }
 
         // GET: Personas/Edit/5
@@ -116,6 +139,7 @@ namespace INSTITUTO_C.Controllers
             {
                 return NotFound();
             }
+            VerificarDNIValido(persona);
 
             if (ModelState.IsValid)
             {

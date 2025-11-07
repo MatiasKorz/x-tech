@@ -65,6 +65,8 @@ namespace INSTITUTO_C.Controllers
         [Authorize(Roles = Configs.Empleado)]
         public async Task<IActionResult> Create([Bind("Id,UserName,Email,Nombre,Apellido,DNI,Telefono,Direccion,Activo,CarreraId")] Alumno alumno)
         {
+            VerificarDNIValido(alumno);
+
             if (ModelState.IsValid)
             {
 
@@ -106,6 +108,24 @@ namespace INSTITUTO_C.Controllers
         }
 
 
+        private void VerificarDNIValido(Persona persona)
+        {
+            if (PersonaDNIExists(persona.DNI))
+            {
+                ModelState.AddModelError("DNI", ErrorMesseges.DNIExistente);
+            }
+        }
+
+        private bool PersonaDNIExists(string DNI)
+        {
+            bool resultado = false;
+            if (!string.IsNullOrEmpty(DNI))
+            {
+                resultado = _context.Personas.Any(p => p.DNI == DNI);
+            }
+            return resultado;
+        }
+
         // GET: Alumnos/Edit/5
         [Authorize(Roles = Configs.Empleado)]
         public async Task<IActionResult> Edit(int? id)
@@ -137,6 +157,7 @@ namespace INSTITUTO_C.Controllers
                 return NotFound();
             }
 
+            VerificarDNIValido(alumno);
             if (ModelState.IsValid)
             {
 
