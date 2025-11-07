@@ -40,8 +40,19 @@ namespace INSTITUTO_C.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Registrar(RegistroUsuario viewModel)
         {
+
+            if (PersonasHelper.PersonaDNIExists(_context, viewModel.DNI))
+            {
+                ModelState.AddModelError("DNI", ErrorMesseges.DNIExistente);
+                ViewData["CarreraNombre"] = new SelectList(_context.Carreras, "Nombre", "Nombre", viewModel.CarreraNombre);
+                return View(viewModel);
+            }
+
             if (ModelState.IsValid)
             {
+     
+
+
                 var carreraSeleccionada = _context.Carreras
                  .FirstOrDefault(c => c.Nombre == viewModel.CarreraNombre);
 
