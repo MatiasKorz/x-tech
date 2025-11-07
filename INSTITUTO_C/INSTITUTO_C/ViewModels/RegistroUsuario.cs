@@ -1,4 +1,6 @@
 ﻿using INSTITUTO_C.Helpers;
+using Microsoft.AspNetCore.Mvc;
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.Xml.Linq;
 
@@ -33,6 +35,7 @@ namespace INSTITUTO_C.ViewModels
 
         [Required(ErrorMessage = ErrorMesseges.Requerido)]
         [EmailAddress(ErrorMessage = ErrorMesseges.NotValid)]
+        [Remote(action: "EmailDisponible", controller:"Account")]
         public string Email { get; set; }
 
 

@@ -40,8 +40,19 @@ namespace INSTITUTO_C.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Registrar(RegistroUsuario viewModel)
         {
+
+            if (PersonasHelper.PersonaDNIExists(_context, viewModel.DNI))
+            {
+                ModelState.AddModelError("DNI", ErrorMesseges.DNIExistente);
+                ViewData["CarreraNombre"] = new SelectList(_context.Carreras, "Nombre", "Nombre", viewModel.CarreraNombre);
+                return View(viewModel);
+            }
+
             if (ModelState.IsValid)
             {
+     
+
+
                 var carreraSeleccionada = _context.Carreras
                  .FirstOrDefault(c => c.Nombre == viewModel.CarreraNombre);
 
@@ -163,7 +174,27 @@ namespace INSTITUTO_C.Controllers
             ViewBag.ReturnUrl = returnUrl;
             return View();
         }
-        
+
+
+
+
+        [HttpGet]
+        [AllowAnonymous]
+        public async Task<IActionResult> EmailDisponible(string email)
+        {
+            var usuarioExistente = await _userManager.FindByEmailAsync(email);
+
+
+            if(usuarioExistente == null)
+            {
+                return Json(true);
+            }
+            else
+            {
+                return Json($"El correo {email} ya esta registrado");
+            }
+
+        }
             
  
 

@@ -57,12 +57,14 @@ namespace INSTITUTO_C.Controllers
         [Authorize(Roles = Configs.Empleado)]
         public async Task<IActionResult> Create([Bind("Id,UserName,Email,Nombre,Apellido,DNI,Telefono,Direccion,Activo")] Empleado empleado)
         {
+
+            VerificarDNIValido(empleado);
             if (ModelState.IsValid)
             {
 
                 empleado.UserName = empleado.Email;
 
-                empleado.Legajo = EmpleadoHelper.GenerarLegajo(_context);
+                empleado.Legajo = PersonasHelper.GenerarLegajo(_context);
 
 
 
@@ -91,6 +93,17 @@ namespace INSTITUTO_C.Controllers
             }
             return View(empleado);
         }
+
+
+        private void VerificarDNIValido(Persona persona)
+        {
+            if (PersonasHelper.PersonaDNIExists(_context, persona.DNI))
+            {
+                ModelState.AddModelError("DNI", ErrorMesseges.DNIExistente);
+            }
+        }
+
+
 
         // GET: Empleados/Edit/5
         [Authorize(Roles = Configs.Empleado)]
@@ -122,6 +135,7 @@ namespace INSTITUTO_C.Controllers
                 return NotFound();
             }
 
+            VerificarDNIValido(empleado);
             if (ModelState.IsValid)
             {
                
@@ -131,7 +145,7 @@ namespace INSTITUTO_C.Controllers
 
                         if (string.IsNullOrEmpty(empleadoEnDB.Legajo))
                         {
-                            empleadoEnDB.Legajo = EmpleadoHelper.GenerarLegajo(_context);
+                            empleadoEnDB.Legajo = PersonasHelper.GenerarLegajo(_context);
                         }
                         empleadoEnDB.Nombre = empleado.Nombre;
                         empleadoEnDB.Apellido = empleado.Apellido;

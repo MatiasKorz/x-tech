@@ -65,6 +65,8 @@ namespace INSTITUTO_C.Controllers
         [Authorize(Roles = Configs.Empleado)]
         public async Task<IActionResult> Create([Bind("Id,UserName,Email,Nombre,Apellido,DNI,Telefono,Direccion,Activo,CarreraId")] Alumno alumno)
         {
+            VerificarDNIValido(alumno);
+
             if (ModelState.IsValid)
             {
 
@@ -74,7 +76,7 @@ namespace INSTITUTO_C.Controllers
 
 
                 alumno.UserName = alumno.Email;
-                alumno.NumeroMatricula = AlumnoHelper.GenerarNumMatricula(_context);
+                alumno.NumeroMatricula = PersonasHelper.GenerarNumMatricula(_context);
 
 
 
@@ -105,6 +107,14 @@ namespace INSTITUTO_C.Controllers
             return View(alumno);
         }
 
+
+        private void VerificarDNIValido(Persona persona)
+        {
+            if (PersonasHelper.PersonaDNIExists(_context, persona.DNI))
+            {
+                ModelState.AddModelError("DNI", ErrorMesseges.DNIExistente);
+            }
+        }
 
         // GET: Alumnos/Edit/5
         [Authorize(Roles = Configs.Empleado)]
@@ -137,6 +147,7 @@ namespace INSTITUTO_C.Controllers
                 return NotFound();
             }
 
+            VerificarDNIValido(alumno);
             if (ModelState.IsValid)
             {
 
@@ -147,7 +158,7 @@ namespace INSTITUTO_C.Controllers
 
                         if (string.IsNullOrEmpty(alumnoEnDb.NumeroMatricula))
                         {
-                            alumnoEnDb.NumeroMatricula = AlumnoHelper.GenerarNumMatricula(_context);
+                            alumnoEnDb.NumeroMatricula = PersonasHelper.GenerarNumMatricula(_context);
                         }
                         alumnoEnDb.Nombre = alumno.Nombre;
                         alumnoEnDb.Apellido = alumno.Apellido;

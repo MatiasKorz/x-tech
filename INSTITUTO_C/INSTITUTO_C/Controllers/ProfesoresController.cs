@@ -59,10 +59,12 @@ namespace INSTITUTO_C.Controllers
         [Authorize(Roles = Configs.Empleado)]
         public async Task<IActionResult> Create([Bind("Id,UserName,Email,Nombre,Apellido,DNI,Telefono,Direccion,Activo")] Profesor profesor)
         {
+
+            VerificarDNIValido(profesor);
             if (ModelState.IsValid)
             {
                 profesor.UserName = profesor.Email;
-                profesor.Legajo = EmpleadoHelper.GenerarLegajo(_context);
+                profesor.Legajo = PersonasHelper.GenerarLegajo(_context);
 
                 var resultAgregar = await _userManager.CreateAsync(profesor, Configs.Password);
                 if (resultAgregar.Succeeded)
@@ -88,6 +90,15 @@ namespace INSTITUTO_C.Controllers
                 return RedirectToAction(nameof(Index));
             }
             return View(profesor);
+        }
+
+
+        private void VerificarDNIValido(Persona persona)
+        {
+            if (PersonasHelper.PersonaDNIExists(_context, persona.DNI))
+            {
+                ModelState.AddModelError("DNI", ErrorMesseges.DNIExistente);
+            }
         }
 
         // GET: Profesores/Edit/5
@@ -119,7 +130,7 @@ namespace INSTITUTO_C.Controllers
             {
                 return NotFound();
             }
-
+            VerificarDNIValido(profesor);
             if (ModelState.IsValid)
             {
                 
@@ -129,7 +140,7 @@ namespace INSTITUTO_C.Controllers
 
                         if (string.IsNullOrEmpty(profesorEnDB.Legajo))
                         {
-                            profesorEnDB.Legajo = EmpleadoHelper.GenerarLegajo(_context);
+                            profesorEnDB.Legajo = PersonasHelper.GenerarLegajo(_context);
                         }
                         profesorEnDB.Nombre = profesor.Nombre;
                         profesorEnDB.Apellido = profesor.Apellido;

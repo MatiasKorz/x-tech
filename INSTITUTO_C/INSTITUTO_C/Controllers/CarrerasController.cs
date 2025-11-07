@@ -64,6 +64,9 @@ namespace INSTITUTO_C.Controllers
         [Authorize(Roles = Configs.Empleado)]
         public async Task<IActionResult> Create([Bind("Id,Nombre")] Carrera carrera)
         {
+
+            VerificarNombreValido(carrera);
+
             if (!ModelState.IsValid)
             {
 
@@ -86,6 +89,23 @@ namespace INSTITUTO_C.Controllers
             }
 
 
+        }
+
+        private void VerificarNombreValido(Carrera carrera)
+        {
+            if (CarreraNombreExists(carrera.Nombre))
+            {
+                ModelState.AddModelError("Nombre", ErrorMesseges.CarreraNombre);
+            }
+        }
+
+        private bool CarreraNombreExists(string nombre)
+        {
+            bool resultado = false;
+            if (!string.IsNullOrEmpty(nombre)){
+                resultado = _context.Carreras.Any(c => c.Nombre == nombre);
+            }
+            return resultado;
         }
 
         private void ProcesarDuplicado(DbUpdateException dbex)
@@ -130,6 +150,8 @@ namespace INSTITUTO_C.Controllers
             {
                 return NotFound();
             }
+
+            VerificarNombreValido(carrera);
 
             if (ModelState.IsValid)
             {

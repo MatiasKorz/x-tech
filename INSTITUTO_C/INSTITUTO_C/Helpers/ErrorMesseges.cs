@@ -21,7 +21,8 @@
 
         public const string NoMatch = "Las contraseñas no coinciden";
 
-        public const string CarreraNombre = "El nombre de carrera esta en uso";
+        public const string CarreraNombre = "Ya existe una carrera con ese nombre";
 
+        public const string DNIExistente = "Ya existe una persona con ese DNI";
     }
 }
