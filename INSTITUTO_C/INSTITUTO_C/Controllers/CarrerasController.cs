@@ -79,21 +79,26 @@ namespace INSTITUTO_C.Controllers
             }
 
             catch (DbUpdateException dbex) 
-            {            
-                SqlException innerException = dbex.InnerException as SqlException;
-                if(innerException != null && (innerException.Number==2627 || innerException.Number == 2601))
-                {
-                    ModelState.AddModelError("Nombre", ErrorMesseges.CarreraNombre);
-                }
-                else
-                {
-                    ModelState.AddModelError(string.Empty, dbex.Message);
-                }
+            {
+                ProcesarDuplicado(dbex);
                 return View(carrera);
 
             }
 
 
+        }
+
+        private void ProcesarDuplicado(DbUpdateException dbex)
+        {
+            SqlException innerException = dbex.InnerException as SqlException;
+            if (innerException != null && (innerException.Number == 2627 || innerException.Number == 2601))
+            {
+                ModelState.AddModelError("Nombre", ErrorMesseges.CarreraNombre);
+            }
+            else
+            {
+                ModelState.AddModelError(string.Empty, dbex.Message);
+            }
         }
 
         // GET: Carreras/Edit/5
@@ -138,6 +143,7 @@ namespace INSTITUTO_C.Controllers
 
                     _context.Update(carreraEnDB);
                     await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -150,7 +156,11 @@ namespace INSTITUTO_C.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                catch (DbUpdateException dbex)
+                {
+                    ProcesarDuplicado(dbex);
+                }
+
             }
             return View(carrera);
         }
