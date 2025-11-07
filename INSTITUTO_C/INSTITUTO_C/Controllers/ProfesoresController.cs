@@ -64,7 +64,7 @@ namespace INSTITUTO_C.Controllers
             if (ModelState.IsValid)
             {
                 profesor.UserName = profesor.Email;
-                profesor.Legajo = EmpleadoHelper.GenerarLegajo(_context);
+                profesor.Legajo = PersonasHelper.GenerarLegajo(_context);
 
                 var resultAgregar = await _userManager.CreateAsync(profesor, Configs.Password);
                 if (resultAgregar.Succeeded)
@@ -150,7 +150,7 @@ namespace INSTITUTO_C.Controllers
 
                         if (string.IsNullOrEmpty(profesorEnDB.Legajo))
                         {
-                            profesorEnDB.Legajo = EmpleadoHelper.GenerarLegajo(_context);
+                            profesorEnDB.Legajo = PersonasHelper.GenerarLegajo(_context);
                         }
                         profesorEnDB.Nombre = profesor.Nombre;
                         profesorEnDB.Apellido = profesor.Apellido;

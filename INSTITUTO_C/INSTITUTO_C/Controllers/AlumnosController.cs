@@ -76,7 +76,7 @@ namespace INSTITUTO_C.Controllers
 
 
                 alumno.UserName = alumno.Email;
-                alumno.NumeroMatricula = AlumnoHelper.GenerarNumMatricula(_context);
+                alumno.NumeroMatricula = PersonasHelper.GenerarNumMatricula(_context);
 
 
 
@@ -168,7 +168,7 @@ namespace INSTITUTO_C.Controllers
 
                         if (string.IsNullOrEmpty(alumnoEnDb.NumeroMatricula))
                         {
-                            alumnoEnDb.NumeroMatricula = AlumnoHelper.GenerarNumMatricula(_context);
+                            alumnoEnDb.NumeroMatricula = PersonasHelper.GenerarNumMatricula(_context);
                         }
                         alumnoEnDb.Nombre = alumno.Nombre;
                         alumnoEnDb.Apellido = alumno.Apellido;

@@ -4,9 +4,8 @@ using System.Linq;
 
 namespace INSTITUTO_C.Helpers
 {
-    public class AlumnoHelper
+    public class PersonasHelper
     {
-
         public static string GenerarNumMatricula(InstitutoContext context)
         {
             int maxMatricula = 0;
@@ -23,5 +22,31 @@ namespace INSTITUTO_C.Helpers
 
             return (maxMatricula + 1).ToString();
         }
+
+
+        public static string GenerarLegajo(InstitutoContext context)
+        {
+            int maxLegajo = 0;
+
+            var legajosNumericos = context.Empleados
+                .AsEnumerable()
+                .Select(e => int.TryParse(e.Legajo, out int parsed) ? parsed : 0)
+                .ToList();
+
+            if (legajosNumericos.Any())
+            {
+                maxLegajo = legajosNumericos.Max();
+            }
+
+            return (maxLegajo + 1).ToString();
+        }
+
+
+
+
+
+
+
+
     }
 }

@@ -64,7 +64,7 @@ namespace INSTITUTO_C.Controllers
 
                 empleado.UserName = empleado.Email;
 
-                empleado.Legajo = EmpleadoHelper.GenerarLegajo(_context);
+                empleado.Legajo = PersonasHelper.GenerarLegajo(_context);
 
 
 
@@ -155,7 +155,7 @@ namespace INSTITUTO_C.Controllers
 
                         if (string.IsNullOrEmpty(empleadoEnDB.Legajo))
                         {
-                            empleadoEnDB.Legajo = EmpleadoHelper.GenerarLegajo(_context);
+                            empleadoEnDB.Legajo = PersonasHelper.GenerarLegajo(_context);
                         }
                         empleadoEnDB.Nombre = empleado.Nombre;
                         empleadoEnDB.Apellido = empleado.Apellido;
