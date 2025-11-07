@@ -64,10 +64,15 @@ namespace INSTITUTO_C.Controllers
         }
 
         // GET: Inscripciones/Create
-        [Authorize(Roles = Configs.Alumno)]
+        [Authorize(Roles = Configs.Empleado + "," + Configs.Alumno)]
         public IActionResult Create()
         {
-          //  ViewData["AlumnoId"] = new SelectList(_context.Alumnos, "Id", "Apellido");
+
+            if (User.IsInRole(Configs.Empleado))
+            {
+                ViewData["AlumnoId"] = new SelectList(_context.Alumnos, "Id", "Apellido");
+            }
+    
             ViewData["MateriaCursadaId"] = new SelectList(_context.MateriasCursadas, "Id", "Nombre");
             return View();
         }
@@ -77,27 +82,22 @@ namespace INSTITUTO_C.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = Configs.Alumno)]
-        public async Task<IActionResult> Create([Bind("MateriaCursadaId")] Inscripcion inscripcion)
+        [Authorize(Roles = Configs.Alumno + "," + Configs.Empleado)]
+        public async Task<IActionResult> Create(Inscripcion inscripcion)
         {
-            var user = await _userManager.GetUserAsync(User);
-            inscripcion.AlumnoId = user.Id;
-            var alumno = await _context.Alumnos.FindAsync(user.Id);
-            if (alumno == null || !alumno.Activo)
-            {
-                TempData["Error"] = "No podés inscribirte porque no estás activo.";
-                return RedirectToAction(nameof(Index));
-            }
+         
+            if (User.IsInRole(Configs.Alumno))
+                inscripcion.AlumnoId = int.Parse(_userManager.GetUserId(User));
 
-            if (ModelState.IsValid)
-            {
-                _context.Inscripciones.Add(inscripcion);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-           // ViewData["AlumnoId"] = new SelectList(_context.Alumnos, "Id", "Apellido", inscripcion.AlumnoId);
-            ViewData["MateriaCursadaId"] = new SelectList(_context.MateriasCursadas, "Id", "Nombre", inscripcion.MateriaCursadaId);
-            return View(inscripcion);
+            var alumno = await _context.Alumnos.FindAsync(inscripcion.AlumnoId);
+
+            if (alumno == null || !alumno.Activo)
+                return Content("No es posible la inscripción, el alumno no está activo.");
+
+            _context.Inscripciones.Add(inscripcion);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Index), new { alumnoId = inscripcion.AlumnoId });
         }
 
         // GET: Inscripciones/Edit/5
