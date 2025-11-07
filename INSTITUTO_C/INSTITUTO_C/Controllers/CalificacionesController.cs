@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using INSTITUTO_C.Data;
 using INSTITUTO_C.Models;
 using Microsoft.AspNetCore.Authorization;
+using INSTITUTO_C.Helpers;
 
 namespace INSTITUTO_C.Controllers
 {
@@ -53,6 +54,7 @@ namespace INSTITUTO_C.Controllers
         }
 
         // GET: Calificaciones/Create
+        [Authorize(Roles = Configs.Profesor)]
         public IActionResult Create()
         {
 
@@ -67,6 +69,7 @@ namespace INSTITUTO_C.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = Configs.Profesor)]
         public async Task<IActionResult> Create([Bind("AlumnoId,MateriaCursadaId,Fecha,Nota,ProfesorId")] Calificacion calificacion)
         {
             if (ModelState.IsValid)
@@ -79,6 +82,7 @@ namespace INSTITUTO_C.Controllers
         }
 
         // GET: Calificaciones/Edit/5
+        [Authorize(Roles = Configs.Profesor)]
         public async Task<IActionResult> Edit(int alumnoId, int materiaCursadaId)
         {
             var calificacion = await _context.Calificaciones
@@ -104,7 +108,8 @@ namespace INSTITUTO_C.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int alumnoId, int materiaCursadaId, [Bind("AlumnoId,MateriaCursadaId,Nota")] Calificacion calificacion)
+        [Authorize(Roles = Configs.Profesor)]
+        public async Task<IActionResult> Edit(int alumnoId, int materiaCursadaId, [Bind("AlumnoId,MateriaCursadaId,Fecha,Nota")] Calificacion calificacion)
         {
             if (alumnoId != calificacion.AlumnoId || materiaCursadaId != calificacion.MateriaCursadaId)
             {
@@ -115,7 +120,7 @@ namespace INSTITUTO_C.Controllers
             {
                 try
                 {
-                    // Solo actualizamos la Nota
+                    
                     var calificacionExistente = await _context.Calificaciones
                         .FirstOrDefaultAsync(c => c.AlumnoId == alumnoId && c.MateriaCursadaId == materiaCursadaId);
 

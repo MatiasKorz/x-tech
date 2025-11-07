@@ -24,5 +24,8 @@
         public const string CarreraNombre = "Ya existe una carrera con ese nombre";
 
         public const string DNIExistente = "Ya existe una persona con ese DNI";
+
+        public const string EmailExistente = "Ya existe un usuario con ese Email";
+
     }
 }

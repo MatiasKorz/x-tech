@@ -97,6 +97,24 @@ namespace INSTITUTO_C.Controllers
             _context.Inscripciones.Add(inscripcion);
             await _context.SaveChangesAsync();
 
+            // Creo una calificacion con nota pendiente
+
+            var materiaCursada = await _context.MateriasCursadas
+              .Include(m => m.Profesor)
+              .FirstOrDefaultAsync(m => m.Id == inscripcion.MateriaCursadaId);
+
+            var calificacion = new Calificacion
+            {
+                AlumnoId = inscripcion.AlumnoId,
+                MateriaCursadaId = inscripcion.MateriaCursadaId,
+                Fecha = DateTime.Now,
+                Nota = Nota.Pendiente, // Enum o valor string según tu modelo
+                ProfesorId = materiaCursada.ProfesorId // aún no asignado
+            };
+
+            _context.Calificaciones.Add(calificacion);
+            await _context.SaveChangesAsync();
+
             return RedirectToAction(nameof(Index), new { alumnoId = inscripcion.AlumnoId });
         }
 

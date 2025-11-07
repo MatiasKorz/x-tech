@@ -59,6 +59,7 @@ namespace INSTITUTO_C.Controllers
         {
 
             VerificarDNIValido(empleado);
+            VerificarEmailValido(empleado);
             if (ModelState.IsValid)
             {
 
@@ -103,7 +104,14 @@ namespace INSTITUTO_C.Controllers
             }
         }
 
+        private void VerificarEmailValido(Persona persona)
+        {
+            if (PersonasHelper.PersonaEmailExists(_context, persona.Email))
+            {
+                ModelState.AddModelError("Email", ErrorMesseges.EmailExistente);
 
+            }
+        }
 
         // GET: Empleados/Edit/5
         [Authorize(Roles = Configs.Empleado)]
@@ -135,11 +143,19 @@ namespace INSTITUTO_C.Controllers
                 return NotFound();
             }
 
-            VerificarDNIValido(empleado);
+
+            var empleadoEnDB = await _userManager.FindByIdAsync(empleado.Id.ToString()) as Empleado;
+
+            if (empleado.DNI != empleadoEnDB.DNI)
+            {
+                VerificarDNIValido(empleado);
+            }
+
+            //VerificarEmailValido(empleado);
             if (ModelState.IsValid)
             {
                
-                    var empleadoEnDB = await _userManager.FindByIdAsync(empleado.Id.ToString()) as Empleado;
+
                     if (empleadoEnDB != null)
                     {
 

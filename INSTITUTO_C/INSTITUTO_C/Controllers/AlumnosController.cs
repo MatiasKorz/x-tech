@@ -66,6 +66,7 @@ namespace INSTITUTO_C.Controllers
         public async Task<IActionResult> Create([Bind("Id,UserName,Email,Nombre,Apellido,DNI,Telefono,Direccion,Activo,CarreraId")] Alumno alumno)
         {
             VerificarDNIValido(alumno);
+            VerificarEmailValido(alumno);
 
             if (ModelState.IsValid)
             {
@@ -116,6 +117,15 @@ namespace INSTITUTO_C.Controllers
             }
         }
 
+        private void VerificarEmailValido(Persona persona)
+        {
+            if (PersonasHelper.PersonaEmailExists(_context, persona.Email))
+            {
+                ModelState.AddModelError("Email", ErrorMesseges.EmailExistente);
+
+            }
+        }
+
         // GET: Alumnos/Edit/5
         [Authorize(Roles = Configs.Empleado)]
         public async Task<IActionResult> Edit(int? id)
@@ -147,12 +157,20 @@ namespace INSTITUTO_C.Controllers
                 return NotFound();
             }
 
-            VerificarDNIValido(alumno);
+
+            var alumnoEnDb = await _userManager.FindByIdAsync(alumno.Id.ToString()) as Alumno;
+
+            if (alumno.DNI != alumnoEnDb.DNI)
+            {
+                VerificarDNIValido(alumno);
+            }
+            
+            //VerificarEmailValido(alumno);
             if (ModelState.IsValid)
             {
 
 
-                var alumnoEnDb = await _userManager.FindByIdAsync(alumno.Id.ToString()) as Alumno;
+
                 if (alumnoEnDb != null)
                     {
 
