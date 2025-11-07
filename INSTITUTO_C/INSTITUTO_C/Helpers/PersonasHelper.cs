@@ -42,7 +42,13 @@ namespace INSTITUTO_C.Helpers
         }
 
 
+        public static bool PersonaDNIExists(InstitutoContext context, string dni)
+        {
+            if (string.IsNullOrEmpty(dni))
+                return false;
 
+            return context.Personas.Any(p => p.DNI == dni);
+        }
 
 
 
