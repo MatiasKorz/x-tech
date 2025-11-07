@@ -157,13 +157,20 @@ namespace INSTITUTO_C.Controllers
                 return NotFound();
             }
 
-            VerificarDNIValido(alumno);
-            VerificarEmailValido(alumno);
+
+            var alumnoEnDb = await _userManager.FindByIdAsync(alumno.Id.ToString()) as Alumno;
+
+            if (alumno.DNI != alumnoEnDb.DNI)
+            {
+                VerificarDNIValido(alumno);
+            }
+            
+            //VerificarEmailValido(alumno);
             if (ModelState.IsValid)
             {
 
 
-                var alumnoEnDb = await _userManager.FindByIdAsync(alumno.Id.ToString()) as Alumno;
+
                 if (alumnoEnDb != null)
                     {
 

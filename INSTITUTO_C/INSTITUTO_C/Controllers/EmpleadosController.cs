@@ -143,12 +143,19 @@ namespace INSTITUTO_C.Controllers
                 return NotFound();
             }
 
-            VerificarDNIValido(empleado);
-            VerificarEmailValido(empleado);
+
+            var empleadoEnDB = await _userManager.FindByIdAsync(empleado.Id.ToString()) as Empleado;
+
+            if (empleado.DNI != empleadoEnDB.DNI)
+            {
+                VerificarDNIValido(empleado);
+            }
+
+            //VerificarEmailValido(empleado);
             if (ModelState.IsValid)
             {
                
-                    var empleadoEnDB = await _userManager.FindByIdAsync(empleado.Id.ToString()) as Empleado;
+
                     if (empleadoEnDB != null)
                     {
 

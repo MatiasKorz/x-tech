@@ -25,7 +25,7 @@
 
         public const string DNIExistente = "Ya existe una persona con ese DNI";
 
-        public const string EmailExistente = "Ya existe una persona con ese Email";
+        public const string EmailExistente = "Ya existe un usuario con ese Email";
 
     }
 }
