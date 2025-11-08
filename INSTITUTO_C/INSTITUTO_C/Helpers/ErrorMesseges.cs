@@ -31,5 +31,7 @@
 
         public const string AlumnoEnCursada = "El alumno ya esta inscripto en esa cursada";
 
+        public const string AlumnoNoCarrera = "El alumno no pertenece a esa carrera";
+
     }
 }

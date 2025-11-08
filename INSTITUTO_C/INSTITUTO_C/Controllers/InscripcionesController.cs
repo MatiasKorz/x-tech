@@ -71,9 +71,23 @@ namespace INSTITUTO_C.Controllers
             if (User.IsInRole(Configs.Empleado))
             {
                 ViewData["AlumnoId"] = new SelectList(_context.Alumnos, "Id", "Apellido");
+                ViewData["MateriaCursadaId"] = new SelectList(_context.MateriasCursadas, "Id", "Nombre");
             }
-    
-            ViewData["MateriaCursadaId"] = new SelectList(_context.MateriasCursadas, "Id", "Nombre");
+            else
+            {
+                var alumno = _context.Alumnos
+                    .Include(a => a.Carrera)
+                    .FirstOrDefault(a => a.Id == int.Parse(_userManager.GetUserId(User)));
+
+            
+                var materiasCursadas = _context.MateriasCursadas
+                    .Include(mc => mc.Materia)
+                    .Where(mc => mc.Materia.CarreraId == alumno.CarreraId && mc.Activo)
+                    .ToList();
+
+                ViewData["MateriaCursadaId"] = new SelectList(materiasCursadas, "Id", "Nombre");
+            }
+       
             return View();
         }
 
@@ -94,6 +108,11 @@ namespace INSTITUTO_C.Controllers
 
             var alumno = await _context.Alumnos.FindAsync(inscripcion.AlumnoId);
 
+            var materiaCursada = await _context.MateriasCursadas
+              .Include(mc => mc.Materia)
+              .ThenInclude(m => m.Carrera)
+              .FirstOrDefaultAsync(mc => mc.Id == inscripcion.MateriaCursadaId);
+
             if (alumno == null || !alumno.Activo)
                 return Content(ErrorMesseges.AlumnoInactivo);
 
@@ -104,14 +123,13 @@ namespace INSTITUTO_C.Controllers
                 return Content(ErrorMesseges.AlumnoEnCursada);
 
 
+            if (materiaCursada.Materia.CarreraId != alumno.CarreraId)
+                return Content(ErrorMesseges.AlumnoNoCarrera);
+
             _context.Inscripciones.Add(inscripcion);
             await _context.SaveChangesAsync();
 
             // Creo una calificacion con nota pendiente
-
-            var materiaCursada = await _context.MateriasCursadas
-              .Include(m => m.Profesor)
-              .FirstOrDefaultAsync(m => m.Id == inscripcion.MateriaCursadaId);
 
             var calificacion = new Calificacion
             {
