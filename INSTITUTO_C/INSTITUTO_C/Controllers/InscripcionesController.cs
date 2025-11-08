@@ -31,7 +31,7 @@ namespace INSTITUTO_C.Controllers
             var usuarioId = Int32.Parse( _userManager.GetUserId(User));
 
             List<Inscripcion> inscripciones = null;
-            if (alumnoId is not null && (alumnoId == usuarioId|| User.IsInRole("Empleado")))
+            if (alumnoId is not null && (alumnoId == usuarioId|| User.IsInRole(Configs.Empleado)))
             {
                 //para un alumno especifico
                 inscripciones = await _context.Inscripciones.Include(i => i.Alumno).Include(i => i.MateriaCursada)
@@ -39,7 +39,7 @@ namespace INSTITUTO_C.Controllers
                     .ToListAsync(); 
                 
             }
-            else if(User.IsInRole("Alumno")){
+            else if(User.IsInRole(Configs.Alumno)){
                 return Content("No podes ver las inscripciones de otro alumno");
             }
             else
@@ -71,9 +71,23 @@ namespace INSTITUTO_C.Controllers
             if (User.IsInRole(Configs.Empleado))
             {
                 ViewData["AlumnoId"] = new SelectList(_context.Alumnos, "Id", "Apellido");
+                ViewData["MateriaCursadaId"] = new SelectList(_context.MateriasCursadas, "Id", "Nombre");
             }
-    
-            ViewData["MateriaCursadaId"] = new SelectList(_context.MateriasCursadas, "Id", "Nombre");
+            else
+            {
+                var alumno = _context.Alumnos
+                    .Include(a => a.Carrera)
+                    .FirstOrDefault(a => a.Id == int.Parse(_userManager.GetUserId(User)));
+
+            
+                var materiasCursadas = _context.MateriasCursadas
+                    .Include(mc => mc.Materia)
+                    .Where(mc => mc.Materia.CarreraId == alumno.CarreraId && mc.Activo)
+                    .ToList();
+
+                ViewData["MateriaCursadaId"] = new SelectList(materiasCursadas, "Id", "Nombre");
+            }
+       
             return View();
         }
 
@@ -87,21 +101,35 @@ namespace INSTITUTO_C.Controllers
         {
          
             if (User.IsInRole(Configs.Alumno))
+            {
                 inscripcion.AlumnoId = int.Parse(_userManager.GetUserId(User));
+
+            }
 
             var alumno = await _context.Alumnos.FindAsync(inscripcion.AlumnoId);
 
+            var materiaCursada = await _context.MateriasCursadas
+              .Include(mc => mc.Materia)
+              .ThenInclude(m => m.Carrera)
+              .FirstOrDefaultAsync(mc => mc.Id == inscripcion.MateriaCursadaId);
+
             if (alumno == null || !alumno.Activo)
-                return Content("No es posible la inscripción, el alumno no está activo.");
+                return Content(ErrorMesseges.AlumnoInactivo);
+
+            bool yaInscripto = await _context.Inscripciones
+              .AnyAsync(i => i.AlumnoId == inscripcion.AlumnoId && i.MateriaCursadaId == inscripcion.MateriaCursadaId);
+
+            if (yaInscripto)
+                return Content(ErrorMesseges.AlumnoEnCursada);
+
+
+            if (materiaCursada.Materia.CarreraId != alumno.CarreraId)
+                return Content(ErrorMesseges.AlumnoNoCarrera);
 
             _context.Inscripciones.Add(inscripcion);
             await _context.SaveChangesAsync();
 
             // Creo una calificacion con nota pendiente
-
-            var materiaCursada = await _context.MateriasCursadas
-              .Include(m => m.Profesor)
-              .FirstOrDefaultAsync(m => m.Id == inscripcion.MateriaCursadaId);
 
             var calificacion = new Calificacion
             {
