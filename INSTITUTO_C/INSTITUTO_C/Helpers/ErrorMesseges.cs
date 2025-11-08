@@ -27,5 +27,9 @@
 
         public const string EmailExistente = "Ya existe un usuario con ese Email";
 
+        public const string AlumnoInactivo = "No es posible la inscripción, el alumno no está activo.";
+
+        public const string AlumnoEnCursada = "El alumno ya esta inscripto en esa cursada";
+
     }
 }

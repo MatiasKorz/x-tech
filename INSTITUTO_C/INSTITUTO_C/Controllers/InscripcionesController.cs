@@ -31,7 +31,7 @@ namespace INSTITUTO_C.Controllers
             var usuarioId = Int32.Parse( _userManager.GetUserId(User));
 
             List<Inscripcion> inscripciones = null;
-            if (alumnoId is not null && (alumnoId == usuarioId|| User.IsInRole("Empleado")))
+            if (alumnoId is not null && (alumnoId == usuarioId|| User.IsInRole(Configs.Empleado)))
             {
                 //para un alumno especifico
                 inscripciones = await _context.Inscripciones.Include(i => i.Alumno).Include(i => i.MateriaCursada)
@@ -39,7 +39,7 @@ namespace INSTITUTO_C.Controllers
                     .ToListAsync(); 
                 
             }
-            else if(User.IsInRole("Alumno")){
+            else if(User.IsInRole(Configs.Alumno)){
                 return Content("No podes ver las inscripciones de otro alumno");
             }
             else
@@ -87,12 +87,22 @@ namespace INSTITUTO_C.Controllers
         {
          
             if (User.IsInRole(Configs.Alumno))
+            {
                 inscripcion.AlumnoId = int.Parse(_userManager.GetUserId(User));
+
+            }
 
             var alumno = await _context.Alumnos.FindAsync(inscripcion.AlumnoId);
 
             if (alumno == null || !alumno.Activo)
-                return Content("No es posible la inscripción, el alumno no está activo.");
+                return Content(ErrorMesseges.AlumnoInactivo);
+
+            bool yaInscripto = await _context.Inscripciones
+              .AnyAsync(i => i.AlumnoId == inscripcion.AlumnoId && i.MateriaCursadaId == inscripcion.MateriaCursadaId);
+
+            if (yaInscripto)
+                return Content(ErrorMesseges.AlumnoEnCursada);
+
 
             _context.Inscripciones.Add(inscripcion);
             await _context.SaveChangesAsync();
