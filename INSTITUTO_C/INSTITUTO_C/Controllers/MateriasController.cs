@@ -9,6 +9,7 @@ using INSTITUTO_C.Data;
 using INSTITUTO_C.Models;
 using Microsoft.AspNetCore.Authorization;
 using INSTITUTO_C.Helpers;
+using Microsoft.Data.SqlClient;
 
 namespace INSTITUTO_C.Controllers
 {
@@ -65,14 +66,60 @@ namespace INSTITUTO_C.Controllers
         [Authorize(Roles = Configs.Empleado)]
         public async Task<IActionResult> Create([Bind("Id,CarreraId,Nombre,CodigoMateria,Descripcion,CupoMaximo")] Materia materia)
         {
+            VerificarCodigoValido(materia);
             if (ModelState.IsValid)
             {
-                _context.Materias.Add(materia);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                try
+                {
+                    _context.Materias.Add(materia);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+
+
+                }
+                catch (DbUpdateException dbex)
+                {
+                    ProcesarDuplicado(dbex);
+                    ViewData["CarreraId"] = new SelectList(_context.Carreras, "Id", "Nombre", materia.CarreraId);
+                    return View(materia);
+
+                }
             }
             ViewData["CarreraId"] = new SelectList(_context.Carreras, "Id", "Nombre", materia.CarreraId);
             return View(materia);
+        }
+
+
+        private void VerificarCodigoValido(Materia materia)
+        {
+            if (CodigoMateriaExists(materia.CodigoMateria))
+            {
+                ModelState.AddModelError("CodigoMateria", ErrorMesseges.CodigoEnUso);
+            }
+        }
+
+        private bool CodigoMateriaExists(string codigo)
+        {
+            bool resultado = false;
+           if (!string.IsNullOrEmpty(codigo))
+            {
+                resultado = _context.Materias.Any(m => m.CodigoMateria == codigo);
+           }
+            return resultado;
+        }
+
+
+        private void ProcesarDuplicado(DbUpdateException dbex)
+        {
+            SqlException innerException = dbex.InnerException as SqlException;
+            if (innerException != null && (innerException.Number == 2627 || innerException.Number == 2601))
+            {
+                ModelState.AddModelError("CodigoMateria", ErrorMesseges.CodigoEnUso);
+            }
+            else
+            {
+                ModelState.AddModelError(string.Empty, dbex.Message);
+            }
         }
 
         // GET: Materias/Edit/5
@@ -106,12 +153,21 @@ namespace INSTITUTO_C.Controllers
                 return NotFound();
             }
 
+            var materiaEnDB = _context.Materias.Find(materia.Id);
+
+            if (materia.CodigoMateria != materiaEnDB.CodigoMateria)
+            {
+                VerificarCodigoValido(materia);
+            }
+
+
+
             if (ModelState.IsValid)
             {
                 try
                 {
 
-                    var materiaEnDB = _context.Materias.Find(materia.Id);
+
 
                     if (materiaEnDB != null)
                     {
@@ -143,6 +199,12 @@ namespace INSTITUTO_C.Controllers
                         throw;
                     }
                 }
+
+                catch (DbUpdateException dbex)
+                {
+                    ProcesarDuplicado(dbex);
+                }
+
                 return RedirectToAction(nameof(Index));
             }
             ViewData["CarreraId"] = new SelectList(_context.Carreras, "Id", "Nombre", materia.CarreraId);
