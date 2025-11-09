@@ -150,14 +150,18 @@ namespace INSTITUTO_C.Controllers
             {
                 return NotFound();
             }
+            var carreraEnDB = _context.Carreras.Find(carrera.Id);
+            if (carrera.Nombre != carreraEnDB.Nombre)
+            {
+                VerificarNombreValido(carrera);
+            }
 
-            VerificarNombreValido(carrera);
 
             if (ModelState.IsValid)
             {
                 try
                 {
-                    var carreraEnDB = _context.Carreras.Find(carrera.Id);
+
                     if (carreraEnDB != null)
                     {
                         carreraEnDB.Nombre = carrera.Nombre;

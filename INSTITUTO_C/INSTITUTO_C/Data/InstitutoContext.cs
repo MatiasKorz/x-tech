@@ -73,6 +73,8 @@ namespace INSTITUTO_C.Data
             //modelBuilder.Entity<Persona>().HasIndex(p => p.Email).IsUnique();
             //lo probe antes y la persona ni se crea asi que quizas la logica es distinta
 
+            modelBuilder.Entity<Materia>().HasIndex(m => m.CodigoMateria).IsUnique();
+
             modelBuilder.Entity<Empleado>().HasIndex(e => e.Legajo).IsUnique();
 
             modelBuilder.Entity<Alumno>().HasIndex(a => a.NumeroMatricula).IsUnique();

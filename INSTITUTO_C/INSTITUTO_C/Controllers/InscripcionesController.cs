@@ -75,20 +75,23 @@ namespace INSTITUTO_C.Controllers
             }
             else
             {
-                var alumno = _context.Alumnos
-                    .Include(a => a.Carrera)
-                    .FirstOrDefault(a => a.Id == int.Parse(_userManager.GetUserId(User)));
 
-            
-                var materiasCursadas = _context.MateriasCursadas
-                    .Include(mc => mc.Materia)
-                    .Where(mc => mc.Materia.CarreraId == alumno.CarreraId && mc.Activo)
-                    .ToList();
-
-                ViewData["MateriaCursadaId"] = new SelectList(materiasCursadas, "Id", "Nombre");
+                ViewData["MateriaCursadaId"] = new SelectList(GetCursadasCarrera(), "Id", "Nombre");
             }
        
             return View();
+        }
+
+        private IEnumerable<MateriaCursada> GetCursadasCarrera()
+        {
+            var alumno = _context.Alumnos
+             .Include(a => a.Carrera)
+             .FirstOrDefault(a => a.Id == int.Parse(_userManager.GetUserId(User)));
+
+            return _context.MateriasCursadas
+                    .Include(mc => mc.Materia)
+                    .Where(mc => mc.Materia.CarreraId == alumno.CarreraId && mc.Activo)
+                    .ToList();
         }
 
         // POST: Inscripciones/Create
@@ -136,8 +139,8 @@ namespace INSTITUTO_C.Controllers
                 AlumnoId = inscripcion.AlumnoId,
                 MateriaCursadaId = inscripcion.MateriaCursadaId,
                 Fecha = DateTime.Now,
-                Nota = Nota.Pendiente, // Enum o valor string según tu modelo
-                ProfesorId = materiaCursada.ProfesorId // aún no asignado
+                Nota = Nota.Pendiente, 
+                ProfesorId = materiaCursada.ProfesorId 
             };
 
             _context.Calificaciones.Add(calificacion);
