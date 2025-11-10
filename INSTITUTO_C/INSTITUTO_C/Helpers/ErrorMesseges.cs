@@ -35,5 +35,7 @@
 
         public const string AlumnoNoCarrera = "El alumno no pertenece a esa carrera";
 
+        public const string NoEsElProfe = "Solo el profesor titular de la cursada puede hacer la calificación";
+
     }
 }

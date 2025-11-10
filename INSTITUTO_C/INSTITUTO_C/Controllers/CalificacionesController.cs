@@ -9,6 +9,7 @@ using INSTITUTO_C.Data;
 using INSTITUTO_C.Models;
 using Microsoft.AspNetCore.Authorization;
 using INSTITUTO_C.Helpers;
+using Microsoft.AspNetCore.Identity;
 
 namespace INSTITUTO_C.Controllers
 {
@@ -16,10 +17,11 @@ namespace INSTITUTO_C.Controllers
     public class CalificacionesController : Controller
     {
         private readonly InstitutoContext _context;
-
-        public CalificacionesController(InstitutoContext context)
+        private readonly UserManager<Persona> _userManager;
+        public CalificacionesController(InstitutoContext context, UserManager<Persona> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: Calificaciones
@@ -115,6 +117,18 @@ namespace INSTITUTO_C.Controllers
             {
                 return NotFound();
             }
+
+            var usuarioId = int.Parse(_userManager.GetUserId(User));
+            
+            var materiaCursada = await _context.MateriasCursadas
+             .Include(mc => mc.Profesor)
+             .FirstOrDefaultAsync(mc => mc.Id == materiaCursadaId);
+
+            if (materiaCursada == null)
+                return NotFound();
+
+            if (materiaCursada.ProfesorId != usuarioId)
+                return Content(ErrorMesseges.NoEsElProfe);
 
             if (ModelState.IsValid)
             {
