@@ -51,6 +51,29 @@
                         </a>
                     </td>
                 }
+                else if (User.IsInRole("Alumno"))
+                {
+                    <td>
+                        @{
+                            var calificacion = item.Calificacion; // 👈 directo
+
+                            if (calificacion != null && calificacion.Nota == Nota.Pendiente)
+                            {
+                                <form asp-action="Baja" method="post" style="display:inline">
+                                    <input type="hidden" name="materiaCursadaId" value="@item.MateriaCursadaId" />
+                                    <button type="submit" class="btn btn-warning btn-sm"
+                                            onclick="return confirm('¿Seguro que querés darte de baja de esta materia?')">
+                                        Baja
+                                    </button>
+                                </form>
+                            }
+                            else
+                            {
+                                <span class="text-muted">Sin acciones</span>
+                            }
+                        }
+                    </td>
+                }
             </tr>
         }
     </tbody>

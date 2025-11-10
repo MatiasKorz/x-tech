@@ -31,13 +31,22 @@ namespace INSTITUTO_C.Controllers
             var usuarioId = Int32.Parse( _userManager.GetUserId(User));
 
             List<Inscripcion> inscripciones = null;
+
+            if (User.IsInRole(Configs.Alumno) && alumnoId is null)
+            {
+                alumnoId = usuarioId;
+            }
+
             if (alumnoId is not null && (alumnoId == usuarioId|| User.IsInRole(Configs.Empleado)))
             {
                 //para un alumno especifico
-                inscripciones = await _context.Inscripciones.Include(i => i.Alumno).Include(i => i.MateriaCursada)
-                    .Where(i => i.AlumnoId == alumnoId)
-                    .ToListAsync(); 
-                
+                inscripciones = await _context.Inscripciones
+                   .Include(i => i.Alumno)
+                  .Include(i => i.MateriaCursada)
+                   .Include(i => i.Calificacion)   // ← incluir la calificación directa
+                   .Where(i => i.AlumnoId == alumnoId)
+                 .ToListAsync();
+
             }
             else if(User.IsInRole(Configs.Alumno)){
                 return Content("No podes ver las inscripciones de otro alumno");
@@ -225,6 +234,40 @@ namespace INSTITUTO_C.Controllers
                 _context.Inscripciones.Remove(inscripcion);
 
             await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
+
+        // POST: Inscripciones/Baja
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = Configs.Alumno)]
+        public async Task<IActionResult> Baja(int materiaCursadaId)
+        {
+            var usuarioId = int.Parse(_userManager.GetUserId(User));
+
+            // Buscar inscripción del alumno logueado
+            var inscripcion = await _context.Inscripciones
+                .FirstOrDefaultAsync(i => i.AlumnoId == usuarioId && i.MateriaCursadaId == materiaCursadaId);
+
+            if (inscripcion == null)
+                return NotFound("No estás inscripto en esa materia.");
+
+            // Buscar la calificación correspondiente
+            var calificacion = await _context.Calificaciones
+                .FirstOrDefaultAsync(c => c.AlumnoId == usuarioId && c.MateriaCursadaId == materiaCursadaId);
+
+            if (calificacion == null)
+                return Content("No se encontró la calificación asociada.");
+
+            if (calificacion.Nota != Nota.Pendiente)
+                return Content("No podés darte de baja porque ya tenés una nota final asignada.");
+
+            // Marcar la calificación como Baja
+            calificacion.Nota = Nota.Baja;
+            _context.Update(calificacion);
+            await _context.SaveChangesAsync();
+
+            TempData["Mensaje"] = "Te diste de baja correctamente.";
             return RedirectToAction(nameof(Index));
         }
 
