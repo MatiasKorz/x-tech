@@ -185,12 +185,23 @@ namespace INSTITUTO_C.Controllers
         [Authorize(Roles = Configs.Empleado)]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var materiaCursada = await _context.MateriasCursadas.FindAsync(id);
-            if (materiaCursada != null)
+            var materiaCursada = await _context.MateriasCursadas
+               .Include(mc => mc.Inscripciones)
+               .FirstOrDefaultAsync(mc => mc.Id == id);
+
+            if (materiaCursada == null)
             {
-                _context.MateriasCursadas.Remove(materiaCursada);
+
+                return NotFound();
             }
 
+            if (materiaCursada.Inscripciones != null && materiaCursada.Inscripciones.Any())
+            {
+                TempData["Error"] = ErrorMesseges.CursadaConInscripciones;
+                return RedirectToAction(nameof(Index));
+            }
+
+            _context.MateriasCursadas.Remove(materiaCursada);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }

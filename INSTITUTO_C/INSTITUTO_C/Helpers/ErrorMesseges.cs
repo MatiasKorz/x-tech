@@ -37,5 +37,6 @@
 
         public const string NoEsElProfe = "Solo el profesor titular de la cursada puede hacer la calificación";
 
+        public const string CursadaConInscripciones = "No se puede eliminar la materia cursada porque tiene inscripciones asociadas.";
     }
 }
