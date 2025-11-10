@@ -54,7 +54,11 @@ namespace INSTITUTO_C.Controllers
         public IActionResult Create()
         {
             ViewData["MateriaId"] = new SelectList(_context.Materias, "Id", "CodigoMateria");
-            ViewData["ProfesorId"] = new SelectList(_context.Profesores, "Id", "Apellido");
+            var profesoresActivos = _context.Profesores
+            .Where(p => p.Activo)
+            .ToList();
+
+            ViewData["ProfesorId"] = new SelectList(profesoresActivos, "Id", "Apellido");
             return View();
         }
 
@@ -77,7 +81,11 @@ namespace INSTITUTO_C.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["MateriaId"] = new SelectList(_context.Materias, "Id", "CodigoMateria", materiaCursada.MateriaId);
-            ViewData["ProfesorId"] = new SelectList(_context.Profesores, "Id", "Apellido", materiaCursada.ProfesorId);
+            var profesoresActivos = _context.Profesores
+             .Where(p => p.Activo)
+             .ToList();
+
+            ViewData["ProfesorId"] = new SelectList(profesoresActivos, "Id", "Apellido");
             return View(materiaCursada);
         }
 
@@ -96,7 +104,11 @@ namespace INSTITUTO_C.Controllers
                 return NotFound();
             }
             ViewData["MateriaId"] = new SelectList(_context.Materias, "Id", "CodigoMateria", materiaCursada.MateriaId);
-            ViewData["ProfesorId"] = new SelectList(_context.Profesores, "Id", "Apellido", materiaCursada.ProfesorId);
+            var profesoresActivos = _context.Profesores
+             .Where(p => p.Activo)
+             .ToList();
+
+            ViewData["ProfesorId"] = new SelectList(profesoresActivos, "Id", "Apellido");
             return View(materiaCursada);
         }
 
@@ -153,8 +165,12 @@ namespace INSTITUTO_C.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-           // ViewData["MateriaId"] = new SelectList(_context.Materias, "Id", "CodigoMateria", materiaCursada.MateriaId);
-            ViewData["ProfesorId"] = new SelectList(_context.Profesores, "Id", "Apellido", materiaCursada.ProfesorId);
+            // ViewData["MateriaId"] = new SelectList(_context.Materias, "Id", "CodigoMateria", materiaCursada.MateriaId);
+            var profesoresActivos = _context.Profesores
+               .Where(p => p.Activo)
+               .ToList();
+
+            ViewData["ProfesorId"] = new SelectList(profesoresActivos, "Id", "Apellido");
             return View(materiaCursada);
         }
 
