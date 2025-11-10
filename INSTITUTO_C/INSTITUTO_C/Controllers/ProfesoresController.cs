@@ -30,8 +30,25 @@ namespace INSTITUTO_C.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var profesores = _userManager.Users.OfType<Profesor>();
-            return View(await Task.FromResult(profesores.ToList()));
+            List<Profesor> profesores;
+            if (!User.Identity.IsAuthenticated || !User.IsInRole(Configs.Empleado))
+            {
+                
+                profesores = await _userManager.Users
+                    .OfType<Profesor>()
+                    .Where(p => p.Activo)
+                    .ToListAsync();
+            }
+            else
+            {
+                
+                profesores = await _userManager.Users
+                    .OfType<Profesor>()
+                    .ToListAsync();
+            }
+
+
+            return View(profesores);
         }
 
         // GET: Profesores/Details/5
