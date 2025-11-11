@@ -23,11 +23,36 @@ namespace INSTITUTO_C.Controllers
         }
 
         // GET: MateriasCursadas
-        public async Task<IActionResult> Index()
+        //public async Task<IActionResult> Index()
+        //{
+        //    var institutoContext = _context.MateriasCursadas.Include(m => m.Materia).Include(m => m.Profesor);
+        //    return View(await institutoContext.ToListAsync());
+        //}
+
+
+
+        public async Task<IActionResult> Actuales()
         {
-            var institutoContext = _context.MateriasCursadas.Include(m => m.Materia).Include(m => m.Profesor);
-            return View(await institutoContext.ToListAsync());
+            var cursadas = await _context.MateriasCursadas
+                .Include(m => m.Materia)
+                .Include(m => m.Profesor)
+                .Where(m => m.Activo)
+                .ToListAsync();
+
+            return View("Index", cursadas);
         }
+
+        public async Task<IActionResult> Finalizadas()
+        {
+            var cursadas = await _context.MateriasCursadas
+                .Include(m => m.Materia)
+                .Include(m => m.Profesor)
+                .Where(m => !m.Activo)
+                .ToListAsync();
+
+            return View("Index", cursadas);
+        }
+
 
         // GET: MateriasCursadas/Details/5
         public async Task<IActionResult> Details(int? id)
