@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace INSTITUTO_C.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial : Migration
+    public partial class Inicial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -320,6 +320,12 @@ namespace INSTITUTO_C.Migrations
                 column: "ProfesorId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Carreras_Nombre",
+                table: "Carreras",
+                column: "Nombre",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Inscripciones_MateriaCursadaId",
                 table: "Inscripciones",
                 column: "MateriaCursadaId");
@@ -328,6 +334,12 @@ namespace INSTITUTO_C.Migrations
                 name: "IX_Materias_CarreraId",
                 table: "Materias",
                 column: "CarreraId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Materias_CodigoMateria",
+                table: "Materias",
+                column: "CodigoMateria",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_MateriasCursadas_MateriaId",
@@ -348,6 +360,13 @@ namespace INSTITUTO_C.Migrations
                 name: "IX_Personas_CarreraId",
                 table: "Personas",
                 column: "CarreraId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Personas_DNI",
+                table: "Personas",
+                column: "DNI",
+                unique: true,
+                filter: "[DNI] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Personas_Legajo",

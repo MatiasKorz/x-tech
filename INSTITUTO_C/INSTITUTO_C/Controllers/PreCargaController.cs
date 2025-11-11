@@ -17,7 +17,7 @@ namespace INSTITUTO_C.Controllers
         private readonly UserManager<Persona> _userManager;
         private readonly RoleManager<IdentityRole<int>> _roleManager;
         private readonly InstitutoContext _context;
-        private List<string> roles = new List<string>() {Configs.Empleado, Configs.Profesor, Configs.Alumno, Configs.Alumno };
+        private List<string> roles = new List<string>() {Configs.Empleado, Configs.Profesor, Configs.Alumno};
         public PreCargaController(UserManager<Persona> userManager, RoleManager<IdentityRole<int>> roleManager, InstitutoContext context)
         {
             this._userManager = userManager;
@@ -33,10 +33,11 @@ namespace INSTITUTO_C.Controllers
 
             await CrearRoles();
             await CrearEmpleados();
-            await CrearAlumnos();
+
 
             await CrearCarreras();
             await CrearMaterias();
+            await CrearAlumnos();
             await CrearProfesores();
 
 
