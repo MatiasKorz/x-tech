@@ -14,9 +14,12 @@
 
 <div class="d-flex justify-content-between align-items-center mb-4">
     <h1>Materias Cursadas</h1>
+                        @if (User.IsInRole(Configs.Empleado))
+                {
     <a asp-action="Create" class="btn btn-primary">
-        + Create New
+        + Crear cursada
     </a>
+                }
 </div>
 <table class="table">
     <thead>
