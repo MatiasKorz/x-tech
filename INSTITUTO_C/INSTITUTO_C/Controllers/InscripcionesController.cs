@@ -43,7 +43,7 @@ namespace INSTITUTO_C.Controllers
                 inscripciones = await _context.Inscripciones
                    .Include(i => i.Alumno)
                   .Include(i => i.MateriaCursada)
-                   .Include(i => i.Calificacion)   // ← incluir la calificación directa
+                   .Include(i => i.Calificacion)   
                    .Where(i => i.AlumnoId == alumnoId)
                  .ToListAsync();
 

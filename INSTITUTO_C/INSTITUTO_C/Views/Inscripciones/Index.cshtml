@@ -19,17 +19,29 @@
             <th>
                 @Html.DisplayNameFor(model => model.Alumno)
             </th>
+            <th>Nota</th>
             <th></th>
         </tr>
     </thead>
     <tbody>
         @foreach (var item in Model) {
+            var calificacion = item?.Calificacion;
             <tr>
                 <td>
                     @Html.DisplayFor(modelItem => item.MateriaCursada.Nombre)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Alumno.Apellido)
+                </td>
+                <td>
+                    @if (calificacion != null)
+                    {
+                        <span>@calificacion.Nota</span>
+                    }
+                    else
+                    {
+                        <span class="text-muted">—</span>
+                    }
                 </td>
                 @if (User.IsInRole("Empleado"))
                 {
@@ -55,9 +67,9 @@
                 {
                     <td>
                         @{
-                            var calificacion = item.Calificacion; // 👈 directo
+                            var calificacionActual = item.Calificacion; // 
 
-                            if (calificacion != null && calificacion.Nota == Nota.Pendiente)
+                            if (calificacionActual != null && calificacionActual.Nota == Nota.Pendiente)
                             {
                                 <form asp-action="Baja" method="post" style="display:inline">
                                     <input type="hidden" name="materiaCursadaId" value="@item.MateriaCursadaId" />
