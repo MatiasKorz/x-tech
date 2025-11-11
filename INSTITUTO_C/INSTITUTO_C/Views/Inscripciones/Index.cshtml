@@ -81,7 +81,13 @@
                             }
                             else
                             {
-                                <span class="text-muted">Sin acciones</span>
+                                <a asp-controller="Calificaciones"
+                                   asp-action="Details"
+                                   asp-route-alumnoId="@item.AlumnoId"
+                                   asp-route-materiaCursadaId="@item.MateriaCursadaId"
+                                   class="btn btn-info btn-sm">
+                                    Ver nota
+                                </a>
                             }
                         }
                     </td>
