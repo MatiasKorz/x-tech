@@ -53,7 +53,11 @@ namespace INSTITUTO_C.Controllers
             }
             else
             {
-                inscripciones = await _context.Inscripciones.Include(i => i.Alumno).Include(i => i.MateriaCursada).ToListAsync();
+                inscripciones = await _context.Inscripciones
+                    .Include(i => i.Alumno)
+                    .Include(i => i.MateriaCursada)
+                    .Include(i => i.Calificacion)
+                    .ToListAsync();
             }
             return View(inscripciones);
         }
