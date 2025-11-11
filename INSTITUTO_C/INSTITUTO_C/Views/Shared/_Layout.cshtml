@@ -46,21 +46,31 @@
                             <li class="nav-item">
                                 @if (User.IsInRole("Alumno"))
                                 {
-                                     
+
                                     <a class="nav-link text-white" asp-area="" asp-controller="Inscripciones" asp-action="Index" asp-route-alumnoid="@User.FindFirstValue(ClaimTypes.NameIdentifier)">MisInscripciones</a>
                                 }
                                 else
                                 {
                                     <a class="nav-link text-white" asp-area="" asp-controller="Inscripciones" asp-action="Index">Inscripciones</a>
                                 }
-                                
+
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-white" asp-area="" asp-controller="MateriasCursadas" asp-action="Actuales">Cursadas actuales</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-white" asp-area="" asp-controller="MateriasCursadas" asp-action="Finalizadas">Cursadas finalizadas</a>
-                            </li>
+                            @if (!User.IsInRole("Empleado")) //user NO es Empleado, NO
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-white" asp-area="" asp-controller="MateriasCursadas" asp-action="Actuales" asp-route-personaid="@User.FindFirstValue(ClaimTypes.NameIdentifier)">Cursadas Actuales</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-white" asp-area="" asp-controller="MateriasCursadas" asp-action="Finalizadas" asp-route-personaid="@User.FindFirstValue(ClaimTypes.NameIdentifier)">Cursadas Finalizadas</a>
+                                </li>
+                            }
+                            else
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-white" asp-area="" asp-controller="MateriasCursadas" asp-action="Index">Cursadas</a>
+                                </li>
+
+                            }
                             <li class="nav-item">
                                 <a class="nav-link text-white" asp-area="" asp-controller="Carreras" asp-action="Index">Carreras</a>
                             </li>

@@ -9,6 +9,7 @@ using INSTITUTO_C.Data;
 using INSTITUTO_C.Models;
 using Microsoft.AspNetCore.Authorization;
 using INSTITUTO_C.Helpers;
+using Microsoft.AspNetCore.Identity;
 
 namespace INSTITUTO_C.Controllers
 {
@@ -16,39 +17,125 @@ namespace INSTITUTO_C.Controllers
     public class MateriasCursadasController : Controller
     {
         private readonly InstitutoContext _context;
+        private readonly UserManager<Persona> _userManager;
 
-        public MateriasCursadasController(InstitutoContext context)
+        public MateriasCursadasController(InstitutoContext context, UserManager<Persona> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: MateriasCursadas
-        //public async Task<IActionResult> Index()
-        //{
-        //    var institutoContext = _context.MateriasCursadas.Include(m => m.Materia).Include(m => m.Profesor);
-        //    return View(await institutoContext.ToListAsync());
-        //}
 
-
-
-        public async Task<IActionResult> Actuales()
+        [Authorize(Roles = Configs.Empleado)]
+        public async Task<IActionResult> Index()
         {
+
             var cursadas = await _context.MateriasCursadas
-                .Include(m => m.Materia)
-                .Include(m => m.Profesor)
-                .Where(m => m.Activo)
-                .ToListAsync();
+               .Include(m => m.Materia)
+               .Include(m => m.Profesor)
+               .OrderByDescending(m => m.Activo) 
+               .ThenBy(m => m.Nombre)
+               .ToListAsync();
+
+            return View("Index",cursadas);
+        }
+
+
+
+        public async Task<IActionResult> Actuales(int? personaId)
+        {
+            var usuarioId = Int32.Parse(_userManager.GetUserId(User));
+            List<MateriaCursada> cursadas = null;
+            if (User.IsInRole(Configs.Empleado))
+            {
+                cursadas = await _context.MateriasCursadas
+                 .Include(m => m.Materia)
+                 .Include(m => m.Profesor)
+                 .Where(m => m.Activo)
+                 .ToListAsync();
+            }
+            else 
+            {
+
+                if (personaId is null)
+                {
+                    personaId = usuarioId;
+                }else if (!User.IsInRole(Configs.Empleado) && personaId != usuarioId)
+                {
+                    return Content("No podes ver las cursadas de otro");
+                }
+                if (User.IsInRole(Configs.Profesor))
+                {
+                    cursadas = await _context.MateriasCursadas
+                     .Include(m => m.Materia)
+                     .Include(m => m.Profesor)
+                     .Where(m=>m.ProfesorId== personaId)
+                     .Where(m => m.Activo)
+                     .ToListAsync();
+                }
+                else if(User.IsInRole(Configs.Alumno))
+                {
+                    cursadas = await _context.Inscripciones
+                        .Include(i => i.MateriaCursada)
+                            .ThenInclude(mc => mc.Materia)
+                        .Include(i => i.MateriaCursada)
+                            .ThenInclude(mc => mc.Profesor)
+                        .Where(i => i.AlumnoId == personaId && i.MateriaCursada.Activo)
+                        .Select(i => i.MateriaCursada)
+                        .ToListAsync();
+                }
+
+            }
+
 
             return View("Index", cursadas);
         }
 
-        public async Task<IActionResult> Finalizadas()
+        public async Task<IActionResult> Finalizadas(int? personaId)
         {
-            var cursadas = await _context.MateriasCursadas
+            var usuarioId = Int32.Parse(_userManager.GetUserId(User));
+            List<MateriaCursada> cursadas = null;
+            if (User.IsInRole(Configs.Empleado))
+            {
+                cursadas = await _context.MateriasCursadas
                 .Include(m => m.Materia)
                 .Include(m => m.Profesor)
                 .Where(m => !m.Activo)
                 .ToListAsync();
+            }
+            else
+            {
+                if (personaId is null)
+                {
+                    personaId = usuarioId;
+                }
+                else if (!User.IsInRole(Configs.Empleado) && personaId != usuarioId)
+                {
+                    return Content("No podes ver las cursadas de otro");
+                }
+                if (User.IsInRole(Configs.Profesor))
+                {
+                    cursadas = await _context.MateriasCursadas
+                     .Include(m => m.Materia)
+                     .Include(m => m.Profesor)
+                     .Where(m => m.ProfesorId == personaId)
+                     .Where(m => !m.Activo)
+                     .ToListAsync();
+                }
+                else if(User.IsInRole(Configs.Alumno))
+                {
+                    cursadas = await _context.Inscripciones
+                        .Include(i => i.MateriaCursada)
+                            .ThenInclude(mc => mc.Materia)
+                        .Include(i => i.MateriaCursada)
+                            .ThenInclude(mc => mc.Profesor)
+                        .Where(i => i.AlumnoId == personaId && !i.MateriaCursada.Activo)
+                        .Select(i => i.MateriaCursada)
+                        .ToListAsync();
+
+                }
+            }
 
             return View("Index", cursadas);
         }
