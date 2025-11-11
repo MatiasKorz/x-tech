@@ -1,12 +1,13 @@
+﻿using INSTITUTO_C.Data; // tu DbContext
+using INSTITUTO_C.Models;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using INSTITUTO_C.Data; // tu DbContext
-using Microsoft.EntityFrameworkCore;
-using INSTITUTO_C.Models;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Configuration;
-using Microsoft.AspNetCore.Authentication.Cookies;
+using System;
 
 namespace INSTITUTO_C
 {
@@ -15,13 +16,27 @@ namespace INSTITUTO_C
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+            var usingInMemory = false;
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
 
-            //builder.Services.AddDbContext<InstitutoContext>(options => options.UseInMemoryDatabase("InstitutoDb"));
-            builder.Services.AddDbContext<InstitutoContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("InstitutoDBCS")));
+            var hostname = Environment.GetEnvironmentVariable("COMPUTERNAME") ?? Environment.GetEnvironmentVariable("HOSTNAME");
 
+            if (hostname?.Equals("SEIDOR106", StringComparison.OrdinalIgnoreCase) == true)
+            {
+                // Ejecutar logica para Ezequiel
+                builder.Services.AddDbContext<InstitutoContext>(options =>
+                    options.UseInMemoryDatabase("InstitutoDb"));
+
+                usingInMemory = true;
+            }
+            else
+            {
+
+                //builder.Services.AddDbContext<InstitutoContext>(options => options.UseInMemoryDatabase("InstitutoDb"));
+                builder.Services.AddDbContext<InstitutoContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("InstitutoDBCS")));
+            }
 
             //identity
 
@@ -59,10 +74,23 @@ namespace INSTITUTO_C
                 app.UseHsts();
             }
 
-            using (var scope = app.Services.CreateScope()) 
-            { var dbContext = scope.ServiceProvider.GetRequiredService<InstitutoContext>(); dbContext.Database.Migrate(); }
+            using (var scope = app.Services.CreateScope())
+            {
+                var dbContext = scope.ServiceProvider.GetRequiredService<InstitutoContext>();
 
-            app.UseHttpsRedirection();
+                if (usingInMemory)
+                {
+                    // Para InMemory Database - NO usar Migrate()
+                    dbContext.Database.EnsureCreated();
+                }
+                else
+                {
+                    // Para SQL Server - usar Migrate()
+                    dbContext.Database.Migrate();
+                }
+            }
+
+                app.UseHttpsRedirection();
             app.UseStaticFiles();
 
             app.UseRouting();
