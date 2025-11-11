@@ -13,7 +13,7 @@ namespace INSTITUTO_C.Controllers
 {
     public class PreCargaController : Controller
     {
-
+        //hola
         private readonly UserManager<Persona> _userManager;
         private readonly RoleManager<IdentityRole<int>> _roleManager;
         private readonly InstitutoContext _context;
