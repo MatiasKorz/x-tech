@@ -76,6 +76,8 @@ namespace INSTITUTO_C.Controllers
 
                 materiaCursada.GenerarNombre();
 
+                materiaCursada.Activo = true;
+
                 _context.MateriasCursadas.Add(materiaCursada);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
