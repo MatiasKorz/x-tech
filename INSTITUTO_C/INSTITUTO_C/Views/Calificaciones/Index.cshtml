@@ -32,9 +32,9 @@
                 <td>@Html.DisplayFor(modelItem => item.Inscripcion.MateriaCursada.Nombre)</td>
                 <td>@Html.DisplayFor(modelItem => item.Alumno.Apellido)</td>
                 <td>
-                    <a asp-action="Edit" asp-route-alumnoId="@item.AlumnoId" asp-route-materiaCursadaId="@item.MateriaCursadaId">Editar</a>
-                    <a asp-action="Details" asp-route-alumnoId="@item.AlumnoId" asp-route-materiaCursadaId="@item.MateriaCursadaId">Detalles</a>
-                    <a asp-action="Delete" asp-route-alumnoId="@item.AlumnoId" asp-route-materiaCursadaId="@item.MateriaCursadaId">Eliminar</a>
+                    <a asp-action="Edit" asp-route-alumnoId="@item.AlumnoId" asp-route-materiaCursadaId="@item.MateriaCursadaId" class="btn btn-warning btn-sm">Editar</a>
+                    <a asp-action="Details" asp-route-alumnoId="@item.AlumnoId" asp-route-materiaCursadaId="@item.MateriaCursadaId" class="btn btn-success btn-sm">Detalles</a>
+                    <a asp-action="Delete" asp-route-alumnoId="@item.AlumnoId" asp-route-materiaCursadaId="@item.MateriaCursadaId" class="btn btn-danger btn-sm">Eliminar</a>
                 </td>
             </tr>
         }

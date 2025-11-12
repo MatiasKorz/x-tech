@@ -51,7 +51,7 @@
                 @Html.DisplayFor(modelItem => item.Legajo)
             </td>
 
-            <td>
+            <td class="no-link-style">
                 @Html.DisplayFor(modelItem => item.Email)
             </td>
             <td>
@@ -75,10 +75,10 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Activo)
             </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Editar</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Detalles</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Eliminar</a>
+            <td class="text-end">
+                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning btn-sm">Editar</a>
+                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-success btn-sm">Detalles</a>
+                <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm">Eliminar</a>
             </td>
         </tr>
 }

@@ -48,18 +48,18 @@
                     <td>
                         <a asp-action="Edit"
                            asp-route-alumnoId="@item.AlumnoId"
-                           asp-route-materiaCursadaId="@item.MateriaCursadaId">
-                            Edit
-                        </a> |
+                           asp-route-materiaCursadaId="@item.MateriaCursadaId" class="btn btn-warning btn-sm">
+                            Editar
+                        </a>
                         <a asp-action="Details"
                            asp-route-alumnoId="@item.AlumnoId"
-                           asp-route-materiaCursadaId="@item.MateriaCursadaId">
-                            Details
-                        </a> |
+                           asp-route-materiaCursadaId="@item.MateriaCursadaId" class="btn btn-success btn-sm">
+                            Detalles
+                        </a>
                         <a asp-action="Delete"
                            asp-route-alumnoId="@item.AlumnoId"
-                           asp-route-materiaCursadaId="@item.MateriaCursadaId">
-                            Delete
+                           asp-route-materiaCursadaId="@item.MateriaCursadaId" class="btn btn-danger btn-sm">
+                           Eliminar
                         </a>
                     </td>
                 }
@@ -71,7 +71,7 @@
                        asp-action="Edit"
                        asp-route-alumnoId="@item.AlumnoId"
                        asp-route-materiaCursadaId="@item.MateriaCursadaId"
-                       class="btn btn-success btn-sm">
+                        class="btn btn-primary">
                         Cargar nota
                     </a>
                  </td>
@@ -86,7 +86,7 @@
                             {
                                 <form asp-action="Baja" method="post" style="display:inline">
                                     <input type="hidden" name="materiaCursadaId" value="@item.MateriaCursadaId" />
-                                    <button type="submit" class="btn btn-warning btn-sm"
+                                    <button type="submit" class="btn btn-delete"
                                             onclick="return confirm('¿Seguro que querés darte de baja de esta materia?')">
                                         Baja
                                     </button>
@@ -98,7 +98,7 @@
                                    asp-action="Details"
                                    asp-route-alumnoId="@item.AlumnoId"
                                    asp-route-materiaCursadaId="@item.MateriaCursadaId"
-                                   class="btn btn-info btn-sm">
+                                   class="btn btn-primary">
                                     Ver nota
                                 </a>
                             }

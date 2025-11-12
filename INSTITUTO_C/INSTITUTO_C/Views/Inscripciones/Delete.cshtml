@@ -25,10 +25,10 @@
         </dd>
     </dl>
     
-    <form asp-action="Delete" method="post">
+    <form asp-action="Delete" method="post" class="form-group pt-3 d-flex justify-content-between align-content-center">
+        <a asp-action="Index" class="btn btn-primary">Volver</a>
         <input type="hidden" asp-for="MateriaCursadaId" />
         <input type="hidden" asp-for="AlumnoId" />
-        <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-action="Index">Volver</a>
+        <input type="submit" value="Eliminar" class="btn btn-delete" />
     </form>
 </div>

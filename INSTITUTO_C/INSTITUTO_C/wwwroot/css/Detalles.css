@@ -13,6 +13,18 @@
     box-shadow: 0 10px 30px rgba(102, 126, 234, 0.15);
 }
 
+.row.main-flex-center > .col-md-4 {
+    background: #fff;
+    padding: 2rem;
+    border-radius: 15px;
+    border-top: 5px solid;
+    border-image: linear-gradient(90deg, #667eea 0%, #764ba2 100%) 1;
+    box-shadow: 0 10px 30px rgba(102, 126, 234, 0.15);
+    max-width:600px;
+}
+
+
+
 /* ENCABEZADOS */
 h1 {
     color: #667eea;

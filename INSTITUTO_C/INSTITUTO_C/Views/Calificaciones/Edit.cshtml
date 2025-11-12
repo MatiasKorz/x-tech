@@ -4,12 +4,10 @@
     ViewData["Title"] = "Edit";
 }
 
-<h1>Editar Calificación</h1>
-
-<h4>Calificación</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
+<div class="row main-flex-center">
+    <div class="col-md-6">
+        <h4>Editar Calificación</h4>
+        <hr />
         <form asp-action="Edit" method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
@@ -35,15 +33,12 @@
                 <span asp-validation-for="ProfesorId" class="text-danger"></span>
             </div> *@
 
-            <div class="form-group">
+            <div class="form-group pt-3 d-flex justify-content-between align-content-center">
+                <a class="btn btn-primary" asp-action="Index">Volver</a>
                 <input type="submit" value="Guardar" class="btn btn-primary" />
             </div>
         </form>
     </div>
-</div>
-
-<div>
-    <a asp-action="Index">Volver al listado</a>
 </div>
 
 @section Scripts {

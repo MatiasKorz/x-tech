@@ -4,54 +4,53 @@
     ViewData["Title"] = "Delete";
 }
 
-<h1>Eliminar Calificación</h1>
+<div class="row main-flex-center">
+    <div class="col-md-6">
+        <h4>¿Estas seguro de eliminar la calificacion?</h4>
+        <hr />
+        <dl class="row main-flex-center">
+            <dt class="col-sm-3">
+                @Html.DisplayNameFor(model => model.Fecha)
+            </dt>
+            <dd class="col-sm-9">
+                @Html.DisplayFor(model => model.Fecha)
+            </dd>
 
-<h3>¿Seguro que quieres eliminar esta calificación?</h3>
+            <dt class="col-sm-3">
+                @Html.DisplayNameFor(model => model.Nota)
+            </dt>
+            <dd class="col-sm-9">
+                @Html.DisplayFor(model => model.Nota)
+            </dd>
 
-<div>
-    <h4>Calificación</h4>
-    <hr />
-    <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Fecha)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Fecha)
-        </dd>
+            <dt class="col-sm-3">
+                @Html.DisplayNameFor(model => model.ProfesorId)
+            </dt>
+            <dd class="col-sm-9">
+                @Html.DisplayFor(model => model.ProfesorId)
+            </dd>
 
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Nota)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Nota)
-        </dd>
+            <dt class="col-sm-3">
+                @Html.DisplayNameFor(model => model.MateriaCursadaId)
+            </dt>
+            <dd class="col-sm-9">
+                @Html.DisplayFor(model => model.MateriaCursadaId)
+            </dd>
 
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.ProfesorId)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.ProfesorId)
-        </dd>
+            <dt class="col-sm-3">
+                @Html.DisplayNameFor(model => model.AlumnoId)
+            </dt>
+            <dd class="col-sm-9">
+                @Html.DisplayFor(model => model.AlumnoId)
+            </dd>
+        </dl>
 
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.MateriaCursadaId)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.MateriaCursadaId)
-        </dd>
+        <form asp-action="Delete" method="post" class="form-group pt-3 d-flex justify-content-between align-content-center">
+            <a asp-action="Index" class="btn btn-primary">Volver</a>
+            <input type="hidden" asp-for="AlumnoId" />
+            <input type="hidden" asp-for="MateriaCursadaId" />
+            <input type="submit" value="Eliminar" class="btn btn-delete" />
+        </form>
+    </div>
 
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.AlumnoId)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.AlumnoId)
-        </dd>
-    </dl>
-
-    <form asp-action="Delete" method="post">
-        <input type="hidden" asp-for="AlumnoId" />
-        <input type="hidden" asp-for="MateriaCursadaId" />
-        <input type="submit" value="Eliminar" class="btn btn-danger" /> |
-        <a asp-action="Index">Volver al listado</a>
-    </form>
 </div>
