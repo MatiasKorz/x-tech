@@ -2,7 +2,6 @@
 {
     public static class ErrorMesseges
     {
-
         public const string Requerido = "El campo {0} es requerido";
 
         public const string SoloLetras = "El campo {0} solo puede contener letras y espacios.";

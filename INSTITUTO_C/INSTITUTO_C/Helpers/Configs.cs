@@ -8,6 +8,5 @@
         public const string Alumno   = "Alumno";
         public const string Usuario  = "Usuario";
 
-       
     }
 }

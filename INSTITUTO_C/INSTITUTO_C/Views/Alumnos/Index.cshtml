@@ -8,7 +8,7 @@
 <div class="d-flex justify-content-between align-items-center mb-4">
     <h1>Alumnos</h1>
     <a asp-action="Create" class="btn btn-primary">
-        + Create New
+        + Crear Nuevo
     </a>
 </div>
 <table class="table">
@@ -21,7 +21,7 @@
                 @Html.DisplayNameFor(model => model.Carrera)
             </th>
 
-            <th>
+            <td class="no-link-style">
                 @Html.DisplayNameFor(model => model.Email)
             </th>
             <th>
@@ -58,7 +58,7 @@
                 @Html.DisplayFor(modelItem => item.Carrera.Nombre)
             </td>
 
-            <td>
+            <td class="no-link-style">
                 @Html.DisplayFor(modelItem => item.Email)
             </td>
             <td>
@@ -82,10 +82,10 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Activo)
             </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            <td class="text-end">
+                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning btn-sm">Editar</a>
+                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-success btn-sm">Detalles</a>
+                <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm">Eliminar</a>
             </td>
         </tr>
 }

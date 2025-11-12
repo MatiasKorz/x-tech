@@ -4,16 +4,13 @@
     ViewData["Title"] = "Iniciar sesion";
 }
 
-
 <h1>@ViewData["Title"]</h1>
-
-
 
 <hr />
 
-<div class="row">
+<div class="row main-flex-center">
 
-    <div class="col-md-4">
+    <div class="col-md-6">
         <form asp-action="IniciarSesion">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
@@ -30,19 +27,15 @@
                 <span asp-validation-for="Recordarme" class="text-danger"></span>
             </div>
 
-            <div class="form-group pt-3 d-flex justify-content-end">
+            <div class="form-group pt-3 d-flex justify-content-center">
                 <input type="submit" value="iniciar sesión" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
 
-
-
-
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
-
 }

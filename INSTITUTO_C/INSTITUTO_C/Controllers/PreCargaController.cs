@@ -128,6 +128,8 @@ namespace INSTITUTO_C.Controllers
                     Activo = false
                 };
 
+                //Password: Password1!
+
                 var result = await _userManager.CreateAsync(profesor, Configs.Password);
 
                 if (result.Succeeded)

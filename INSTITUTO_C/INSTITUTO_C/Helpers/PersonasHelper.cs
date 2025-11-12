@@ -2,7 +2,6 @@
 using System;
 using System.Linq;
 
-
 namespace INSTITUTO_C.Helpers
 {
     public class PersonasHelper
@@ -10,7 +9,6 @@ namespace INSTITUTO_C.Helpers
         public static string GenerarNumMatricula(InstitutoContext context)
         {
             int maxMatricula = 0;
-
             var matriculasNumericas = context.Alumnos
                 .AsEnumerable()
                 .Select(a => int.TryParse(a.NumeroMatricula, out int parsed) ? parsed : 0)
@@ -23,7 +21,6 @@ namespace INSTITUTO_C.Helpers
 
             return (maxMatricula + 1).ToString();
         }
-
 
         public static string GenerarLegajo(InstitutoContext context)
         {
@@ -41,7 +38,6 @@ namespace INSTITUTO_C.Helpers
 
             return (maxLegajo + 1).ToString();
         }
-
 
         public static bool PersonaDNIExists(InstitutoContext context, string dni)
         {

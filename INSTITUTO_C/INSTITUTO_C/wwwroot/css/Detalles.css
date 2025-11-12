@@ -1,0 +1,103 @@
+﻿
+/* CONTENEDOR PRINCIPAL */
+.row.main-flex-center {
+    margin-top: 2rem;
+}
+
+.row.main-flex-center > .col-md-6 {
+    background: #fff;
+    padding: 2rem;
+    border-radius: 15px;
+    border-top: 5px solid;
+    border-image: linear-gradient(90deg, #667eea 0%, #764ba2 100%) 1;
+    box-shadow: 0 10px 30px rgba(102, 126, 234, 0.15);
+}
+
+/* ENCABEZADOS */
+h1 {
+    color: #667eea;
+    font-weight: 700;
+    margin-bottom: 2rem;
+    text-align: center;
+    font-size: 2.5rem;
+}
+
+.col-md-6 h4 {
+    color: #667eea;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    font-size: 1.8rem;
+}
+
+.col-md-6 hr {
+    border-top: 2px solid #667eea;
+    opacity: 0.2;
+    margin-bottom: 1.5rem;
+}
+
+/* LISTA DEFINICIONES */
+dl.main-flex-center {
+    margin-bottom: 1rem;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+dl.main-flex-center dt {
+    font-weight: 700;
+    color: #667eea;
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding-top: 0.5rem;
+    padding-bottom: 0.25rem;
+    width: 25%; 
+}
+
+dl.main-flex-center dd {
+    font-size: 1rem;
+    color: #333;
+    padding-bottom: 0.5rem;
+    padding-top: 0.5rem;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    width: 75%; 
+    border-bottom: 1px solid #e9ecef;
+}
+
+dl.main-flex-center dt:hover + dd,
+dl.main-flex-center dd:hover {
+    background-color: #f8f9fa;
+    border-radius: 5px;
+    transition: background-color 0.2s ease;
+}
+
+/* BOTONES */
+.form-group.pt-3 {
+    margin-top: 1.5rem;
+    padding-top: 1rem !important;
+    border-top: 2px solid #f0f0f0;
+}
+
+.form-group .btn {
+    padding: 0.75rem 2rem;
+    font-weight: 600;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 10px rgba(102, 126, 234, 0.2);
+    border: none;
+}
+
+.form-group .btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 15px rgba(102, 126, 234, 0.4);
+}
+
+.form-group .btn-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: none;
+}
+
+.form-group .btn-primary:hover {
+    background: linear-gradient(135deg, #5568d3 0%, #6a3f8f 100%);
+}
+
