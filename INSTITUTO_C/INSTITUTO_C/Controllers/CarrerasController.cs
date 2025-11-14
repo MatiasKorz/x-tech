@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Authorization;
 using INSTITUTO_C.Helpers;
 using Microsoft.Data.SqlClient;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.AspNetCore.Identity;
 
 namespace INSTITUTO_C.Controllers
 {
@@ -18,10 +19,12 @@ namespace INSTITUTO_C.Controllers
     public class CarrerasController : Controller
     {
         private readonly InstitutoContext _context;
+        private readonly UserManager<Persona> _userManager;
 
-        public CarrerasController(InstitutoContext context)
+        public CarrerasController(InstitutoContext context, UserManager<Persona> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: Carreras
@@ -49,6 +52,24 @@ namespace INSTITUTO_C.Controllers
             }
 
             return View(carrera);
+        }
+
+
+        [Authorize(Roles = Configs.Alumno)]
+        public async Task<IActionResult> MiCarrera()
+        {
+            int usuarioId = int.Parse(_userManager.GetUserId(User));
+
+
+            var alumno = await _context.Alumnos
+               .Include(a => a.Carrera)
+               .FirstOrDefaultAsync(a => a.Id == usuarioId);
+            if (alumno == null)
+            {
+                return NotFound();
+            }
+
+            return RedirectToAction("Details", new { id = alumno.CarreraId });
         }
 
         // GET: Carreras/Create
