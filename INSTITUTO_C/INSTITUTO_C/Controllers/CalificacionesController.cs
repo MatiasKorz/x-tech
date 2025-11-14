@@ -190,7 +190,7 @@ namespace INSTITUTO_C.Controllers
                     _context.Update(calificacionExistente);
                     await _context.SaveChangesAsync();
 
-                    return RedirectToAction(nameof(Index));
+                    return RedirectToAction("Details", "MateriasCursadas", new { id = materiaCursadaId });
                 }
                 catch (DbUpdateConcurrencyException)
                 {
