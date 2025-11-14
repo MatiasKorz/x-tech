@@ -37,12 +37,18 @@ namespace INSTITUTO_C.Controllers
         // GET: Personas/Details/5
         public async Task<IActionResult> Details(int? id)
         {
+            var usuarioId = Int32.Parse(_userManager.GetUserId(User));
             if (id == null)
             {
                 return NotFound();
             }
+            else if (usuarioId != id) 
+            {
+                return Content("Ese no es tu perfil");
+            }
 
-            var persona = await _userManager.FindByIdAsync(id.ToString());
+
+                var persona = await _userManager.FindByIdAsync(id.ToString());
 
             if (persona == null)
             {
