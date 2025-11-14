@@ -81,6 +81,8 @@ namespace INSTITUTO_C.Data
 
             modelBuilder.Entity<Carrera>().HasIndex(c => c.Nombre).IsUnique();
 
+            modelBuilder.Entity<MateriaCursada>().HasIndex(mc => mc.Nombre).IsUnique();
+
 
         }
 
