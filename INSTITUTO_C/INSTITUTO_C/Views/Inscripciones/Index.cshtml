@@ -64,18 +64,6 @@
                     </td>
                 }
 
-                else if (User.IsInRole("Profesor"))
-                {
-                 <td>
-                    <a asp-controller="Calificaciones"
-                       asp-action="Edit"
-                       asp-route-alumnoId="@item.AlumnoId"
-                       asp-route-materiaCursadaId="@item.MateriaCursadaId"
-                        class="btn btn-primary">
-                        Cargar nota
-                    </a>
-                 </td>
-                }
                 else if (User.IsInRole("Alumno"))
                 {
                     <td>
