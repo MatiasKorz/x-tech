@@ -43,28 +43,7 @@
                         <span class="text-muted">—</span>
                     }
                 </td>
-                @if (User.IsInRole("Empleado"))
-                {
-                    <td>
-                        <a asp-action="Edit"
-                           asp-route-alumnoId="@item.AlumnoId"
-                           asp-route-materiaCursadaId="@item.MateriaCursadaId" class="btn btn-warning btn-sm">
-                            Editar
-                        </a>
-                        <a asp-action="Details"
-                           asp-route-alumnoId="@item.AlumnoId"
-                           asp-route-materiaCursadaId="@item.MateriaCursadaId" class="btn btn-success btn-sm">
-                            Detalles
-                        </a>
-                        <a asp-action="Delete"
-                           asp-route-alumnoId="@item.AlumnoId"
-                           asp-route-materiaCursadaId="@item.MateriaCursadaId" class="btn btn-danger btn-sm">
-                           Eliminar
-                        </a>
-                    </td>
-                }
-
-                else if (User.IsInRole("Alumno"))
+                @if (User.IsInRole("Alumno"))
                 {
                     <td>
                         @{

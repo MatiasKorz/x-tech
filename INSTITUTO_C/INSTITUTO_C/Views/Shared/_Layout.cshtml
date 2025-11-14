@@ -80,12 +80,15 @@
                         else if (User.IsInRole("Alumno"))
                         {
 
-                            <ul class="navbar-nav flex-grow-1 justify-content-center">
+                         <ul class="navbar-nav flex-grow-1 justify-content-center">
                                 <li class="nav-item">
                                     <a class="nav-link text-white" asp-controller="Inscripciones" asp-action="Index" asp-route-alumnoId="@User.FindFirstValue(ClaimTypes.NameIdentifier)">Mis Inscripciones</a>
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link text-white" asp-controller="Inscripciones" asp-action="Create">Inscribirme</a>
+                                </li>
+                                <li class="nav-item">
+                                <a class="nav-link text-white" asp-area="" asp-controller="Inscripciones" asp-action="Index" asp-route-alumnoid="@User.FindFirstValue(ClaimTypes.NameIdentifier)">MisInscripciones</a>
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link text-white" asp-controller="Calificaciones" asp-action="Index">Mis Calificaciones</a>

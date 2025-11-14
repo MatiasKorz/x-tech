@@ -69,7 +69,10 @@
         </dl>
         <div class="form-group pt-3 d-flex justify-content-between align-content-center">
             <a class="btn btn-primary" asp-action="Index">Volver</a>
+         @if (User.IsInRole("Empleado"))
+                {
             <a class="btn btn-primary" asp-action="Edit" asp-route-id="@Model?.Id">Editar</a>
+                }
         </div>
     </div>
 </div>
