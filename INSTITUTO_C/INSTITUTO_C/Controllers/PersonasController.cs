@@ -27,6 +27,7 @@ namespace INSTITUTO_C.Controllers
         }
 
         // GET: Personas
+        [Authorize(Roles = Configs.Empleado)]
         public async Task<IActionResult> Index()
         {
 
@@ -59,6 +60,7 @@ namespace INSTITUTO_C.Controllers
         }
 
         // GET: Personas/Create
+        [Authorize(Roles = Configs.Empleado)]
         public IActionResult Create()
         {
             return View();
@@ -69,6 +71,7 @@ namespace INSTITUTO_C.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = Configs.Empleado)]
         public async Task<IActionResult> Create([Bind("Id,UserName,Email,Nombre,Apellido,DNI,Telefono,Direccion,Activo")] Persona persona)
         {
 
@@ -124,6 +127,7 @@ namespace INSTITUTO_C.Controllers
 
 
         // GET: Personas/Edit/5
+        [Authorize(Roles = Configs.Empleado)]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -144,6 +148,7 @@ namespace INSTITUTO_C.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = Configs.Empleado)]
         public async Task<IActionResult> Edit(int id, [Bind("Id,UserName,Email,Nombre,Apellido,DNI,Telefono,Direccion,Activo")] Persona persona)
         {
             if (id != persona.Id)
