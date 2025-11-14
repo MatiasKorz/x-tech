@@ -155,6 +155,8 @@ namespace INSTITUTO_C.Controllers
               .Include(m => m.Profesor)
               .Include(m => m.Inscripciones)
               .ThenInclude(i => i.Alumno)
+              .Include(m => m.Inscripciones)
+              .ThenInclude(i => i.Calificacion)
               .FirstOrDefaultAsync(m => m.Id == id);
             if (materiaCursada == null)
             {
