@@ -64,7 +64,7 @@
                             </ul>
 
 
-                        if (!User.IsInRole("Empleado"))
+                        if (!User.IsInRole("Empleado")) //LO VEN TANTO PROFES COMO ALUMNOS
                         {
 
                             <ul class="navbar-nav flex-grow-1 justify-content-center">
@@ -74,6 +74,9 @@
                                     <li class="nav-item">
                                         <a class="nav-link text-white" asp-area="" asp-controller="MateriasCursadas" asp-action="Finalizadas" asp-route-personaid="@User.FindFirstValue(ClaimTypes.NameIdentifier)">Cursadas Finalizadas</a>
                                     </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-white" asp-area="" asp-controller="Calificaciones" asp-action="Index" asp-route-personaid="@User.FindFirstValue(ClaimTypes.NameIdentifier)">Calificaciones</a>
+                                </li>
 
                             </ul>
                         }
