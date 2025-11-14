@@ -25,14 +25,58 @@ namespace INSTITUTO_C.Controllers
         }
 
         // GET: Calificaciones
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? personaId)
         {
-            var calificaciones = await _context.Calificaciones
-                .Include(c => c.Profesor)
-                .Include(c => c.Alumno)
-                .Include(c => c.Inscripcion)
-                    .ThenInclude(i => i.MateriaCursada)
-                .ToListAsync();
+            List<Calificacion> calificaciones = null;
+
+            if (User.IsInRole(Configs.Empleado))
+            {
+                calificaciones = await _context.Calificaciones
+                 .Include(c => c.Profesor)
+                 .Include(c => c.Alumno)
+                 .Include(c => c.Inscripcion)
+                 .ThenInclude(i => i.MateriaCursada)
+                 .ToListAsync();
+            }
+
+            else
+            {
+                var usuarioId = int.Parse(_userManager.GetUserId(User));
+                if (personaId is null)
+                {
+                    personaId = usuarioId;
+                }
+
+                else if (!User.IsInRole(Configs.Empleado) && personaId != usuarioId)
+                {
+                    return Content("No podes ver las calificaciones de otro");
+                }
+
+                if (User.IsInRole(Configs.Profesor))
+                {
+                    calificaciones = await _context.Calificaciones
+                     .Include(c => c.Profesor)
+                     .Include(c => c.Alumno)
+                     .Include(c => c.Inscripcion)
+                     .ThenInclude(i => i.MateriaCursada)
+                     .Where(c => c.ProfesorId == usuarioId)
+                     .ToListAsync();
+
+                }
+                else if (User.IsInRole(Configs.Alumno))
+                {
+
+                    calificaciones = await _context.Calificaciones
+                     .Include(c => c.Profesor)
+                     .Include(c => c.Alumno)
+                     .Include(c => c.Inscripcion)
+                     .ThenInclude(i => i.MateriaCursada)
+                     .Where(c => c.AlumnoId == usuarioId)
+                     .ToListAsync();
+                }
+
+            }
+
 
             return View(calificaciones);
         }

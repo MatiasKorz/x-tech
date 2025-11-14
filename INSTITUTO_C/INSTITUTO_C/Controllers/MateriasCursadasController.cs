@@ -45,7 +45,7 @@ namespace INSTITUTO_C.Controllers
 
         public async Task<IActionResult> Actuales(int? personaId)
         {
-            var usuarioId = Int32.Parse(_userManager.GetUserId(User));
+
             List<MateriaCursada> cursadas = null;
             if (User.IsInRole(Configs.Empleado))
             {
@@ -57,7 +57,7 @@ namespace INSTITUTO_C.Controllers
             }
             else 
             {
-
+                var usuarioId = Int32.Parse(_userManager.GetUserId(User));
                 if (personaId is null)
                 {
                     personaId = usuarioId;
@@ -94,7 +94,7 @@ namespace INSTITUTO_C.Controllers
 
         public async Task<IActionResult> Finalizadas(int? personaId)
         {
-            var usuarioId = Int32.Parse(_userManager.GetUserId(User));
+
             List<MateriaCursada> cursadas = null;
             if (User.IsInRole(Configs.Empleado))
             {
@@ -106,6 +106,7 @@ namespace INSTITUTO_C.Controllers
             }
             else
             {
+                var usuarioId = Int32.Parse(_userManager.GetUserId(User));
                 if (personaId is null)
                 {
                     personaId = usuarioId;
