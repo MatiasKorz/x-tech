@@ -10,6 +10,7 @@ using INSTITUTO_C.Models;
 using Microsoft.AspNetCore.Authorization;
 using INSTITUTO_C.Helpers;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Data.SqlClient;
 
 namespace INSTITUTO_C.Controllers
 {
@@ -187,17 +188,34 @@ namespace INSTITUTO_C.Controllers
         [Authorize(Roles = Configs.Empleado)]
         public async Task<IActionResult> Create([Bind("Id,MateriaId,CodigoCursada,Cuatrimestre,Activo,ProfesorId")] MateriaCursada materiaCursada)
         {
+
+
             if (ModelState.IsValid)
             {
-                materiaCursada.Materia = await _context.Materias.FindAsync(materiaCursada.MateriaId);
+                try
+                {
+                    materiaCursada.Materia = await _context.Materias.FindAsync(materiaCursada.MateriaId);
 
-                materiaCursada.GenerarNombre();
+                    materiaCursada.GenerarNombre();
+                    //VerificarNombreValido(materiaCursada);
 
-                materiaCursada.Activo = true;
+                    materiaCursada.Activo = true;
 
-                _context.MateriasCursadas.Add(materiaCursada);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+
+                    _context.MateriasCursadas.Add(materiaCursada);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+
+
+
+
+                }
+                catch (DbUpdateException dbex)
+                {
+                    ProcesarDuplicado(dbex);
+                    return View(materiaCursada);
+
+                }
             }
             ViewData["MateriaId"] = new SelectList(_context.Materias, "Id", "CodigoMateria", materiaCursada.MateriaId);
             var profesoresActivos = _context.Profesores
@@ -207,6 +225,38 @@ namespace INSTITUTO_C.Controllers
             ViewData["ProfesorId"] = new SelectList(profesoresActivos, "Id", "Apellido");
             return View(materiaCursada);
         }
+
+
+        private void ProcesarDuplicado(DbUpdateException dbex)
+        {
+            SqlException innerException = dbex.InnerException as SqlException;
+            if (innerException != null && (innerException.Number == 2627 || innerException.Number == 2601))
+            {
+                ModelState.AddModelError("Nombre", ErrorMesseges.CursadaDuplicada);
+            }
+            else
+            {
+                ModelState.AddModelError(string.Empty, dbex.Message);
+            }
+        }
+
+        //private void VerificarNombreValido(MateriaCursada cursada)
+        //{
+        //    if (CursadaNombreExists(cursada.Nombre))
+        //    {
+        //        ModelState.AddModelError("Nombre", ErrorMesseges.CursadaDuplicada);
+        //    }
+        //}
+
+        //private bool CursadaNombreExists(string nombre)
+        //{
+        //    bool resultado = false;
+        //    if (!string.IsNullOrEmpty(nombre))
+        //    {
+        //        resultado = _context.MateriasCursadas.Any(c => c.Nombre == nombre);
+        //    }
+        //    return resultado;
+        //}
 
         // GET: MateriasCursadas/Edit/5
         [Authorize(Roles = Configs.Empleado)]
