@@ -136,6 +136,28 @@ namespace INSTITUTO_C.Controllers
                 {
                     await _userManager.AddToRoleAsync(profesor, Configs.Profesor);
                 }
+
+
+                var profesor2 = new Profesor
+                {
+                    UserName = "profesor2@xtech.com",
+                    Email = "profesor2@xtech.com",
+                    Nombre = "Lucas",
+                    Apellido = "Howlett",
+                    DNI = "10000002",
+                    Telefono = "1112345678",
+                    Direccion = "Calle Lobezno 1832",
+                    Activo = false
+                };
+
+                //Password: Password1!
+
+                result = await _userManager.CreateAsync(profesor2, Configs.Password);
+
+                if (result.Succeeded)
+                {
+                    await _userManager.AddToRoleAsync(profesor2, Configs.Profesor);
+                }
             }
 
         }
