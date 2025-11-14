@@ -76,6 +76,8 @@
             <th>Nombre</th>
             <th>Apellido</th>
             <th>Correo electrónico</th>
+            <th>Nota</th>
+            <th>Acción</th>
         </tr>
     </thead>
     <tbody>
@@ -83,17 +85,42 @@
         {
             @foreach (var inscripcion in Model.Inscripciones)
             {
+                var calificacion = inscripcion.Calificacion;
                 <tr>
                     <td>@inscripcion.Alumno.Nombre</td>
                     <td>@inscripcion.Alumno.Apellido</td>
                     <td class="no-link-style">@inscripcion.Alumno.Email</td>
+
+            <td>
+                    @if (calificacion != null)
+                    {
+                    <span>@calificacion.Nota</span>
+                    }
+                    else
+                    {
+                    <span class="text-muted">—</span>
+                    }
+            </td>
+
+            <td>
+                    @if (User.IsInRole("Profesor"))
+                    {
+                    <a asp-controller="Calificaciones"
+                       asp-action="Edit"
+                       asp-route-alumnoId="@inscripcion.AlumnoId"
+                       asp-route-materiaCursadaId="@inscripcion.MateriaCursadaId"
+                       class="btn btn-primary btn-sm">
+                        Cargar nota
+                    </a>
+                    }
+            </td>
                 </tr>
             }
         }
         else
         {
             <tr>
-                <td colspan="3" class="text-muted text-center">No hay alumnos inscriptos</td>
+                <td colspan="5" class="text-muted text-center">No hay alumnos inscriptos</td>
             </tr>
         }
     </tbody>
