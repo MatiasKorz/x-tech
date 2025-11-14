@@ -32,6 +32,7 @@ namespace INSTITUTO_C.Controllers
         }
 
         // GET: Carreras/Details/5
+        [AllowAnonymous]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -40,6 +41,7 @@ namespace INSTITUTO_C.Controllers
             }
 
             var carrera = await _context.Carreras
+                .Include(c => c.Materias)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (carrera == null)
             {

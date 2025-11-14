@@ -17,13 +17,55 @@
                 @Html.DisplayFor(model => model.Nombre)
             </dd>
         </dl>
-     @if (User.IsInRole("Empleado"))
-                {
+        @if (Model.Materias != null && Model.Materias.Any())
+        {
+            <table class="table table-striped mt-2">
+                <thead class="bg-light">
+                    <tr class="text-white">
+                        <th>Nombre</th>
+                        <th>Código</th>
+                        <th>Descripción</th>
+                        <th></th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var materia in Model.Materias)
+                    {
+                        <tr>
+                            <td>@materia.Nombre</td>
+                            <td>@materia.CodigoMateria</td>
+                            <td>@materia.Descripcion</td>
+
+                            <td>
+                                <a class="btn btn-sm btn-primary"
+                                   asp-controller="Materias"
+                                   asp-action="Details"
+                                   asp-route-id="@materia.Id">
+                                    Ver
+                                </a>
+                            </td>
+                            
+
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <p class="text-muted">Esta carrera aún no tiene materias registradas.</p>
+        }
+
         <div class="form-group pt-3 d-flex justify-content-between align-content-center">
             <a class="btn btn-primary" asp-action="Index">Volver</a>
+     @if (User.IsInRole("Empleado"))
+                {
+
             <a class="btn btn-primary" asp-action="Edit" asp-route-id="@Model?.Id">Editar</a>
-        </div>
+
                 }
+        </div>
     </div>
 </div>
 
