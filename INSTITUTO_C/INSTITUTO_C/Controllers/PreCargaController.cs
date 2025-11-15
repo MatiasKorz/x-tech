@@ -118,8 +118,8 @@ namespace INSTITUTO_C.Controllers
             {
                 var profesor = new Profesor
                 {
-                    UserName = "profesor@xtech.com",
-                    Email = "profesor@xtech.com",
+                    UserName = "profesor@ort.edu.ar",
+                    Email = "profesor@ort.edu.ar",
                     Nombre = "Hernan",
                     Apellido = "Macoy",
                     DNI = "30000002",
@@ -140,8 +140,8 @@ namespace INSTITUTO_C.Controllers
 
                 var profesor2 = new Profesor
                 {
-                    UserName = "profesor2@xtech.com",
-                    Email = "profesor2@xtech.com",
+                    UserName = "profesor2@ort.edu.ar",
+                    Email = "profesor2@ort.edu.ar",
                     Nombre = "Lucas",
                     Apellido = "Howlett",
                     DNI = "10000002",
@@ -168,8 +168,8 @@ namespace INSTITUTO_C.Controllers
             {
                 var empleado = new Empleado
                 {
-                    UserName = "empleado@xtech.com",
-                    Email = "empleado@xtech.com",
+                    UserName = "empleado@ort.edu.ar",
+                    Email = "empleado@ort.edu.ar",
                     Nombre = "Carlos",
                     Apellido = "Javier",
                     DNI = "30000001",
@@ -198,8 +198,8 @@ namespace INSTITUTO_C.Controllers
                 var carrera2 = _context.Carreras.OrderByDescending(c => c.Id).FirstOrDefault();
                 var alumno = new Alumno
                 {
-                    UserName = "alumno@xtech.com",
-                    Email = "alumno@xtech.com",
+                    UserName = "alumno@ort.edu.ar",
+                    Email = "alumno@ort.edu.ar",
                     Nombre = "Kevin",
                     Apellido = "Wagner",
                     DNI = "30000003",
@@ -217,8 +217,8 @@ namespace INSTITUTO_C.Controllers
 
                 var alumno2 = new Alumno
                 {
-                    UserName = "alumno2@xtech.com",
-                    Email = "alumno2@xtech.com",
+                    UserName = "alumno2@ort.edu.ar",
+                    Email = "alumno2@ort.edu.ar",
                     Nombre = "Oriana",
                     Apellido = "Monroe",
                     DNI = "30000004",
@@ -238,8 +238,8 @@ namespace INSTITUTO_C.Controllers
 
                 var alumno3 = new Alumno
                 {
-                    UserName = "alumno3@xtech.com",
-                    Email = "alumno3@xtech.com",
+                    UserName = "alumno3@ort.edu.ar",
+                    Email = "alumno3@ort.edu.ar",
                     Nombre = "Pedro",
                     Apellido = "Colosso",
                     DNI = "30000005",
@@ -259,8 +259,8 @@ namespace INSTITUTO_C.Controllers
 
                 var alumno4 = new Alumno
                 {
-                    UserName = "alumno4@xtech.com",
-                    Email = "alumno4@xtech.com",
+                    UserName = "alumno4@ort.edu.ar",
+                    Email = "alumno4@ort.edu.ar",
                     Nombre = "Anna Maria",
                     Apellido = "Rogue",
                     DNI = "30000006",
