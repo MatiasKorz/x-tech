@@ -213,19 +213,24 @@ namespace INSTITUTO_C.Controllers
                 catch (DbUpdateException dbex)
                 {
                     ProcesarDuplicado(dbex);
+                    CargarViewData(materiaCursada);
                     return View(materiaCursada);
 
                 }
             }
+            CargarViewData(materiaCursada);
+            return View(materiaCursada);
+        }
+
+        private void CargarViewData(MateriaCursada materiaCursada)
+        {
             ViewData["MateriaId"] = new SelectList(_context.Materias, "Id", "CodigoMateria", materiaCursada.MateriaId);
             var profesoresActivos = _context.Profesores
              .Where(p => p.Activo)
              .ToList();
 
             ViewData["ProfesorId"] = new SelectList(profesoresActivos, "Id", "Apellido");
-            return View(materiaCursada);
         }
-
 
         private void ProcesarDuplicado(DbUpdateException dbex)
         {
@@ -272,12 +277,7 @@ namespace INSTITUTO_C.Controllers
             {
                 return NotFound();
             }
-            ViewData["MateriaId"] = new SelectList(_context.Materias, "Id", "CodigoMateria", materiaCursada.MateriaId);
-            var profesoresActivos = _context.Profesores
-             .Where(p => p.Activo)
-             .ToList();
-
-            ViewData["ProfesorId"] = new SelectList(profesoresActivos, "Id", "Apellido");
+            CargarViewData(materiaCursada);
             return View(materiaCursada);
         }
 
@@ -334,12 +334,7 @@ namespace INSTITUTO_C.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            // ViewData["MateriaId"] = new SelectList(_context.Materias, "Id", "CodigoMateria", materiaCursada.MateriaId);
-            var profesoresActivos = _context.Profesores
-               .Where(p => p.Activo)
-               .ToList();
-
-            ViewData["ProfesorId"] = new SelectList(profesoresActivos, "Id", "Apellido");
+            CargarViewData(materiaCursada);
             return View(materiaCursada);
         }
 
