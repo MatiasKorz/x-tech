@@ -8,7 +8,7 @@ namespace INSTITUTO_C.Models
 {
     public class Alumno: Persona
     {
-        //- UserName
+        //- UserName 
         //- Email
         //- FechaAlta
         //- Nombre
