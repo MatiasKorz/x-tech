@@ -115,7 +115,7 @@ namespace INSTITUTO_C.Controllers
             SqlException innerException = dbex.InnerException as SqlException;
             if (innerException != null && (innerException.Number == 2627 || innerException.Number == 2601))
             {
-                ModelState.AddModelError("CodigoMateria", ErrorMesseges.CodigoEnUso);
+                ModelState.AddModelError("CodigoMateria", "Nombre o codigo en uso");
             }
             else
             {
