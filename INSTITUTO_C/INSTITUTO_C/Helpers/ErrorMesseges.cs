@@ -6,6 +6,8 @@
 
         public const string SoloLetras = "El campo {0} solo puede contener letras y espacios.";
 
+        public const string SoloLetrasNumEsp = "El campo {0} solo puede contener letras, numeros y espacios.";
+
         public const string CaracteresMinMax = "El campo {0} tiene que tener entre {2} y {1} caracteres.";
 
         public const string Range = "El campo {0} tiene que estar entre {1} y {2}.";

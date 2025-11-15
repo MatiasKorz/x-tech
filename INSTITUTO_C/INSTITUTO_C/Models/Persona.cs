@@ -21,7 +21,7 @@ namespace INSTITUTO_C.Models
        // public int Id { get; set; }
 
         //[Required(ErrorMessage = ErrorMesseges.Requerido)]
-        [StringLength(50, MinimumLength = 3, ErrorMessage = ErrorMesseges.CaracteresMinMax)]
+        //[StringLength(50, MinimumLength = 3, ErrorMessage = ErrorMesseges.CaracteresMinMax)]
         //[RegularExpression(@"^[a-zA-Z0-9_]+$", ErrorMessage = "Solo letras, números y guión bajo")]
         public override string UserName { 
              get { return base.UserName; }
@@ -54,16 +54,17 @@ namespace INSTITUTO_C.Models
 
         [Required(ErrorMessage = ErrorMesseges.Requerido)]
         [RegularExpression(@"^\d+$", ErrorMessage = ErrorMesseges.SoloNumeros)]
-        [StringLength(10, MinimumLength = 7, ErrorMessage = "DNI debe tener entre 7 y 10 dígitos")]
+        [StringLength(10, MinimumLength = 7, ErrorMessage = ErrorMesseges.CaracteresMinMax)]
         public string DNI { get; set; }
 
         [Required(ErrorMessage = ErrorMesseges.Requerido)]
-        [StringLength(20, MinimumLength = 8, ErrorMessage = "Teléfono debe tener entre 8 y 20 caracteres")]
-        [RegularExpression(@"^[\d\s\-\(\)\+]+$", ErrorMessage = ErrorMesseges.SoloNumeros)]
+        [StringLength(20, MinimumLength = 8, ErrorMessage = ErrorMesseges.CaracteresMinMax)]
+        [RegularExpression(@"^\d+$", ErrorMessage = ErrorMesseges.SoloNumeros)]
         public string Telefono { get; set; }
 
         [Required(ErrorMessage = ErrorMesseges.Requerido)]
-        [StringLength(100, MinimumLength = 5, ErrorMessage = "Dirección debe tener entre 10 y 100 caracteres")]
+        [StringLength(100, MinimumLength = 5, ErrorMessage = ErrorMesseges.CaracteresMinMax)]
+        [RegularExpression("^[a-zA-Z0-9 ]+$", ErrorMessage = "La dirección solo puede contener letras, números y espacios")]
         public string Direccion { get; set; }
 
         public bool Activo { get; set; } = true;

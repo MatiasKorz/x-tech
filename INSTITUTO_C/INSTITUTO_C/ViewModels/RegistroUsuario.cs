@@ -18,18 +18,28 @@ namespace INSTITUTO_C.ViewModels
 
 
         [Required(ErrorMessage = ErrorMesseges.Requerido)]
+        [StringLength(20, MinimumLength = 2, ErrorMessage = ErrorMesseges.CaracteresMinMax)]
+        [RegularExpression(@"^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s']+$", ErrorMessage = ErrorMesseges.SoloLetras)]
         public string Nombre { get; set; }
 
         [Required(ErrorMessage = ErrorMesseges.Requerido)]
+        [StringLength(20, MinimumLength = 2, ErrorMessage = ErrorMesseges.CaracteresMinMax)]
+        [RegularExpression(@"^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s']+$", ErrorMessage = ErrorMesseges.SoloLetras)]
         public string Apellido { get; set; }
 
         [Required(ErrorMessage = ErrorMesseges.Requerido)]
+        [RegularExpression(@"^\d+$", ErrorMessage = ErrorMesseges.SoloNumeros)]
+        [StringLength(10, MinimumLength = 7, ErrorMessage = ErrorMesseges.CaracteresMinMax)]
         public string DNI { get; set; }
 
         [Required(ErrorMessage = ErrorMesseges.Requerido)]
+        [StringLength(20, MinimumLength = 8, ErrorMessage = ErrorMesseges.CaracteresMinMax)]
+        [RegularExpression(@"^\d+$", ErrorMessage = ErrorMesseges.SoloNumeros)]
         public string Telefono { get; set; }
 
         [Required(ErrorMessage = ErrorMesseges.Requerido)]
+        [StringLength(100, MinimumLength = 5, ErrorMessage = ErrorMesseges.CaracteresMinMax)]
+        [RegularExpression("^[a-zA-Z0-9 ]+$", ErrorMessage = ErrorMesseges.SoloLetrasNumEsp)]
         public string Direccion { get; set; }
 
 
