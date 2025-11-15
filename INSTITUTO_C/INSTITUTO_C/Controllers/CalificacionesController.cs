@@ -174,6 +174,9 @@ namespace INSTITUTO_C.Controllers
             if (materiaCursada.ProfesorId != usuarioId)
                 return Content(ErrorMesseges.NoEsElProfe);
 
+            if (!materiaCursada.Activo)
+                ModelState.AddModelError(string.Empty, ErrorMesseges.CursadaFinalizada);
+
             if (ModelState.IsValid)
             {
                 try

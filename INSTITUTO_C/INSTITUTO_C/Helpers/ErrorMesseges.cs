@@ -39,5 +39,7 @@
         public const string CursadaConInscripciones = "No se puede eliminar la materia cursada porque tiene inscripciones asociadas.";
 
         public const string CursadaDuplicada = "No se puede crear 2 veces la misma cursada.";
+
+        public const string CursadaFinalizada = "No se puede calificar porque la cursada ha finalizado.";
     }
 }
