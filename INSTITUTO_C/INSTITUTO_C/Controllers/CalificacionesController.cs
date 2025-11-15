@@ -210,40 +210,40 @@ namespace INSTITUTO_C.Controllers
 
 
         // GET: Calificaciones/Delete
-        public async Task<IActionResult> Delete(int alumnoId, int materiaCursadaId)
-        {
-            var calificacion = await _context.Calificaciones
-                .Include(c => c.Alumno)
-                .Include(c => c.Profesor)
-                .Include(c => c.Inscripcion)
-                .ThenInclude(i => i.MateriaCursada)
-                .FirstOrDefaultAsync(c => c.AlumnoId == alumnoId && c.MateriaCursadaId == materiaCursadaId);
+        //public async Task<IActionResult> Delete(int alumnoId, int materiaCursadaId)
+        //{
+        //    var calificacion = await _context.Calificaciones
+        //        .Include(c => c.Alumno)
+        //        .Include(c => c.Profesor)
+        //        .Include(c => c.Inscripcion)
+        //        .ThenInclude(i => i.MateriaCursada)
+        //        .FirstOrDefaultAsync(c => c.AlumnoId == alumnoId && c.MateriaCursadaId == materiaCursadaId);
 
-            if (calificacion == null)
-            {
-                return NotFound();
-            }
+        //    if (calificacion == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            return View(calificacion);
-        }
+        //    return View(calificacion);
+        //}
 
-        // POST: Calificaciones/Delete
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
+        //// POST: Calificaciones/Delete
+        //[HttpPost, ActionName("Delete")]
+        //[ValidateAntiForgeryToken]
 
-        public async Task<IActionResult> DeleteConfirmed(int alumnoId, int materiaCursadaId)
-        {
-            var calificacion = await _context.Calificaciones
-                .FirstOrDefaultAsync(c => c.AlumnoId == alumnoId && c.MateriaCursadaId == materiaCursadaId);
+        //public async Task<IActionResult> DeleteConfirmed(int alumnoId, int materiaCursadaId)
+        //{
+        //    var calificacion = await _context.Calificaciones
+        //        .FirstOrDefaultAsync(c => c.AlumnoId == alumnoId && c.MateriaCursadaId == materiaCursadaId);
 
-            if (calificacion != null)
-            {
-                _context.Calificaciones.Remove(calificacion);
-                await _context.SaveChangesAsync();
-            }
+        //    if (calificacion != null)
+        //    {
+        //        _context.Calificaciones.Remove(calificacion);
+        //        await _context.SaveChangesAsync();
+        //    }
 
-            return RedirectToAction(nameof(Index));
-        }
+        //    return RedirectToAction(nameof(Index));
+        //}
 
         private bool CalificacionExists(int alumnoId, int materiaCursadaId)
         {

@@ -213,42 +213,42 @@ namespace INSTITUTO_C.Controllers
         
 
 
-        // GET: Profesores/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
+        //// GET: Profesores/Delete/5
+        //public async Task<IActionResult> Delete(int? id)
+        //{
+        //    if (id == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            var profesor = await _userManager.FindByIdAsync(id.ToString()) as Profesor;
+        //    var profesor = await _userManager.FindByIdAsync(id.ToString()) as Profesor;
       
-            if (profesor == null)
-            {
-                return NotFound();
-            }
+        //    if (profesor == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            return View(profesor);
-        }
+        //    return View(profesor);
+        //}
 
-        // POST: Profesores/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var profesor = await _userManager.FindByIdAsync(id.ToString()) as Profesor;
-            if (profesor == null) return NotFound();
+        //// POST: Profesores/Delete/5
+        //[HttpPost, ActionName("Delete")]
+        //[ValidateAntiForgeryToken]
+        //public async Task<IActionResult> DeleteConfirmed(int id)
+        //{
+        //    var profesor = await _userManager.FindByIdAsync(id.ToString()) as Profesor;
+        //    if (profesor == null) return NotFound();
 
-            var resultado = await _userManager.DeleteAsync(profesor);
-            if (!resultado.Succeeded)
-            {
-                foreach (var error in resultado.Errors)
-                    ModelState.AddModelError("", error.Description);
-                return View(profesor);
-            }
+        //    var resultado = await _userManager.DeleteAsync(profesor);
+        //    if (!resultado.Succeeded)
+        //    {
+        //        foreach (var error in resultado.Errors)
+        //            ModelState.AddModelError("", error.Description);
+        //        return View(profesor);
+        //    }
 
-            return RedirectToAction(nameof(Index));
-        }
+        //    return RedirectToAction(nameof(Index));
+        //}
 
         private async Task<bool> ProfesorExists(int id)
         {

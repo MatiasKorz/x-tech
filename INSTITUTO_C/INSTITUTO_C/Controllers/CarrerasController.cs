@@ -215,39 +215,39 @@ namespace INSTITUTO_C.Controllers
         }
 
         // GET: Carreras/Delete/5
-        [Authorize(Roles = Configs.Empleado)]
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
+        //[Authorize(Roles = Configs.Empleado)]
+        //public async Task<IActionResult> Delete(int? id)
+        //{
+        //    if (id == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            var carrera = await _context.Carreras
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (carrera == null)
-            {
-                return NotFound();
-            }
+        //    var carrera = await _context.Carreras
+        //        .FirstOrDefaultAsync(m => m.Id == id);
+        //    if (carrera == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            return View(carrera);
-        }
+        //    return View(carrera);
+        //}
 
-        // POST: Carreras/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        [Authorize(Roles = Configs.Empleado)]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var carrera = await _context.Carreras.FindAsync(id);
-            if (carrera != null)
-            {
-                _context.Carreras.Remove(carrera);
-            }
+        //// POST: Carreras/Delete/5
+        //[HttpPost, ActionName("Delete")]
+        //[ValidateAntiForgeryToken]
+        //[Authorize(Roles = Configs.Empleado)]
+        //public async Task<IActionResult> DeleteConfirmed(int id)
+        //{
+        //    var carrera = await _context.Carreras.FindAsync(id);
+        //    if (carrera != null)
+        //    {
+        //        _context.Carreras.Remove(carrera);
+        //    }
 
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
+        //    await _context.SaveChangesAsync();
+        //    return RedirectToAction(nameof(Index));
+        //}
 
         private bool CarreraExists(int id)
         {
