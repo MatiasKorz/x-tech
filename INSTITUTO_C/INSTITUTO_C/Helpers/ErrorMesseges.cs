@@ -2,7 +2,6 @@
 {
     public static class ErrorMesseges
     {
-
         public const string Requerido = "El campo {0} es requerido";
 
         public const string SoloLetras = "El campo {0} solo puede contener letras y espacios.";
@@ -35,5 +34,12 @@
 
         public const string AlumnoNoCarrera = "El alumno no pertenece a esa carrera";
 
+        public const string NoEsElProfe = "Solo el profesor titular de la cursada puede hacer la calificación";
+
+        public const string CursadaConInscripciones = "No se puede eliminar la materia cursada porque tiene inscripciones asociadas.";
+
+        public const string CursadaDuplicada = "No se puede crear 2 veces la misma cursada.";
+
+        public const string CursadaFinalizada = "No se puede calificar porque la cursada ha finalizado.";
     }
 }

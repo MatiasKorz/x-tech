@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Authorization;
 using INSTITUTO_C.Helpers;
 using Microsoft.Data.SqlClient;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.AspNetCore.Identity;
 
 namespace INSTITUTO_C.Controllers
 {
@@ -18,10 +19,12 @@ namespace INSTITUTO_C.Controllers
     public class CarrerasController : Controller
     {
         private readonly InstitutoContext _context;
+        private readonly UserManager<Persona> _userManager;
 
-        public CarrerasController(InstitutoContext context)
+        public CarrerasController(InstitutoContext context, UserManager<Persona> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: Carreras
@@ -32,6 +35,7 @@ namespace INSTITUTO_C.Controllers
         }
 
         // GET: Carreras/Details/5
+        [AllowAnonymous]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -40,6 +44,7 @@ namespace INSTITUTO_C.Controllers
             }
 
             var carrera = await _context.Carreras
+                .Include(c => c.Materias)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (carrera == null)
             {
@@ -47,6 +52,24 @@ namespace INSTITUTO_C.Controllers
             }
 
             return View(carrera);
+        }
+
+
+        [Authorize(Roles = Configs.Alumno)]
+        public async Task<IActionResult> MiCarrera()
+        {
+            int usuarioId = int.Parse(_userManager.GetUserId(User));
+
+
+            var alumno = await _context.Alumnos
+               .Include(a => a.Carrera)
+               .FirstOrDefaultAsync(a => a.Id == usuarioId);
+            if (alumno == null)
+            {
+                return NotFound();
+            }
+
+            return RedirectToAction("Details", new { id = alumno.CarreraId });
         }
 
         // GET: Carreras/Create
@@ -192,39 +215,39 @@ namespace INSTITUTO_C.Controllers
         }
 
         // GET: Carreras/Delete/5
-        [Authorize(Roles = Configs.Empleado)]
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
+        //[Authorize(Roles = Configs.Empleado)]
+        //public async Task<IActionResult> Delete(int? id)
+        //{
+        //    if (id == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            var carrera = await _context.Carreras
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (carrera == null)
-            {
-                return NotFound();
-            }
+        //    var carrera = await _context.Carreras
+        //        .FirstOrDefaultAsync(m => m.Id == id);
+        //    if (carrera == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            return View(carrera);
-        }
+        //    return View(carrera);
+        //}
 
-        // POST: Carreras/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        [Authorize(Roles = Configs.Empleado)]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var carrera = await _context.Carreras.FindAsync(id);
-            if (carrera != null)
-            {
-                _context.Carreras.Remove(carrera);
-            }
+        //// POST: Carreras/Delete/5
+        //[HttpPost, ActionName("Delete")]
+        //[ValidateAntiForgeryToken]
+        //[Authorize(Roles = Configs.Empleado)]
+        //public async Task<IActionResult> DeleteConfirmed(int id)
+        //{
+        //    var carrera = await _context.Carreras.FindAsync(id);
+        //    if (carrera != null)
+        //    {
+        //        _context.Carreras.Remove(carrera);
+        //    }
 
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
+        //    await _context.SaveChangesAsync();
+        //    return RedirectToAction(nameof(Index));
+        //}
 
         private bool CarreraExists(int id)
         {

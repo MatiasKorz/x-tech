@@ -27,6 +27,7 @@ namespace INSTITUTO_C.Controllers
         }
 
         // GET: Personas
+        [Authorize(Roles = Configs.Empleado)]
         public async Task<IActionResult> Index()
         {
 
@@ -37,12 +38,18 @@ namespace INSTITUTO_C.Controllers
         // GET: Personas/Details/5
         public async Task<IActionResult> Details(int? id)
         {
+            var usuarioId = Int32.Parse(_userManager.GetUserId(User));
             if (id == null)
             {
                 return NotFound();
             }
+            else if (usuarioId != id) 
+            {
+                return Content("Ese no es tu perfil");
+            }
 
-            var persona = await _userManager.FindByIdAsync(id.ToString());
+
+                var persona = await _userManager.FindByIdAsync(id.ToString());
 
             if (persona == null)
             {
@@ -53,6 +60,7 @@ namespace INSTITUTO_C.Controllers
         }
 
         // GET: Personas/Create
+        [Authorize(Roles = Configs.Empleado)]
         public IActionResult Create()
         {
             return View();
@@ -63,6 +71,7 @@ namespace INSTITUTO_C.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = Configs.Empleado)]
         public async Task<IActionResult> Create([Bind("Id,UserName,Email,Nombre,Apellido,DNI,Telefono,Direccion,Activo")] Persona persona)
         {
 
@@ -118,6 +127,7 @@ namespace INSTITUTO_C.Controllers
 
 
         // GET: Personas/Edit/5
+        [Authorize(Roles = Configs.Empleado)]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -138,6 +148,7 @@ namespace INSTITUTO_C.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = Configs.Empleado)]
         public async Task<IActionResult> Edit(int id, [Bind("Id,UserName,Email,Nombre,Apellido,DNI,Telefono,Direccion,Activo")] Persona persona)
         {
             if (id != persona.Id)
@@ -192,47 +203,47 @@ namespace INSTITUTO_C.Controllers
             return View(persona);
         }
 
-        // GET: Personas/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
+        //// GET: Personas/Delete/5
+        //public async Task<IActionResult> Delete(int? id)
+        //{
+        //    if (id == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            var persona = await _userManager.FindByIdAsync(id.ToString());
+        //    var persona = await _userManager.FindByIdAsync(id.ToString());
    
-            if (persona == null)
-            {
-                return NotFound();
-            }
+        //    if (persona == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            return View(persona);
-        }
+        //    return View(persona);
+        //}
 
-        // POST: Personas/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var persona = await _userManager.FindByIdAsync(id.ToString());
-            if (persona != null)
-            {
-                var resultado = await _userManager.DeleteAsync(persona);
-                if (!resultado.Succeeded)
-                {
-                    foreach (var error in resultado.Errors)
-                        ModelState.AddModelError("", error.Description);
-                    return View(persona);
-                }
-            }
+        //// POST: Personas/Delete/5
+        //[HttpPost, ActionName("Delete")]
+        //[ValidateAntiForgeryToken]
+        //public async Task<IActionResult> DeleteConfirmed(int id)
+        //{
+        //    var persona = await _userManager.FindByIdAsync(id.ToString());
+        //    if (persona != null)
+        //    {
+        //        var resultado = await _userManager.DeleteAsync(persona);
+        //        if (!resultado.Succeeded)
+        //        {
+        //            foreach (var error in resultado.Errors)
+        //                ModelState.AddModelError("", error.Description);
+        //            return View(persona);
+        //        }
+        //    }
 
-            else
-            {
-                return NotFound();
-            }
-            return RedirectToAction(nameof(Index));
-        }
+        //    else
+        //    {
+        //        return NotFound();
+        //    }
+        //    return RedirectToAction(nameof(Index));
+        //}
 
         private async Task<bool> PersonaExists(int id)
         {

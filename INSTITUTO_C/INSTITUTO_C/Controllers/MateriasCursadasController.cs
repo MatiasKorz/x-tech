@@ -9,6 +9,8 @@ using INSTITUTO_C.Data;
 using INSTITUTO_C.Models;
 using Microsoft.AspNetCore.Authorization;
 using INSTITUTO_C.Helpers;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.Data.SqlClient;
 
 namespace INSTITUTO_C.Controllers
 {
@@ -16,18 +18,130 @@ namespace INSTITUTO_C.Controllers
     public class MateriasCursadasController : Controller
     {
         private readonly InstitutoContext _context;
+        private readonly UserManager<Persona> _userManager;
 
-        public MateriasCursadasController(InstitutoContext context)
+        public MateriasCursadasController(InstitutoContext context, UserManager<Persona> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: MateriasCursadas
+
+        [Authorize(Roles = Configs.Empleado)]
         public async Task<IActionResult> Index()
         {
-            var institutoContext = _context.MateriasCursadas.Include(m => m.Materia).Include(m => m.Profesor);
-            return View(await institutoContext.ToListAsync());
+
+            var cursadas = await _context.MateriasCursadas
+               .Include(m => m.Materia)
+               .Include(m => m.Profesor)
+               .OrderByDescending(m => m.Activo) 
+               .ThenBy(m => m.Nombre)
+               .ToListAsync();
+
+            return View("Index",cursadas);
         }
+
+
+
+        public async Task<IActionResult> Actuales(int? personaId)
+        {
+
+            List<MateriaCursada> cursadas = null;
+            if (User.IsInRole(Configs.Empleado))
+            {
+                cursadas = await _context.MateriasCursadas
+                 .Include(m => m.Materia)
+                 .Include(m => m.Profesor)
+                 .Where(m => m.Activo)
+                 .ToListAsync();
+            }
+            else 
+            {
+                var usuarioId = Int32.Parse(_userManager.GetUserId(User));
+                if (personaId is null)
+                {
+                    personaId = usuarioId;
+                }else if (!User.IsInRole(Configs.Empleado) && personaId != usuarioId)
+                {
+                    return Content("No podes ver las cursadas de otro");
+                }
+                if (User.IsInRole(Configs.Profesor))
+                {
+                    cursadas = await _context.MateriasCursadas
+                     .Include(m => m.Materia)
+                     .Include(m => m.Profesor)
+                     .Where(m=>m.ProfesorId== personaId)
+                     .Where(m => m.Activo)
+                     .ToListAsync();
+                }
+                else if(User.IsInRole(Configs.Alumno))
+                {
+                    cursadas = await _context.Inscripciones
+                        .Include(i => i.MateriaCursada)
+                            .ThenInclude(mc => mc.Materia)
+                        .Include(i => i.MateriaCursada)
+                            .ThenInclude(mc => mc.Profesor)
+                        .Where(i => i.AlumnoId == personaId && i.MateriaCursada.Activo)
+                        .Select(i => i.MateriaCursada)
+                        .ToListAsync();
+                }
+
+            }
+
+
+            return View("Index", cursadas);
+        }
+
+        public async Task<IActionResult> Finalizadas(int? personaId)
+        {
+
+            List<MateriaCursada> cursadas = null;
+            if (User.IsInRole(Configs.Empleado))
+            {
+                cursadas = await _context.MateriasCursadas
+                .Include(m => m.Materia)
+                .Include(m => m.Profesor)
+                .Where(m => !m.Activo)
+                .ToListAsync();
+            }
+            else
+            {
+                var usuarioId = Int32.Parse(_userManager.GetUserId(User));
+                if (personaId is null)
+                {
+                    personaId = usuarioId;
+                }
+                else if (!User.IsInRole(Configs.Empleado) && personaId != usuarioId)
+                {
+                    return Content("No podes ver las cursadas de otro");
+                }
+                if (User.IsInRole(Configs.Profesor))
+                {
+                    cursadas = await _context.MateriasCursadas
+                     .Include(m => m.Materia)
+                     .Include(m => m.Profesor)
+                     .Where(m => m.ProfesorId == personaId)
+                     .Where(m => !m.Activo)
+                     .ToListAsync();
+                }
+                else if(User.IsInRole(Configs.Alumno))
+                {
+                    cursadas = await _context.Inscripciones
+                        .Include(i => i.MateriaCursada)
+                            .ThenInclude(mc => mc.Materia)
+                        .Include(i => i.MateriaCursada)
+                            .ThenInclude(mc => mc.Profesor)
+                        .Where(i => i.AlumnoId == personaId && !i.MateriaCursada.Activo)
+                        .Select(i => i.MateriaCursada)
+                        .ToListAsync();
+
+                }
+            }
+
+            return View("Index", cursadas);
+        }
+
 
         // GET: MateriasCursadas/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -38,9 +152,13 @@ namespace INSTITUTO_C.Controllers
             }
 
             var materiaCursada = await _context.MateriasCursadas
-                .Include(m => m.Materia)
-                .Include(m => m.Profesor)
-                .FirstOrDefaultAsync(m => m.Id == id);
+              .Include(m => m.Materia)
+              .Include(m => m.Profesor)
+              .Include(m => m.Inscripciones)
+              .ThenInclude(i => i.Alumno)
+              .Include(m => m.Inscripciones)
+              .ThenInclude(i => i.Calificacion)
+              .FirstOrDefaultAsync(m => m.Id == id);
             if (materiaCursada == null)
             {
                 return NotFound();
@@ -54,7 +172,11 @@ namespace INSTITUTO_C.Controllers
         public IActionResult Create()
         {
             ViewData["MateriaId"] = new SelectList(_context.Materias, "Id", "CodigoMateria");
-            ViewData["ProfesorId"] = new SelectList(_context.Profesores, "Id", "Apellido");
+            var profesoresActivos = _context.Profesores
+            .Where(p => p.Activo)
+            .ToList();
+
+            ViewData["ProfesorId"] = new SelectList(profesoresActivos, "Id", "Apellido");
             return View();
         }
 
@@ -66,20 +188,75 @@ namespace INSTITUTO_C.Controllers
         [Authorize(Roles = Configs.Empleado)]
         public async Task<IActionResult> Create([Bind("Id,MateriaId,CodigoCursada,Cuatrimestre,Activo,ProfesorId")] MateriaCursada materiaCursada)
         {
+
+
             if (ModelState.IsValid)
             {
-                materiaCursada.Materia = await _context.Materias.FindAsync(materiaCursada.MateriaId);
+                try
+                {
+                    materiaCursada.Materia = await _context.Materias.FindAsync(materiaCursada.MateriaId);
 
-                materiaCursada.GenerarNombre();
+                    materiaCursada.GenerarNombre();
+                    //VerificarNombreValido(materiaCursada);
 
-                _context.MateriasCursadas.Add(materiaCursada);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                    materiaCursada.Activo = true;
+
+
+                    _context.MateriasCursadas.Add(materiaCursada);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+
+
+
+
+                }
+                catch (DbUpdateException dbex)
+                {
+                    ProcesarDuplicado(dbex);
+                    return View(materiaCursada);
+
+                }
             }
             ViewData["MateriaId"] = new SelectList(_context.Materias, "Id", "CodigoMateria", materiaCursada.MateriaId);
-            ViewData["ProfesorId"] = new SelectList(_context.Profesores, "Id", "Apellido", materiaCursada.ProfesorId);
+            var profesoresActivos = _context.Profesores
+             .Where(p => p.Activo)
+             .ToList();
+
+            ViewData["ProfesorId"] = new SelectList(profesoresActivos, "Id", "Apellido");
             return View(materiaCursada);
         }
+
+
+        private void ProcesarDuplicado(DbUpdateException dbex)
+        {
+            SqlException innerException = dbex.InnerException as SqlException;
+            if (innerException != null && (innerException.Number == 2627 || innerException.Number == 2601))
+            {
+                ModelState.AddModelError("Nombre", ErrorMesseges.CursadaDuplicada);
+            }
+            else
+            {
+                ModelState.AddModelError(string.Empty, dbex.Message);
+            }
+        }
+
+        //private void VerificarNombreValido(MateriaCursada cursada)
+        //{
+        //    if (CursadaNombreExists(cursada.Nombre))
+        //    {
+        //        ModelState.AddModelError("Nombre", ErrorMesseges.CursadaDuplicada);
+        //    }
+        //}
+
+        //private bool CursadaNombreExists(string nombre)
+        //{
+        //    bool resultado = false;
+        //    if (!string.IsNullOrEmpty(nombre))
+        //    {
+        //        resultado = _context.MateriasCursadas.Any(c => c.Nombre == nombre);
+        //    }
+        //    return resultado;
+        //}
 
         // GET: MateriasCursadas/Edit/5
         [Authorize(Roles = Configs.Empleado)]
@@ -96,7 +273,11 @@ namespace INSTITUTO_C.Controllers
                 return NotFound();
             }
             ViewData["MateriaId"] = new SelectList(_context.Materias, "Id", "CodigoMateria", materiaCursada.MateriaId);
-            ViewData["ProfesorId"] = new SelectList(_context.Profesores, "Id", "Apellido", materiaCursada.ProfesorId);
+            var profesoresActivos = _context.Profesores
+             .Where(p => p.Activo)
+             .ToList();
+
+            ViewData["ProfesorId"] = new SelectList(profesoresActivos, "Id", "Apellido");
             return View(materiaCursada);
         }
 
@@ -153,8 +334,12 @@ namespace INSTITUTO_C.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-           // ViewData["MateriaId"] = new SelectList(_context.Materias, "Id", "CodigoMateria", materiaCursada.MateriaId);
-            ViewData["ProfesorId"] = new SelectList(_context.Profesores, "Id", "Apellido", materiaCursada.ProfesorId);
+            // ViewData["MateriaId"] = new SelectList(_context.Materias, "Id", "CodigoMateria", materiaCursada.MateriaId);
+            var profesoresActivos = _context.Profesores
+               .Where(p => p.Activo)
+               .ToList();
+
+            ViewData["ProfesorId"] = new SelectList(profesoresActivos, "Id", "Apellido");
             return View(materiaCursada);
         }
 
@@ -185,12 +370,23 @@ namespace INSTITUTO_C.Controllers
         [Authorize(Roles = Configs.Empleado)]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var materiaCursada = await _context.MateriasCursadas.FindAsync(id);
-            if (materiaCursada != null)
+            var materiaCursada = await _context.MateriasCursadas
+               .Include(mc => mc.Inscripciones)
+               .FirstOrDefaultAsync(mc => mc.Id == id);
+
+            if (materiaCursada == null)
             {
-                _context.MateriasCursadas.Remove(materiaCursada);
+
+                return NotFound();
             }
 
+            if (materiaCursada.Inscripciones != null && materiaCursada.Inscripciones.Any())
+            {
+                TempData["Error"] = ErrorMesseges.CursadaConInscripciones;
+                return RedirectToAction(nameof(Index));
+            }
+
+            _context.MateriasCursadas.Remove(materiaCursada);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }

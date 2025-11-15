@@ -145,7 +145,7 @@ namespace INSTITUTO_C.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Nombre")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("ProfesorId")
                         .HasColumnType("int");
@@ -153,6 +153,10 @@ namespace INSTITUTO_C.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("MateriaId");
+
+                    b.HasIndex("Nombre")
+                        .IsUnique()
+                        .HasFilter("[Nombre] IS NOT NULL");
 
                     b.HasIndex("ProfesorId");
 

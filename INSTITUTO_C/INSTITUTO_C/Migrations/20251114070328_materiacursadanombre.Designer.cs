@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace INSTITUTO_C.Migrations
 {
     [DbContext(typeof(InstitutoContext))]
-    [Migration("20251109050911_CodigoMateriaUnique")]
-    partial class CodigoMateriaUnique
+    [Migration("20251114070328_materiacursadanombre")]
+    partial class materiacursadanombre
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -148,7 +148,7 @@ namespace INSTITUTO_C.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Nombre")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("ProfesorId")
                         .HasColumnType("int");
@@ -156,6 +156,10 @@ namespace INSTITUTO_C.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("MateriaId");
+
+                    b.HasIndex("Nombre")
+                        .IsUnique()
+                        .HasFilter("[Nombre] IS NOT NULL");
 
                     b.HasIndex("ProfesorId");
 

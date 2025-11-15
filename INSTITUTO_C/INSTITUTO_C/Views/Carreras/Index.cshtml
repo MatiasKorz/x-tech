@@ -6,9 +6,12 @@
 
 <div class="d-flex justify-content-between align-items-center mb-4">
     <h1>Carreras</h1>
+         @if (User.IsInRole("Empleado"))
+                {
     <a asp-action="Create" class="btn btn-primary">
-        + Create New
+        + Crear Nueva
     </a>
+                }
 </div>
 <table class="table">
     <thead>
@@ -25,11 +28,17 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Nombre)
             </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
+                <td class="text-end">
+                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-success btn-sm">Detalles</a>
+                @if (User.IsInRole("Empleado"))
+                {
+
+                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning btn-sm">Editar</a>
+
+
+
+                }
+                </td>
         </tr>
 }
     </tbody>

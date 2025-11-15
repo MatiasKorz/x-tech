@@ -1,13 +1,15 @@
-﻿@using System.Security.Claims
+﻿﻿@using System.Security.Claims
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - X-Tech</title>
+    <title>@ViewData["Title"] -X-Tech</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/MisEstilos.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/Detalles.css" asp-append-version="true" />
+
 </head>
 <body>
     <header>
@@ -26,112 +28,93 @@
                             <a class="nav-link text-white" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
                     </ul> *@
+
                     @if (signInManager.IsSignedIn(User))
                     {
+                        <ul class="navbar-nav flex-grow-1 justify-content-center">
+                            <li class="nav-item">
+                                <a class="nav-link text-white" asp-controller="Personas" asp-action="Details" asp-route-id="@User.FindFirstValue(ClaimTypes.NameIdentifier)">Mi Perfil</a>
+                            </li>
+                            @if (User.IsInRole("Alumno"))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-white" asp-area="" asp-controller="Carreras" asp-action="MiCarrera">Mi carrera</a>
+                                </li>
+                            }
 
-                        //DEJO EL ESQUELETO PARA VISTA SEGUN ROL
-                        @if (User.IsInRole("Empleado"))
-                        {
-                            //ADMINISTRACION TOTAL - TODAS LAS SECCIONES
-                            @* <ul class="navbar-nav flex-grow-1 justify-content-center">
-                                <li class="nav-item">
-                                    <a class="nav-link text-white" asp-area="" asp-controller="Personas" asp-action="Index">Personas</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link text-white" asp-area="" asp-controller="Alumnos" asp-action="Index">Alumnos</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link text-white" asp-area="" asp-controller="Profesores" asp-action="Index">Profesores</a>
-                                </li>
+                            @if (User.IsInRole("Empleado"))
+                            {
+                                //ADMINISTRACION TOTAL - TODAS LAS SECCIONES
+
                                 <li class="nav-item">
                                     <a class="nav-link text-white" asp-area="" asp-controller="Empleados" asp-action="Index">Empleados</a>
                                 </li>
+
                                 <li class="nav-item">
-                                    <a class="nav-link text-white" asp-area="" asp-controller="Materias" asp-action="Index">Materias</a>
+                                    <a class="nav-link text-white" asp-area="" asp-controller="Alumnos" asp-action="Index">Alumnos</a>
                                 </li>
-                                <li class="nav-item">
-                                    <a class="nav-link text-white" asp-area="" asp-controller="MateriasCursadas" asp-action="Index">Materias Cursadas</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link text-white" asp-area="" asp-controller="Inscripciones" asp-action="Index">Inscripciones</a>
-                                </li>
+
+
+                            }
+
+                            <li class="nav-item">
+                                <a class="nav-link text-white" asp-area="" asp-controller="Profesores" asp-action="Index">Profesores</a>
+                            </li>
+                            @if (!User.IsInRole("Alumno"))
+                            {
                                 <li class="nav-item">
                                     <a class="nav-link text-white" asp-area="" asp-controller="Carreras" asp-action="Index">Carreras</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link text-white" asp-area="" asp-controller="Calificaciones" asp-action="Index">Calificaciones</a>
+                                    <a class="nav-link text-white" asp-area="" asp-controller="Materias" asp-action="Index">Materias</a>
                                 </li>
-                            </ul> *@
-                        }
+                            }
+                        </ul>
 
-                        else if (User.IsInRole("Profesor"))
+
+                        if (!User.IsInRole("Empleado")) //LO VEN TANTO PROFES COMO ALUMNOS
                         {
-                            //PROFESOR - GESTIÓN DE CALIFICACIONES
-                            @* <ul class="navbar-nav flex-grow-1 justify-content-center">
+
+                            <ul class="navbar-nav flex-grow-1 justify-content-center">
+                                    <li class="nav-item">
+                                        <a class="nav-link text-white" asp-area="" asp-controller="MateriasCursadas" asp-action="Actuales" asp-route-personaid="@User.FindFirstValue(ClaimTypes.NameIdentifier)">Cursadas Actuales</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link text-white" asp-area="" asp-controller="MateriasCursadas" asp-action="Finalizadas" asp-route-personaid="@User.FindFirstValue(ClaimTypes.NameIdentifier)">Cursadas Finalizadas</a>
+                                    </li>
                                 <li class="nav-item">
-                                    <a class="nav-link text-white" asp-controller="Profesores" asp-action="MisMaterias">Mis Materias</a>
+                                    <a class="nav-link text-white" asp-area="" asp-controller="Calificaciones" asp-action="Index" asp-route-personaid="@User.FindFirstValue(ClaimTypes.NameIdentifier)">Calificaciones</a>
+                                </li>
+
+                            </ul>
+                        }
+                        if (User.IsInRole("Alumno"))
+                        {
+
+                         <ul class="navbar-nav flex-grow-1 justify-content-center">
+                                <li class="nav-item">
+                                    <a class="nav-link text-white" asp-controller="Inscripciones" asp-action="Index" asp-route-alumnoId="@User.FindFirstValue(ClaimTypes.NameIdentifier)">Mis Inscripciones</a>
+                                </li>
+
+                            </ul>
+
+                        }
+                        if (User.IsInRole("Empleado"))
+                        {
+
+                            <ul class="navbar-nav flex-grow-1 justify-content-center">
+                                <li class="nav-item">
+                                    <a class="nav-link text-white" asp-area="" asp-controller="Inscripciones" asp-action="Index">Inscripciones</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-white" asp-area="" asp-controller="MateriasCursadas" asp-action="Index">Cursadas</a>
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link text-white" asp-controller="Calificaciones" asp-action="Index">Calificaciones</a>
                                 </li>
-                            </ul> *@
-                        }
-                        else if (User.IsInRole("Alumno"))
-                        {
-                            //ALUMNO - AUTO-GESTIÓN 
-                            @* <ul class="navbar-nav flex-grow-1 justify-content-center">
-                                <li class="nav-item">
-                                    <a class="nav-link text-white" asp-controller="Alumnos" asp-action="MisMaterias">Mis Materias</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link text-white" asp-controller="Inscripciones" asp-action="Inscribirse">Inscripción</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link text-white" asp-controller="Calificaciones" asp-action="MisCalificaciones">Mis Calificaciones</a>
-                                </li>
-                            </ul> *@
-                           
-                        }
 
-                        //CON LOGIN ACCESO A TODAS LAS SECCIONES
-                        <ul class="navbar-nav flex-grow-1 justify-content-center">
-                            <li class="nav-item">
-                                <a class="nav-link text-white" asp-area="" asp-controller="Personas" asp-action="Index">Personas</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-white" asp-area="" asp-controller="Alumnos" asp-action="Index">Alumnos</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-white" asp-area="" asp-controller="Profesores" asp-action="Index">Profesores</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-white" asp-area="" asp-controller="Empleados" asp-action="Index">Empleados</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-white" asp-area="" asp-controller="Materias" asp-action="Index">Materias</a>
-                            </li>
-                            <li class="nav-item">
-                                @if (User.IsInRole("Alumno"))
-                                {
-                                     
-                                    <a class="nav-link text-white" asp-area="" asp-controller="Inscripciones" asp-action="Index" asp-route-alumnoid="@User.FindFirstValue(ClaimTypes.NameIdentifier)">MisInscripciones</a>
-                                }
-                                else
-                                {
-                                    <a class="nav-link text-white" asp-area="" asp-controller="Inscripciones" asp-action="Index">Inscripciones</a>
-                                }
-                                
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-white" asp-area="" asp-controller="MateriasCursadas" asp-action="Index">Materias Cursadas</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-white" asp-area="" asp-controller="Carreras" asp-action="Index">Carreras</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-white" asp-area="" asp-controller="Calificaciones" asp-action="Index">Calificaciones</a>
-                            </li>
-                        </ul>
+                            </ul>
+                        }
 
 
                         <ul class="navbar-nav">
@@ -144,13 +127,10 @@
                     }
                     else
                     {
-                        //SIN LOGIN SOLO REGISTRARSE E INICIAR SESION
+                        //SIN LOGIN SOLO REGISTRARSE E INICIAR SESION Y DATOS DE CARRERAS MATERIAS Y PROFESORES
                         <ul class="navbar-nav ms-auto">
                             <li class="nav-item">
                                 <a class="nav-link text-white" asp-area="" asp-controller="Carreras" asp-action="Index">Carreras</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-white" asp-area="" asp-controller="Materias" asp-action="Index">Materias</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link text-white" asp-area="" asp-controller="Profesores" asp-action="Index">Profesores</a>
@@ -165,18 +145,19 @@
 
                         </ul>
                     }
+                    
                 </div>
             </div>
         </nav>
     </header>
     <main role="main" class="pb-3">
-        <div class="container">
+        <div class="main-style">
             @RenderBody()
         </div>
     </main>
 
     <footer class="footer text-muted">
-        <span class="text-white"> &copy; 2025 - X-Tech</span> <a asp-action="Seed" asp-controller="PreCarga" class="btn btn-sm btn-info">Pre Carga Db</a>
+        <span class="text-white"> &copy; 2025 -X-Tech</span> <a asp-action="Seed" asp-controller="PreCarga" class="btn btn-sm btn-info">Pre Carga Db</a>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>

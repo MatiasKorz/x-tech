@@ -1,4 +1,4 @@
-﻿/*GENERALES*/
+﻿﻿ /*GENERALES*/
 html, body {
     height: 100%;
     margin: 0;
@@ -15,6 +15,25 @@ body {
 .container {
     flex: 1;
     min-height: 100%;
+}
+
+.main-style {
+    margin: 10px 70px 0 70px;
+}
+
+.main-flex-center {
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    /*    width:100vw;*/
+}
+
+h1 {
+    color: #6366f1;
+    font-weight: 700;
+    margin-bottom: 2rem;
+    text-align: center;
+    font-size: 2.5rem;
 }
 
 /*NAVBAR*/
@@ -87,6 +106,12 @@ body {
     overflow: visible;
 }
 
+.no-link-style a {
+    text-decoration: none;
+    color: inherit;
+    pointer-events: none;
+}
+
 /* BOTONES*/
 .btn-primary {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -95,6 +120,7 @@ body {
     padding: 0.6rem 1.5rem;
     font-weight: 500;
     transition: all 0.3s ease;
+    margin-top: 10px;
 }
 
 .btn-primary:hover {
@@ -131,6 +157,17 @@ body {
     border-radius: 8px;
     font-weight: 500;
     font-size: 0.7rem
+}
+
+.btn-delete {
+    background: linear-gradient(135deg, #ff3b3b 0%, #d81e1e 100%);
+    border: none;
+    color: white;
+    border-radius: 8px;
+    padding: 0.6rem 1.5rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    margin-top: 10px;
 }
 
 /*FORMULARIOS*/
@@ -268,7 +305,39 @@ body {
     margin: 0;
 }
 
- 
+
+/*DETALLES*/
+.info-group {
+    margin-bottom: 1rem;
+}
+
+.info-group label {
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+    display: block;
+}
+
+.info-group p {
+    margin-bottom: 0;
+    font-size: 1rem;
+}
+
+.card {
+    border: none;
+    border-radius: 10px;
+}
+
+.card-header {
+    border-radius: 10px 10px 0 0 !important;
+    padding: 1.25rem;
+}
+
+.card-footer {
+    border-radius: 0 0 10px 10px !important;
+    padding: 1.25rem;
+}
+
+
 /*FOOTER*/
 footer {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -284,22 +353,4 @@ footer {
     justify-content: center;
     align-items: center;
     font-size: 1rem;
-}
-
-/*RESPONSIVE*/
-@media (max-width: 768px) {
-    .hero-section h1 {
-        font-size: 2rem;
-    }
-
-    .hero-section p {
-        font-size: 1rem;
-    }
-
-    .navbar-nav {
-        background-color: rgba(102, 126, 234, 0.95);
-        padding: 1rem;
-        border-radius: 10px;
-        margin-top: 10px;
-    }
 }

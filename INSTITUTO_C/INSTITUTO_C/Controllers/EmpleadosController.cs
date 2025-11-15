@@ -195,41 +195,41 @@ namespace INSTITUTO_C.Controllers
         }
 
         // GET: Empleados/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
+        //public async Task<IActionResult> Delete(int? id)
+        //{
+        //    if (id == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            var empleado = await _userManager.FindByIdAsync(id.ToString()) as Empleado;
+        //    var empleado = await _userManager.FindByIdAsync(id.ToString()) as Empleado;
 
-            if (empleado == null)
-            {
-                return NotFound();
-            }
+        //    if (empleado == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            return View(empleado);
-        }
+        //    return View(empleado);
+        //}
 
-        // POST: Empleados/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var empleado = await _userManager.FindByIdAsync(id.ToString()) as Empleado;
-            if (empleado == null) return NotFound();
+        //// POST: Empleados/Delete/5
+        //[HttpPost, ActionName("Delete")]
+        //[ValidateAntiForgeryToken]
+        //public async Task<IActionResult> DeleteConfirmed(int id)
+        //{
+        //    var empleado = await _userManager.FindByIdAsync(id.ToString()) as Empleado;
+        //    if (empleado == null) return NotFound();
 
-            var resultado = await _userManager.DeleteAsync(empleado);
-            if (!resultado.Succeeded)
-            {
-                foreach (var error in resultado.Errors)
-                    ModelState.AddModelError("", error.Description);
-                return View(empleado);
-            }
+        //    var resultado = await _userManager.DeleteAsync(empleado);
+        //    if (!resultado.Succeeded)
+        //    {
+        //        foreach (var error in resultado.Errors)
+        //            ModelState.AddModelError("", error.Description);
+        //        return View(empleado);
+        //    }
           
-            return RedirectToAction(nameof(Index));
-        }
+        //    return RedirectToAction(nameof(Index));
+        //}
 
         private async Task<bool> EmpleadoExists(int id)
         {

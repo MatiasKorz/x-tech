@@ -207,34 +207,34 @@ namespace INSTITUTO_C.Controllers
         }
 
         // GET: Alumnos/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-                return NotFound();
+        //public async Task<IActionResult> Delete(int? id)
+        //{
+        //    if (id == null)
+        //        return NotFound();
 
-            var alumno = await _context.Alumnos
-                .Include(a => a.Carrera)
-                .FirstOrDefaultAsync(m => m.Id == id);
+        //    var alumno = await _context.Alumnos
+        //        .Include(a => a.Carrera)
+        //        .FirstOrDefaultAsync(m => m.Id == id);
 
-            if (alumno == null)
-                return NotFound();
+        //    if (alumno == null)
+        //        return NotFound();
 
-            return View(alumno);
-        }
+        //    return View(alumno);
+        //}
 
 
-        // POST: Alumno/DeleteConfirmed/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var alumno = await _context.Alumnos.FindAsync(id);
+        //// POST: Alumno/DeleteConfirmed/5
+        //[HttpPost, ActionName("Delete")]
+        //[ValidateAntiForgeryToken]
+        //public async Task<IActionResult> DeleteConfirmed(int id)
+        //{
+        //    var alumno = await _context.Alumnos.FindAsync(id);
 
-            _context.Alumnos.Remove(alumno);
-            await _context.SaveChangesAsync();
+        //    _context.Alumnos.Remove(alumno);
+        //    await _context.SaveChangesAsync();
 
-            return RedirectToAction(nameof(Index));
-        }
+        //    return RedirectToAction(nameof(Index));
+        //}
         private async Task<bool> AlumnoExists(int id)
         {
             var alumno = await _userManager.FindByIdAsync(id.ToString()) as Alumno;

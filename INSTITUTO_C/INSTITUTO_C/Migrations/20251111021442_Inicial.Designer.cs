@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace INSTITUTO_C.Migrations
 {
     [DbContext(typeof(InstitutoContext))]
-    [Migration("20251026204011_Initial")]
-    partial class Initial
+    [Migration("20251111021442_Inicial")]
+    partial class Inicial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -63,6 +63,9 @@ namespace INSTITUTO_C.Migrations
                         .HasColumnType("nvarchar(20)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Nombre")
+                        .IsUnique();
 
                     b.ToTable("Carreras");
                 });
@@ -114,6 +117,9 @@ namespace INSTITUTO_C.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CarreraId");
+
+                    b.HasIndex("CodigoMateria")
+                        .IsUnique();
 
                     b.ToTable("Materias");
                 });
@@ -374,14 +380,17 @@ namespace INSTITUTO_C.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("Apellido")
+                        .IsRequired()
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
 
                     b.Property<string>("DNI")
+                        .IsRequired()
                         .HasMaxLength(10)
                         .HasColumnType("nvarchar(10)");
 
                     b.Property<string>("Direccion")
+                        .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
@@ -390,12 +399,18 @@ namespace INSTITUTO_C.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Nombre")
+                        .IsRequired()
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
 
                     b.Property<string>("Telefono")
+                        .IsRequired()
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
+
+                    b.HasIndex("DNI")
+                        .IsUnique()
+                        .HasFilter("[DNI] IS NOT NULL");
 
                     b.HasDiscriminator().HasValue("Persona");
                 });

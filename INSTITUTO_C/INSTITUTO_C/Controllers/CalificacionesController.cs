@@ -9,6 +9,7 @@ using INSTITUTO_C.Data;
 using INSTITUTO_C.Models;
 using Microsoft.AspNetCore.Authorization;
 using INSTITUTO_C.Helpers;
+using Microsoft.AspNetCore.Identity;
 
 namespace INSTITUTO_C.Controllers
 {
@@ -16,21 +17,66 @@ namespace INSTITUTO_C.Controllers
     public class CalificacionesController : Controller
     {
         private readonly InstitutoContext _context;
-
-        public CalificacionesController(InstitutoContext context)
+        private readonly UserManager<Persona> _userManager;
+        public CalificacionesController(InstitutoContext context, UserManager<Persona> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: Calificaciones
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? personaId)
         {
-            var calificaciones = await _context.Calificaciones
-                .Include(c => c.Profesor)
-                .Include(c => c.Alumno)
-                .Include(c => c.Inscripcion)
-                    .ThenInclude(i => i.MateriaCursada)
-                .ToListAsync();
+            List<Calificacion> calificaciones = null;
+
+            if (User.IsInRole(Configs.Empleado))
+            {
+                calificaciones = await _context.Calificaciones
+                 .Include(c => c.Profesor)
+                 .Include(c => c.Alumno)
+                 .Include(c => c.Inscripcion)
+                 .ThenInclude(i => i.MateriaCursada)
+                 .ToListAsync();
+            }
+
+            else
+            {
+                var usuarioId = int.Parse(_userManager.GetUserId(User));
+                if (personaId is null)
+                {
+                    personaId = usuarioId;
+                }
+
+                else if (!User.IsInRole(Configs.Empleado) && personaId != usuarioId)
+                {
+                    return Content("No podes ver las calificaciones de otro");
+                }
+
+                if (User.IsInRole(Configs.Profesor))
+                {
+                    calificaciones = await _context.Calificaciones
+                     .Include(c => c.Profesor)
+                     .Include(c => c.Alumno)
+                     .Include(c => c.Inscripcion)
+                     .ThenInclude(i => i.MateriaCursada)
+                     .Where(c => c.ProfesorId == usuarioId)
+                     .ToListAsync();
+
+                }
+                else if (User.IsInRole(Configs.Alumno))
+                {
+
+                    calificaciones = await _context.Calificaciones
+                     .Include(c => c.Profesor)
+                     .Include(c => c.Alumno)
+                     .Include(c => c.Inscripcion)
+                     .ThenInclude(i => i.MateriaCursada)
+                     .Where(c => c.AlumnoId == usuarioId)
+                     .ToListAsync();
+                }
+
+            }
+
 
             return View(calificaciones);
         }
@@ -116,6 +162,21 @@ namespace INSTITUTO_C.Controllers
                 return NotFound();
             }
 
+            var usuarioId = int.Parse(_userManager.GetUserId(User));
+            
+            var materiaCursada = await _context.MateriasCursadas
+             .Include(mc => mc.Profesor)
+             .FirstOrDefaultAsync(mc => mc.Id == materiaCursadaId);
+
+            if (materiaCursada == null)
+                return NotFound();
+
+            if (materiaCursada.ProfesorId != usuarioId)
+                return Content(ErrorMesseges.NoEsElProfe);
+
+            if (!materiaCursada.Activo)
+                ModelState.AddModelError(string.Empty, ErrorMesseges.CursadaFinalizada);
+
             if (ModelState.IsValid)
             {
                 try
@@ -132,7 +193,7 @@ namespace INSTITUTO_C.Controllers
                     _context.Update(calificacionExistente);
                     await _context.SaveChangesAsync();
 
-                    return RedirectToAction(nameof(Index));
+                    return RedirectToAction("Details", "MateriasCursadas", new { id = materiaCursadaId });
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -152,40 +213,40 @@ namespace INSTITUTO_C.Controllers
 
 
         // GET: Calificaciones/Delete
-        public async Task<IActionResult> Delete(int alumnoId, int materiaCursadaId)
-        {
-            var calificacion = await _context.Calificaciones
-                .Include(c => c.Alumno)
-                .Include(c => c.Profesor)
-                .Include(c => c.Inscripcion)
-                .ThenInclude(i => i.MateriaCursada)
-                .FirstOrDefaultAsync(c => c.AlumnoId == alumnoId && c.MateriaCursadaId == materiaCursadaId);
+        //public async Task<IActionResult> Delete(int alumnoId, int materiaCursadaId)
+        //{
+        //    var calificacion = await _context.Calificaciones
+        //        .Include(c => c.Alumno)
+        //        .Include(c => c.Profesor)
+        //        .Include(c => c.Inscripcion)
+        //        .ThenInclude(i => i.MateriaCursada)
+        //        .FirstOrDefaultAsync(c => c.AlumnoId == alumnoId && c.MateriaCursadaId == materiaCursadaId);
 
-            if (calificacion == null)
-            {
-                return NotFound();
-            }
+        //    if (calificacion == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            return View(calificacion);
-        }
+        //    return View(calificacion);
+        //}
 
-        // POST: Calificaciones/Delete
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
+        //// POST: Calificaciones/Delete
+        //[HttpPost, ActionName("Delete")]
+        //[ValidateAntiForgeryToken]
 
-        public async Task<IActionResult> DeleteConfirmed(int alumnoId, int materiaCursadaId)
-        {
-            var calificacion = await _context.Calificaciones
-                .FirstOrDefaultAsync(c => c.AlumnoId == alumnoId && c.MateriaCursadaId == materiaCursadaId);
+        //public async Task<IActionResult> DeleteConfirmed(int alumnoId, int materiaCursadaId)
+        //{
+        //    var calificacion = await _context.Calificaciones
+        //        .FirstOrDefaultAsync(c => c.AlumnoId == alumnoId && c.MateriaCursadaId == materiaCursadaId);
 
-            if (calificacion != null)
-            {
-                _context.Calificaciones.Remove(calificacion);
-                await _context.SaveChangesAsync();
-            }
+        //    if (calificacion != null)
+        //    {
+        //        _context.Calificaciones.Remove(calificacion);
+        //        await _context.SaveChangesAsync();
+        //    }
 
-            return RedirectToAction(nameof(Index));
-        }
+        //    return RedirectToAction(nameof(Index));
+        //}
 
         private bool CalificacionExists(int alumnoId, int materiaCursadaId)
         {

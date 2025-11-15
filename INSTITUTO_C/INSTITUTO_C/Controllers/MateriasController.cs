@@ -32,6 +32,7 @@ namespace INSTITUTO_C.Controllers
         }
 
         // GET: Materias/Details/5
+        [AllowAnonymous]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -212,40 +213,40 @@ namespace INSTITUTO_C.Controllers
         }
 
         // GET: Materias/Delete/5
-        [Authorize(Roles = Configs.Empleado)]
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
+        //[Authorize(Roles = Configs.Empleado)]
+        //public async Task<IActionResult> Delete(int? id)
+        //{
+        //    if (id == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            var materia = await _context.Materias
-                .Include(m => m.Carrera)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (materia == null)
-            {
-                return NotFound();
-            }
+        //    var materia = await _context.Materias
+        //        .Include(m => m.Carrera)
+        //        .FirstOrDefaultAsync(m => m.Id == id);
+        //    if (materia == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            return View(materia);
-        }
+        //    return View(materia);
+        //}
 
-        // POST: Materias/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        [Authorize(Roles = Configs.Empleado)]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var materia = await _context.Materias.FindAsync(id);
-            if (materia != null)
-            {
-                _context.Materias.Remove(materia);
-            }
+        //// POST: Materias/Delete/5
+        //[HttpPost, ActionName("Delete")]
+        //[ValidateAntiForgeryToken]
+        //[Authorize(Roles = Configs.Empleado)]
+        //public async Task<IActionResult> DeleteConfirmed(int id)
+        //{
+        //    var materia = await _context.Materias.FindAsync(id);
+        //    if (materia != null)
+        //    {
+        //        _context.Materias.Remove(materia);
+        //    }
 
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
+        //    await _context.SaveChangesAsync();
+        //    return RedirectToAction(nameof(Index));
+        //}
 
         private bool MateriaExists(int id)
         {

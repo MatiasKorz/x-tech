@@ -4,57 +4,127 @@
     ViewData["Title"] = "Details";
 }
 
-<h1>Details</h1>
+<div class="row main-flex-center">
 
-<div>
-    <h4>MateriaCursada</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Materia)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Materia.CodigoMateria)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.CodigoCursada)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CodigoCursada)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Anio)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Anio)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Cuatrimestre)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Cuatrimestre)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Nombre)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Nombre)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Activo)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Activo)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Profesor)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Profesor.Apellido)
-        </dd>
-    </dl>
+    <div class="col-md-6">
+        <h4>Detalles cursada</h4>
+        <hr />
+        <dl class="row main-flex-center">
+            <dt class="col-sm-3">
+                @Html.DisplayNameFor(model => model.Materia)
+            </dt>
+            <dd class="col-sm-9">
+                @Html.DisplayFor(model => model.Materia.CodigoMateria)
+            </dd>
+
+            <dt class="col-sm-3">
+                @Html.DisplayNameFor(model => model.CodigoCursada)
+            </dt>
+            <dd class="col-sm-9">
+                @Html.DisplayFor(model => model.CodigoCursada)
+            </dd>
+
+            <dt class="col-sm-3">
+                @Html.DisplayNameFor(model => model.Anio)
+            </dt>
+            <dd class="col-sm-9">
+                @Html.DisplayFor(model => model.Anio)
+            </dd>
+
+            <dt class="col-sm-3">
+                @Html.DisplayNameFor(model => model.Cuatrimestre)
+            </dt>
+            <dd class="col-sm-9">
+                @Html.DisplayFor(model => model.Cuatrimestre)
+            </dd>
+
+            <dt class="col-sm-3">
+                @Html.DisplayNameFor(model => model.Nombre)
+            </dt>
+            <dd class="col-sm-9">
+                @Html.DisplayFor(model => model.Nombre)
+            </dd>
+
+            <dt class="col-sm-3">
+                @Html.DisplayNameFor(model => model.Activo)
+            </dt>
+            <dd class="col-sm-9">
+                @Html.DisplayFor(model => model.Activo)
+            </dd>
+
+            <dt class="col-sm-3">Profesor a cargo</dt>
+            <dd class="col-sm-9">
+                <span class="d-inline-block">@Model.Profesor.Nombre @Model.Profesor.Apellido</span>
+                <small class="text-muted d-inline-block ms-2">(@Model.Profesor.Email)</small>
+            </dd>
+
+        </dl>
+        <div class="form-group pt-3 d-flex justify-content-between align-content-center">
+     @if (User.IsInRole("Empleado"))
+                {
+            <a class="btn btn-primary" asp-action="Edit" asp-route-id="@Model?.Id">Editar</a>
+                }
+        </div>
+    </div>
 </div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-</div>
+
+
+<hr />
+
+<h1>Alumnos inscriptos</h1>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Apellido</th>
+            <th>Correo electrónico</th>
+            <th>Nota</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model.Inscripciones != null && Model.Inscripciones.Any())
+        {
+            @foreach (var inscripcion in Model.Inscripciones)
+            {
+                var calificacion = inscripcion.Calificacion;
+                <tr>
+                    <td>@inscripcion.Alumno.Nombre</td>
+                    <td>@inscripcion.Alumno.Apellido</td>
+                    <td class="no-link-style">@inscripcion.Alumno.Email</td>
+
+            <td>
+                    @if (calificacion != null)
+                    {
+                    <span>@calificacion.Nota</span>
+                    }
+                    else
+                    {
+                    <span class="text-muted">—</span>
+                    }
+            </td>
+
+            <td>
+                    @if (User.IsInRole("Profesor"))
+                    {
+                    <a asp-controller="Calificaciones"
+                       asp-action="Edit"
+                       asp-route-alumnoId="@inscripcion.AlumnoId"
+                       asp-route-materiaCursadaId="@inscripcion.MateriaCursadaId"
+                       class="btn btn-primary btn-sm">
+                        Cargar nota
+                    </a>
+                    }
+            </td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="5" class="text-muted text-center">No hay alumnos inscriptos</td>
+            </tr>
+        }
+    </tbody>
+</table>
+

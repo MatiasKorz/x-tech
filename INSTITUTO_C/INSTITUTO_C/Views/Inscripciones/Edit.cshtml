@@ -4,12 +4,11 @@
     ViewData["Title"] = "Edit";
 }
 
-<h1>Edit</h1>
+<div class="row main-flex-center">
 
-<h4>Inscripcion</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
+    <div class="col-md-6">
+        <h4>Editar Inscripcion</h4>
+        <hr />
         <form asp-action="Edit" method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
@@ -26,9 +25,9 @@
                 <select asp-for="MateriaCursadaId" class="form-control" asp-items="ViewBag.MateriaCursadaId"></select>
             </div>
 
-            <div class="form-group mt-3">
+            <div class="form-group pt-3 d-flex justify-content-between align-content-center">
+                <a class="btn btn-primary" asp-action="Index">Volver</a>
                 <input type="submit" value="Guardar" class="btn btn-primary" />
-                <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
             </div>
         </form>
     </div>

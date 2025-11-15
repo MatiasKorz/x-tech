@@ -1,14 +1,25 @@
 ﻿@model IEnumerable<INSTITUTO_C.Models.MateriaCursada>
-
+@using INSTITUTO_C.Helpers
 @{
     ViewData["Title"] = "MateriaCursada";
 }
 
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        @TempData["Error"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
 <div class="d-flex justify-content-between align-items-center mb-4">
     <h1>Materias Cursadas</h1>
+                        @if (User.IsInRole(Configs.Empleado))
+                {
     <a asp-action="Create" class="btn btn-primary">
-        + Create New
+        + Crear cursada
     </a>
+                }
 </div>
 <table class="table">
     <thead>
@@ -38,34 +49,39 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Nombre)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Materia.CodigoMateria)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CodigoCursada)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Anio.Year)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Cuatrimestre)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Activo)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Profesor.Apellido)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
+        @foreach (var item in Model) {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Nombre)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Materia.CodigoMateria)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CodigoCursada)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Anio.Year)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Cuatrimestre)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Activo)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Profesor.Apellido)
+                </td>
+                <td class="text-end">
+                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-success btn-sm">Detalles</a>
+                
+                    @if (User.IsInRole(Configs.Empleado))
+                {
+                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning btn-sm">Editar</a>
+                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm">Eliminar</a>
+                }
+
+                </td>
         </tr>
 }
     </tbody>

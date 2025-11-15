@@ -63,7 +63,7 @@ namespace INSTITUTO_C.Models
         public string Telefono { get; set; }
 
         [Required(ErrorMessage = ErrorMesseges.Requerido)]
-        [StringLength(100, MinimumLength = 10, ErrorMessage = "Dirección debe tener entre 10 y 100 caracteres")]
+        [StringLength(100, MinimumLength = 5, ErrorMessage = "Dirección debe tener entre 10 y 100 caracteres")]
         public string Direccion { get; set; }
 
         public bool Activo { get; set; } = true;
