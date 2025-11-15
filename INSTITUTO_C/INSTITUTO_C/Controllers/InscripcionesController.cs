@@ -84,7 +84,13 @@ namespace INSTITUTO_C.Controllers
             if (User.IsInRole(Configs.Empleado))
             {
                 ViewData["AlumnoId"] = new SelectList(_context.Alumnos, "Id", "Apellido");
-                ViewData["MateriaCursadaId"] = new SelectList(_context.MateriasCursadas, "Id", "Nombre");
+                ViewData["MateriaCursadaId"] = new SelectList(
+                    _context.MateriasCursadas
+                        .Where(mc => mc.Activo)
+                        .OrderBy(mc => mc.Nombre),
+                    "Id",
+                    "Nombre"
+                );
             }
             else
             {
