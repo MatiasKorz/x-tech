@@ -46,13 +46,14 @@
             </dd>
 
         </dl>
-     @if (User.IsInRole("Empleado"))
-                {
         <div class="form-group pt-3 d-flex justify-content-between align-content-center">
+            <a class="btn btn-primary" asp-controller="Carreras" asp-action="Details" asp-route-id="@Model.CarreraId">Volver</a>
+            @if (User.IsInRole("Empleado"))
+            {
+                <a class="btn btn-primary" asp-action="Edit" asp-route-id="@Model?.Id">Editar</a>
 
-            <a class="btn btn-primary" asp-action="Edit" asp-route-id="@Model?.Id">Editar</a>
+            }
         </div>
-                }
     </div>
 </div>
 
