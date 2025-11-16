@@ -407,6 +407,12 @@ namespace INSTITUTO_C.Controllers
                     MateriaCursadaId = cursadas.First(c => c.Nombre.Contains("BK1-2025-1C-A")).Id
                 });
 
+                inscripciones.Add(new Inscripcion
+                {
+                    AlumnoId = alumnos.First(a => a.Email == "alumno2@ort.edu.ar").Id,
+                    MateriaCursadaId = cursadas.First(c => c.Nombre.Contains("BD1-2024-2C-A")).Id
+                });
+
                 _context.Inscripciones.AddRange(inscripciones);
                 await _context.SaveChangesAsync();
             }
@@ -443,6 +449,7 @@ namespace INSTITUTO_C.Controllers
                         Nota = nota,
                         ProfesorId = inscripcion.MateriaCursada.ProfesorId
                     });
+
                 }
 
                 _context.Calificaciones.AddRange(calificaciones);
