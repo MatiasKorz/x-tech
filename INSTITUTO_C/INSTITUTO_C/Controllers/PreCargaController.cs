@@ -272,7 +272,7 @@ namespace INSTITUTO_C.Controllers
                     DNI = "30000005",
                     Telefono = "11222455",
                     Direccion = "Av Madre Rusia 87",
-                    Activo = true,
+                    Activo = false,
                     CarreraId = carrera1.Id,
                     NumeroMatricula = PersonasHelper.GenerarNumMatricula(_context)
                 };
