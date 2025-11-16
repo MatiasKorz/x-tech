@@ -33,7 +33,7 @@ namespace INSTITUTO_C.Controllers
 
         // GET: Materias/Details/5
         [AllowAnonymous]
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(int? id, string returnUrl)
         {
             if (id == null)
             {
@@ -47,6 +47,9 @@ namespace INSTITUTO_C.Controllers
             {
                 return NotFound();
             }
+
+            //USO VIEWBAG PARA SABER DONDE VIENE Y USARLO EN EL BOTON DE VOLVER
+            ViewBag.ReturnUrl = returnUrl;
 
             return View(materia);
         }
