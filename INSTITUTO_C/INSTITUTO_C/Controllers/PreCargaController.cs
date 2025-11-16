@@ -3,6 +3,7 @@ using INSTITUTO_C.Helpers;
 using INSTITUTO_C.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,37 +14,33 @@ namespace INSTITUTO_C.Controllers
 {
     public class PreCargaController : Controller
     {
-        //hola
         private readonly UserManager<Persona> _userManager;
         private readonly RoleManager<IdentityRole<int>> _roleManager;
         private readonly InstitutoContext _context;
-        private List<string> roles = new List<string>() {Configs.Empleado, Configs.Profesor, Configs.Alumno};
+        private List<string> roles = new List<string>() { Configs.Empleado, Configs.Profesor, Configs.Alumno };
         public PreCargaController(UserManager<Persona> userManager, RoleManager<IdentityRole<int>> roleManager, InstitutoContext context)
         {
             this._userManager = userManager;
-            this._roleManager = roleManager; 
+            this._roleManager = roleManager;
             this._context = context;
 
         }
-
-
 
         public async Task<IActionResult> Seed()
         {
 
             await CrearRoles();
             await CrearEmpleados();
-
-
             await CrearCarreras();
             await CrearMaterias();
             await CrearAlumnos();
             await CrearProfesores();
+            await CrearMateriasCursadas();
+            await CrearInscripciones(); 
+            await CrearCalificaciones();
 
-
-            return RedirectToAction("Index","Home", new { mensaje = "Se ha realizado el seed aparentemente correctamente" });
+            return RedirectToAction("Index", "Home", new { mensaje = "Se ha realizado la Precarga de datos correctamente" });
         }
-
 
         private async Task CrearCarreras()
         {
@@ -51,8 +48,9 @@ namespace INSTITUTO_C.Controllers
             {
                 var carreras = new List<Carrera>
         {
-            new Carrera { Nombre = "MacroTecnologia" },
-            new Carrera { Nombre = "Ing Agroespacial" }
+            new Carrera { Nombre = "Frontend Development" },
+            new Carrera { Nombre = "Backend Development" },
+
         };
 
                 _context.Carreras.AddRange(carreras);
@@ -73,38 +71,38 @@ namespace INSTITUTO_C.Controllers
 
                 var materia1 = new Materia
                 {
-                    Nombre = "Robotica I",
-                    CodigoMateria = "R1",
-                    Descripcion = "Introducción a las tecnologias utilizadas en la creacion de robots gigantes",
-                    CupoMaximo = 10,
+                    Nombre = "HTML5,CSS3,JavaScript",
+                    CodigoMateria = "FT1",
+                    Descripcion = "Introduccion al desarrollo Web",
+                    CupoMaximo = 2,
                     CarreraId = carrera1.Id
                 };
 
                 var materia2 = new Materia
                 {
-                    Nombre = "Flora terrestre",
-                    CodigoMateria = "FT",
-                    Descripcion = "Introducción a las plantas",
-                    CupoMaximo = 5,
+                    Nombre = "C#,.NET Core,Node.js",
+                    CodigoMateria = "BK1",
+                    Descripcion = "Fundamentos de desarrollo backend",
+                    CupoMaximo = 2,
                     CarreraId = carrera2.Id
                 };
 
                 var materia3 = new Materia
                 {
-                    Nombre = "Aviacion",
-                    CodigoMateria = "AV",
-                    Descripcion = "Introducción al manejo de Jets militares",
+                    Nombre = "React, Vue, Angular",
+                    CodigoMateria = "RVA1",
+                    Descripcion = "Conceptos basicos de frameworks",
                     CupoMaximo = 2,
                     CarreraId = carrera1.Id
                 };
 
                 var materia4 = new Materia
                 {
-                    Nombre = "Biocibernetica",
-                    CodigoMateria = "BC",
-                    Descripcion = "Cyborgs, peligros y riesgos",
+                    Nombre = "Bases de Datos SQL/NoSQL",
+                    CodigoMateria = "BD1",
+                    Descripcion = "Introduccion a Bases de datos",
                     CupoMaximo = 2,
-                    CarreraId = carrera1.Id
+                    CarreraId = carrera2.Id
                 };
 
                 _context.Materias.AddRange(materia1, materia2, materia3, materia4);
@@ -125,7 +123,7 @@ namespace INSTITUTO_C.Controllers
                     DNI = "30000002",
                     Telefono = "1112345678",
                     Direccion = "Cruze Peligroso 5",
-                    Activo = false
+                    Activo = true
                 };
 
                 //Password: Password1!
@@ -147,7 +145,7 @@ namespace INSTITUTO_C.Controllers
                     DNI = "10000002",
                     Telefono = "1112345678",
                     Direccion = "Calle Lobezno 1832",
-                    Activo = false
+                    Activo = true
                 };
 
                 //Password: Password1!
@@ -174,8 +172,8 @@ namespace INSTITUTO_C.Controllers
                     Apellido = "Javier",
                     DNI = "30000001",
                     Telefono = "1112345678",
-                    Direccion = "Avenida Sentinela 123",
-                    Activo = false
+                    Direccion = "Avenida centinela 123",
+                    Activo = true
                 };
 
                 var result = await _userManager.CreateAsync(empleado, Configs.Password);
@@ -205,7 +203,7 @@ namespace INSTITUTO_C.Controllers
                     DNI = "30000003",
                     Telefono = "11333444",
                     Direccion = "Callejon Oscuro 666",
-                    Activo = false,
+                    Activo = true,
                     CarreraId = carrera1.Id
                 };
                 var result = await _userManager.CreateAsync(alumno, Configs.Password);
@@ -224,7 +222,7 @@ namespace INSTITUTO_C.Controllers
                     DNI = "30000004",
                     Telefono = "11333555",
                     Direccion = "Cairo 75",
-                    Activo = false,
+                    Activo = true,
                     CarreraId = carrera2.Id
                 };
 
@@ -245,7 +243,7 @@ namespace INSTITUTO_C.Controllers
                     DNI = "30000005",
                     Telefono = "11222455",
                     Direccion = "Av Madre Rusia 87",
-                    Activo = false,
+                    Activo = true,
                     CarreraId = carrera1.Id
                 };
 
@@ -266,7 +264,7 @@ namespace INSTITUTO_C.Controllers
                     DNI = "30000006",
                     Telefono = "113334448",
                     Direccion = "Calle Sugah 23",
-                    Activo = false,
+                    Activo = true,
                     CarreraId = carrera1.Id
                 };
 
@@ -279,13 +277,154 @@ namespace INSTITUTO_C.Controllers
             }
         }
 
+        private async Task CrearMateriasCursadas()
+        {
+            if (!_context.MateriasCursadas.Any())
+            {
+                var materias = await _context.Materias.ToListAsync();
+                var profesores = await _context.Profesores.ToListAsync();
+
+                var cursadas = new List<MateriaCursada>();
+
+                var cursada1 = new MateriaCursada
+                {
+                    MateriaId = materias.First(m => m.CodigoMateria == "FT1").Id,
+                    CodigoCursada = CodigoCursada.A,
+                    Anio = new DateTime(2025, 1, 1),
+                    Cuatrimestre = 1,
+                    Activo = true,
+                    ProfesorId = profesores.First(p => p.Email == "profesor@ort.edu.ar").Id
+                };
+                cursada1.Materia = materias.First(m => m.CodigoMateria == "FT1");
+                cursada1.GenerarNombre();
+                cursadas.Add(cursada1);
+
+                var cursada2 = new MateriaCursada
+                {
+                    MateriaId = materias.First(m => m.CodigoMateria == "BK1").Id,
+                    CodigoCursada = CodigoCursada.A,
+                    Anio = new DateTime(2025, 1, 1),
+                    Cuatrimestre = 1,
+                    Activo = true,
+                    ProfesorId = profesores.First(p => p.Email == "profesor2@ort.edu.ar").Id
+                };
+                cursada2.Materia = materias.First(m => m.CodigoMateria == "BK1");
+                cursada2.GenerarNombre();
+                cursadas.Add(cursada2);
+
+                var cursada3 = new MateriaCursada
+                {
+                    MateriaId = materias.First(m => m.CodigoMateria == "RVA1").Id,
+                    CodigoCursada = CodigoCursada.A,
+                    Anio = new DateTime(2025, 1, 1),
+                    Cuatrimestre = 1,
+                    Activo = true,
+                    ProfesorId = profesores.First(p => p.Email == "profesor@ort.edu.ar").Id
+                };
+                cursada3.Materia = materias.First(m => m.CodigoMateria == "RVA1");
+                cursada3.GenerarNombre();
+                cursadas.Add(cursada3);
+
+                var cursada4 = new MateriaCursada
+                {
+                    MateriaId = materias.First(m => m.CodigoMateria == "BD1").Id,
+                    CodigoCursada = CodigoCursada.A,
+                    Anio = new DateTime(2024, 1, 1),
+                    Cuatrimestre = 2,
+                    Activo = false,
+                    ProfesorId = profesores.First(p => p.Email == "profesor2@ort.edu.ar").Id
+                };
+                cursada4.Materia = materias.First(m => m.CodigoMateria == "BD1");
+                cursada4.GenerarNombre();
+                cursadas.Add(cursada4);
+
+                _context.MateriasCursadas.AddRange(cursadas);
+                await _context.SaveChangesAsync();
+            }
+        }
+
+        private async Task CrearInscripciones()
+        {
+            if (!_context.Inscripciones.Any())
+            {
+                var alumnos = await _context.Alumnos.ToListAsync();
+                var cursadas = await _context.MateriasCursadas.ToListAsync();
+
+                var inscripciones = new List<Inscripcion>();
+
+                inscripciones.Add(new Inscripcion
+                {
+                    AlumnoId = alumnos.First(a => a.Email == "alumno@ort.edu.ar").Id,
+                    MateriaCursadaId = cursadas.First(c => c.Nombre.Contains("FT1-2025-1C-A")).Id
+                });
+
+                inscripciones.Add(new Inscripcion
+                {
+                    AlumnoId = alumnos.First(a => a.Email == "alumno3@ort.edu.ar").Id,
+                    MateriaCursadaId = cursadas.First(c => c.Nombre.Contains("FT1-2025-1C-A")).Id
+                });
+
+                inscripciones.Add(new Inscripcion
+                {
+                    AlumnoId = alumnos.First(a => a.Email == "alumno4@ort.edu.ar").Id,
+                    MateriaCursadaId = cursadas.First(c => c.Nombre.Contains("RVA1-2025-1C-A")).Id
+                });
+
+                inscripciones.Add(new Inscripcion
+                {
+                    AlumnoId = alumnos.First(a => a.Email == "alumno2@ort.edu.ar").Id,
+                    MateriaCursadaId = cursadas.First(c => c.Nombre.Contains("BK1-2025-1C-A")).Id
+                });
+
+                _context.Inscripciones.AddRange(inscripciones);
+                await _context.SaveChangesAsync();
+            }
+        }
+
+        private async Task CrearCalificaciones()
+        {
+            if (!_context.Calificaciones.Any())
+            {
+                var inscripciones = await _context.Inscripciones
+                    .Include(i => i.MateriaCursada)
+                    .ToListAsync();
+
+                var calificaciones = new List<Calificacion>();
+
+                foreach (var inscripcion in inscripciones)
+                {
+                    Nota nota = Nota.Pendiente;
+
+                    if (inscripcion.AlumnoId % 2 == 0)
+                    {
+                        nota = Nota.Ocho; 
+                    }
+                    else if (inscripcion.AlumnoId % 3 == 0)
+                    {
+                        nota = Nota.Siete; 
+                    }
+
+                    calificaciones.Add(new Calificacion
+                    {
+                        AlumnoId = inscripcion.AlumnoId,
+                        MateriaCursadaId = inscripcion.MateriaCursadaId,
+                        Fecha = DateTime.Now,
+                        Nota = nota,
+                        ProfesorId = inscripcion.MateriaCursada.ProfesorId
+                    });
+                }
+
+                _context.Calificaciones.AddRange(calificaciones);
+                await _context.SaveChangesAsync();
+            }
+        }
         private async Task CrearRoles()
         {
             foreach (var rolName in roles)
             {
                 if (!await _roleManager.RoleExistsAsync(rolName))
                 {
-                   await _roleManager.CreateAsync(new IdentityRole<int> { Name= rolName});
+                    await _roleManager.CreateAsync(new IdentityRole<int> { Name = rolName });
                 }
             }
         }
