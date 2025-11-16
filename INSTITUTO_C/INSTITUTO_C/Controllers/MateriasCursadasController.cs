@@ -144,7 +144,7 @@ namespace INSTITUTO_C.Controllers
 
 
         // GET: MateriasCursadas/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(int? id, string returnUrl)
         {
             if (id == null)
             {
@@ -163,6 +163,8 @@ namespace INSTITUTO_C.Controllers
             {
                 return NotFound();
             }
+
+            ViewBag.ReturnUrl = returnUrl;
 
             return View(materiaCursada);
         }

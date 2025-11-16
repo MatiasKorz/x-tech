@@ -46,13 +46,19 @@
             </dd>
         </dl>
         <div class="form-group pt-3 d-flex justify-content-between align-content-center">
+            @if (ViewBag.ReturnUrl == "Inscripciones")
+            {
+                <a class="btn btn-primary" asp-controller="Inscripciones" asp-action="Index">Volver</a>
+            }
+            else
+            {
+                <a class="btn btn-primary" asp-action="Index">Volver</a>
+            }
 
-        @if (User.IsInRole("Profesor"))
-                {
-            <a asp-action="Edit"
-               asp-route-alumnoId="@Model.AlumnoId"
-               asp-route-materiaCursadaId="@Model.MateriaCursadaId" class="btn btn-primary">Editar</a>
-                }
+            @if (User.IsInRole("Profesor"))
+            {
+                <a asp-action="Edit" asp-route-alumnoId="@Model.AlumnoId" asp-route-materiaCursadaId="@Model.MateriaCursadaId" class="btn btn-primary">Editar</a>
+            }
         </div>
     </div>
 </div>

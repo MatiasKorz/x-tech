@@ -82,7 +82,7 @@ namespace INSTITUTO_C.Controllers
         }
 
         // GET: Calificaciones/Details/5
-        public async Task<IActionResult> Details(int alumnoId, int materiaCursadaId)
+        public async Task<IActionResult> Details(int alumnoId, int materiaCursadaId, string returnUrl)
         {
             var calificacion = await _context.Calificaciones
                 .Include(c => c.Alumno)
@@ -95,6 +95,8 @@ namespace INSTITUTO_C.Controllers
             {
                 return NotFound();
             }
+
+            ViewBag.ReturnUrl = returnUrl;
 
             return View(calificacion);
         }
