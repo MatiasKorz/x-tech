@@ -9,14 +9,17 @@ namespace INSTITUTO_C.Models
         [Display(Name = "Cursada")]
         [Required(ErrorMessage = ErrorMesseges.Requerido)]
         [Key]
+        //Propiedad Realcional
         public int MateriaCursadaId { get; set; }
 
         [Display(Name = "Alumno")]
         [Required(ErrorMessage = ErrorMesseges.Requerido)]
         [Key]
+        //propiedad Relacional
         public int AlumnoId { get; set; }
         //asi estaba en los videos cortos
 
+        //propidad Navegacional
         public MateriaCursada MateriaCursada { get; set; }
 
         public Alumno Alumno { get; set; }

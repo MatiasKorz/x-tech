@@ -56,7 +56,7 @@ namespace INSTITUTO_C.Controllers
 
         // GET: Materias/Create
         [Authorize(Roles = Configs.Empleado)]
-        public IActionResult Create()
+        public IActionResult Create(int materiaId)
         {
             ViewData["CarreraId"] = new SelectList(_context.Carreras, "Id", "Nombre");
             return View();

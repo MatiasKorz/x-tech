@@ -38,7 +38,14 @@ namespace INSTITUTO_C.Controllers
         // GET: Alumnos/Details/5
         public async Task<IActionResult> Details(int? id)
         {
+            var usuarioId = Int32.Parse(_userManager.GetUserId(User));
+
             if (id == null) return NotFound();
+
+            if (User.IsInRole(Configs.Alumno) && usuarioId != id)
+            {
+                return Content("Ese no es tu perfil");
+            }
 
             var alumno = await _context.Alumnos
                 .Include(a => a.Carrera)

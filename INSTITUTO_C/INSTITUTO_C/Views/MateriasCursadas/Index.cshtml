@@ -31,6 +31,9 @@
                 @Html.DisplayNameFor(model => model.Materia)
             </th>
             <th>
+                @Html.DisplayNameFor(model => model.Materia.Carrera)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.CodigoCursada)
             </th>
             <th>
@@ -55,7 +58,10 @@
                     @Html.DisplayFor(modelItem => item.Nombre)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Materia.CodigoMateria)
+                    @Html.DisplayFor(modelItem => item.Materia.Nombre)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Materia.Carrera.Nombre)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.CodigoCursada)

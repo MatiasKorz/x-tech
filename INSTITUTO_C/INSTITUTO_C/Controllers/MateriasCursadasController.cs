@@ -34,6 +34,7 @@ namespace INSTITUTO_C.Controllers
 
             var cursadas = await _context.MateriasCursadas
                .Include(m => m.Materia)
+               .ThenInclude(m => m.Carrera)
                .Include(m => m.Profesor)
                .OrderByDescending(m => m.Activo) 
                .ThenBy(m => m.Nombre)
