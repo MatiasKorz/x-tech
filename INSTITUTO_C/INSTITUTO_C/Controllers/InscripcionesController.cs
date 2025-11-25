@@ -41,11 +41,11 @@ namespace INSTITUTO_C.Controllers
             {
                 //para un alumno especifico
                 inscripciones = await _context.Inscripciones
-                   .Include(i => i.Alumno)
-                  .Include(i => i.MateriaCursada)
-                   .Include(i => i.Calificacion)   
-                   .Where(i => i.AlumnoId == alumnoId)
-                 .ToListAsync();
+                    .Include(i => i.Alumno)
+                    .Include(i => i.MateriaCursada)
+                    .Include(i => i.Calificacion)   
+                    .Where(i => i.AlumnoId == alumnoId)
+                    .ToListAsync();
 
             }
             else if(User.IsInRole(Configs.Alumno)){
@@ -78,7 +78,7 @@ namespace INSTITUTO_C.Controllers
 
         // GET: Inscripciones/Create
         [Authorize(Roles = Configs.Empleado + "," + Configs.Alumno)]
-        public IActionResult Create()
+        public IActionResult Create(int materiaId)
         {
 
             if (User.IsInRole(Configs.Empleado))
@@ -89,7 +89,8 @@ namespace INSTITUTO_C.Controllers
                         .Where(mc => mc.Activo)
                         .OrderBy(mc => mc.Nombre),
                     "Id",
-                    "Nombre"
+                    "Nombre",
+                    materiaId
                 );
             }
             else
@@ -103,13 +104,22 @@ namespace INSTITUTO_C.Controllers
 
         private IEnumerable<MateriaCursada> GetCursadasCarrera()
         {
+            var alumnoId = int.Parse(_userManager.GetUserId(User));
+
             var alumno = _context.Alumnos
              .Include(a => a.Carrera)
-             .FirstOrDefault(a => a.Id == int.Parse(_userManager.GetUserId(User)));
+             .FirstOrDefault(a => a.Id == alumnoId);
+
+            //OBTENGO LOS ID DE LAS CURSADAS YA INCRIPTAS
+            var cursadasInscriptas = _context.Inscripciones
+                .Where(i => i.AlumnoId == alumnoId)
+                .Select(i => i.MateriaCursadaId)
+                .ToList();
 
             return _context.MateriasCursadas
                     .Include(mc => mc.Materia)
-                    .Where(mc => mc.Materia.CarreraId == alumno.CarreraId && mc.Activo)
+                    .Where(mc => mc.Materia.CarreraId == alumno.CarreraId && mc.Activo &&
+            !cursadasInscriptas.Contains(mc.Id))
                     .ToList();
         }
 
