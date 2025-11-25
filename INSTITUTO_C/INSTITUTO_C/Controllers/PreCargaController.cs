@@ -123,7 +123,8 @@ namespace INSTITUTO_C.Controllers
                     DNI = "30000002",
                     Telefono = "1112345678",
                     Direccion = "Cruze Peligroso 5",
-                    Activo = true
+                    Activo = true,
+                    Legajo = PersonasHelper.GenerarLegajo(_context)
                 };
 
                 //Password: Password1!
@@ -145,8 +146,11 @@ namespace INSTITUTO_C.Controllers
                     DNI = "10000002",
                     Telefono = "1112345678",
                     Direccion = "Calle Lobezno 1832",
-                    Activo = true
+                    Activo = true,
+                    Legajo = PersonasHelper.GenerarLegajo(_context)
                 };
+
+
 
                 //Password: Password1!
 
@@ -155,6 +159,28 @@ namespace INSTITUTO_C.Controllers
                 if (result.Succeeded)
                 {
                     await _userManager.AddToRoleAsync(profesor2, Configs.Profesor);
+                }
+
+                var profesor3 = new Profesor
+                {
+                    UserName = "profesor3@ort.edu.ar",
+                    Email = "profesor3@ort.edu.ar",
+                    Nombre = "Juana",
+                    Apellido = "Grey",
+                    DNI = "40000002",
+                    Telefono = "1164633259",
+                    Direccion = "Av Fenix 2146",
+                    Activo = false,
+                    Legajo = PersonasHelper.GenerarLegajo(_context)
+                };
+
+                //Password: Password1!
+
+                result = await _userManager.CreateAsync(profesor3, Configs.Password);
+
+                if (result.Succeeded)
+                {
+                    await _userManager.AddToRoleAsync(profesor3, Configs.Profesor);
                 }
             }
 
@@ -173,7 +199,8 @@ namespace INSTITUTO_C.Controllers
                     DNI = "30000001",
                     Telefono = "1112345678",
                     Direccion = "Avenida centinela 123",
-                    Activo = true
+                    Activo = true,
+                    Legajo = PersonasHelper.GenerarLegajo(_context)
                 };
 
                 var result = await _userManager.CreateAsync(empleado, Configs.Password);
@@ -204,7 +231,8 @@ namespace INSTITUTO_C.Controllers
                     Telefono = "11333444",
                     Direccion = "Callejon Oscuro 666",
                     Activo = true,
-                    CarreraId = carrera1.Id
+                    CarreraId = carrera1.Id,
+                    NumeroMatricula = PersonasHelper.GenerarNumMatricula(_context)
                 };
                 var result = await _userManager.CreateAsync(alumno, Configs.Password);
 
@@ -223,7 +251,8 @@ namespace INSTITUTO_C.Controllers
                     Telefono = "11333555",
                     Direccion = "Cairo 75",
                     Activo = true,
-                    CarreraId = carrera2.Id
+                    CarreraId = carrera2.Id,
+                    NumeroMatricula = PersonasHelper.GenerarNumMatricula(_context)
                 };
 
                 result = await _userManager.CreateAsync(alumno2, Configs.Password);
@@ -244,7 +273,8 @@ namespace INSTITUTO_C.Controllers
                     Telefono = "11222455",
                     Direccion = "Av Madre Rusia 87",
                     Activo = true,
-                    CarreraId = carrera1.Id
+                    CarreraId = carrera1.Id,
+                    NumeroMatricula = PersonasHelper.GenerarNumMatricula(_context)
                 };
 
                 result = await _userManager.CreateAsync(alumno3, Configs.Password);
@@ -265,7 +295,8 @@ namespace INSTITUTO_C.Controllers
                     Telefono = "113334448",
                     Direccion = "Calle Sugah 23",
                     Activo = true,
-                    CarreraId = carrera1.Id
+                    CarreraId = carrera1.Id,
+                    NumeroMatricula = PersonasHelper.GenerarNumMatricula(_context)
                 };
 
                 result = await _userManager.CreateAsync(alumno4, Configs.Password);
@@ -376,6 +407,12 @@ namespace INSTITUTO_C.Controllers
                     MateriaCursadaId = cursadas.First(c => c.Nombre.Contains("BK1-2025-1C-A")).Id
                 });
 
+                inscripciones.Add(new Inscripcion
+                {
+                    AlumnoId = alumnos.First(a => a.Email == "alumno2@ort.edu.ar").Id,
+                    MateriaCursadaId = cursadas.First(c => c.Nombre.Contains("BD1-2024-2C-A")).Id
+                });
+
                 _context.Inscripciones.AddRange(inscripciones);
                 await _context.SaveChangesAsync();
             }
@@ -412,6 +449,7 @@ namespace INSTITUTO_C.Controllers
                         Nota = nota,
                         ProfesorId = inscripcion.MateriaCursada.ProfesorId
                     });
+
                 }
 
                 _context.Calificaciones.AddRange(calificaciones);
