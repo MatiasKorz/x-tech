@@ -24,6 +24,7 @@ namespace INSTITUTO_C.Models
 
         //[Required(ErrorMessage = ErrorMesseges.Requerido)]
         //elimine el range xq deberia ser autogenerado
+        [Display(Name = "Numero de matricula")]
         public string NumeroMatricula { get; set; }
 
         //navegacional

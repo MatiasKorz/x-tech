@@ -39,6 +39,7 @@ namespace INSTITUTO_C.Models
         [DataType(DataType.Date)]
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:yyyy/MM/dd}")]
         [ScaffoldColumn(false)] // Esto le dice a ASP.NET MVC que no genere un campo en los formularios
+        [Display(Name = "Fecha de alta")]
         public DateTime FechaAlta { get; private set; } = DateTime.Now;
 
 

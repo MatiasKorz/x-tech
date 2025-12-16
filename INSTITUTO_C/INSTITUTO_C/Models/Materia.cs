@@ -31,6 +31,7 @@ namespace INSTITUTO_C.Models
         [Required(ErrorMessage = ErrorMesseges.Requerido)]
         [StringLength(10, MinimumLength = 2, ErrorMessage = ErrorMesseges.CaracteresMinMax)]
         [RegularExpression(@"^[A-Z0-9]+$", ErrorMessage = ErrorMesseges.SoloMayusculasYNumeros)]
+        [Display(Name = "Codigo de Materia")]
         public string CodigoMateria { get; set; }
 
         [Required(ErrorMessage = ErrorMesseges.Requerido)]
@@ -39,6 +40,7 @@ namespace INSTITUTO_C.Models
 
         [Required(ErrorMessage = ErrorMesseges.Requerido)]
         [Range(1, 500, ErrorMessage = ErrorMesseges.Range)]
+        [Display(Name = "Cupo maximo")]
         public int CupoMaximo { get; set; }
 
         public List<MateriaCursada> cursadas { get; set; }
