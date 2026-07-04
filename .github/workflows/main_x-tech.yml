@@ -15,7 +15,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up .NET Core
+      - name: Set up .NET
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '8.x'
@@ -23,17 +23,17 @@ jobs:
       - name: Restore
         run: dotnet restore INSTITUTO_C/INSTITUTO_C/INSTITUTO_C.csproj
 
-      - name: Build with dotnet
-        run: dotnet build INSTITUTO_C/INSTITUTO_C/INSTITUTO_C.csproj --configuration Release --no-restore
+      - name: Build
+        run: dotnet build INSTITUTO_C/INSTITUTO_C/INSTITUTO_C.csproj -c Release --no-restore
 
-      - name: dotnet publish
-        run: dotnet publish INSTITUTO_C/INSTITUTO_C.csproj -c Release -o "${{env.DOTNET_ROOT}}/myapp" --no-build
+      - name: Publish
+        run: dotnet publish INSTITUTO_C/INSTITUTO_C/INSTITUTO_C.csproj -c Release -o publish --no-build
 
-      - name: Upload artifact for deployment job
+      - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: .net-app
-          path: ${{env.DOTNET_ROOT}}/myapp
+          name: app
+          path: publish
 
   deploy:
     runs-on: windows-latest
@@ -43,10 +43,11 @@ jobs:
       contents: read
 
     steps:
-      - name: Download artifact from build job
+      - name: Download artifact
         uses: actions/download-artifact@v4
         with:
-          name: .net-app
+          name: app
+          path: publish
 
       - name: Login to Azure
         uses: azure/login@v2
@@ -56,9 +57,8 @@ jobs:
           subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_ACE9F13D5C6F498DA9E36467A2A5C758 }}
 
       - name: Deploy to Azure Web App
-        id: deploy-to-webapp
         uses: azure/webapps-deploy@v3
         with:
-          app-name: 'x-tech'
-          slot-name: 'Production'
-          package: .
+          app-name: x-tech
+          slot-name: Production
+          package: publish
