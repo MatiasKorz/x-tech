@@ -24,10 +24,10 @@ jobs:
         run: dotnet restore INSTITUTO_C/INSTITUTO_C/INSTITUTO_C.csproj
 
       - name: Build with dotnet
-        run: dotnet build INSTITUTO_C/INSTITUTO_C.csproj --configuration Release --no-restore
+        run: dotnet build INSTITUTO_C/INSTITUTO_C/INSTITUTO_C.csproj --configuration Release --no-restore
 
       - name: dotnet publish
-        run: dotnet publish INSTITUTO_C/INSTITUTO_C.csproj -c Release -o "${{env.DOTNET_ROOT}}/myapp" --no-build
+        run: dotnet publish INSTITUTO_C/INSTITUTO_C/INSTITUTO_C.csproj -c Release -o "${{env.DOTNET_ROOT}}/myapp" --no-build
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
@@ -62,4 +62,3 @@ jobs:
           app-name: 'x-tech'
           slot-name: 'Production'
           package: ${{env.DOTNET_ROOT}}/myapp
-          
